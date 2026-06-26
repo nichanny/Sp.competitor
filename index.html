@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopee Competitor Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0F; --bg2: #111118; --bg3: #18181F;
+    --text: #EEEAF5; --dim: #7A7590;
+    --orange: #FF6B35; --border: rgba(255,255,255,0.07);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Sarabun',sans-serif; min-height:100vh; }
+
+  .hero {
+    padding: 60px 24px 40px; text-align:center;
+    background: radial-gradient(ellipse at 50% 0%, rgba(255,107,53,0.1) 0%, transparent 70%);
+    border-bottom: 1px solid var(--border);
+  }
+  .badge {
+    display:inline-block; font-family:'Space Mono',monospace; font-size:9px;
+    letter-spacing:4px; text-transform:uppercase; color:var(--orange);
+    border:1px solid rgba(255,107,53,0.3); border-radius:20px; padding:4px 14px; margin-bottom:16px;
+  }
+  .hero h1 { font-size:clamp(24px,5vw,42px); font-weight:800; margin-bottom:8px; }
+  .hero h1 span { color:var(--orange); }
+  .hero p { color:var(--dim); font-size:14px; }
+
+  .grid {
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap:16px; padding:32px 24px; max-width:900px; margin:0 auto;
+  }
+
+  .card {
+    background:var(--bg3); border:1px solid var(--border);
+    border-radius:16px; padding:24px; text-decoration:none; color:var(--text);
+    transition:all 0.2s; position:relative; overflow:hidden;
+    display:block;
+  }
+  .card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, var(--orange), transparent);
+  }
+  .card:hover { border-color:rgba(255,107,53,0.4); transform:translateY(-2px); }
+
+  .card-icon { font-size:28px; margin-bottom:14px; }
+  .card-title { font-size:16px; font-weight:700; margin-bottom:6px; }
+  .card-desc { font-size:13px; color:var(--dim); line-height:1.6; }
+  .card-tag {
+    display:inline-block; margin-top:12px; font-size:10px; padding:3px 10px;
+    border-radius:20px; background:rgba(255,107,53,0.12);
+    color:var(--orange); border:1px solid rgba(255,107,53,0.25);
+    font-family:'Space Mono',monospace;
+  }
+
+  .footer { text-align:center; padding:32px; color:var(--dim); font-size:12px; border-top:1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">Shopee Strategy Dashboard</div>
+  <h1>De & Tb <span>Command Center</span></h1>
+  <p>เครื่องมือวิเคราะห์คู่แข่งและกลยุทธ์ Shopee ทั้งหมดในที่เดียว</p>
+</div>
+
+<div class="grid">
+  <a class="card" href="shopee-neuro-framework.html">
+    <div class="card-icon">🧠</div>
+    <div class="card-title">Shopee Neuro Framework</div>
+    <div class="card-desc">SWOT + Neuroscience + จิตวิทยาผู้ซื้อ + 90-Day Roadmap สำหรับทั้งสองร้าน</div>
+    <span class="card-tag">STRATEGY</span>
+  </a>
+
+  <a class="card" href="raindoor-battle-plan.html">
+    <div class="card-icon">🚪</div>
+    <div class="card-title">ประตูสายฝน — Battle Plan</div>
+    <div class="card-desc">วิเคราะห์คู่แข่ง chocksomkid + KKB Wood + Solutions S1–S11 + Pricing Strategy</div>
+    <span class="card-tag">RAIN DOOR</span>
+  </a>
+
+  <a class="card" href="modern-door-analysis.html">
+    <div class="card-icon">🏆</div>
+    <div class="card-title">ประตูโมเดิร์น — Analysis</div>
+    <div class="card-desc">Gap Analysis + SKU Plan + Neuro Pricing + Action Plan ทุกขนาดทุกลาย</div>
+    <span class="card-tag">MODERN DOOR</span>
+  </a>
+
+  <a class="card" href="modern-door-price-v5.html">
+    <div class="card-icon">📊</div>
+    <div class="card-title">ตารางราคา — เปรียบทุก SKU</div>
+    <div class="card-desc">De L1 / De L2 / Tb / chocksomkid / PG Wood ทุกขนาด ทุกลาย กรองได้</div>
+    <span class="card-tag">PRICE TABLE</span>
+  </a>
+</div>
+
+<div class="footer">
+  De (DOOR_E_D) × Tb (turbo teak) — Updated June 2026
+</div>
+
+</body>
+</html>
