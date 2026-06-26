@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ประตูโมเดิร์น — Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0F; --bg2: #111118; --bg3: #18181F; --bg4: #1E1E28;
+    --text: #EEEAF5; --dim: #7A7590;
+    --orange: #FF6B35; --orange-glow: rgba(255,107,53,0.12);
+    --green: #00E5A0; --green-glow: rgba(0,229,160,0.1);
+    --red: #FF4060; --red-glow: rgba(255,64,96,0.1);
+    --yellow: #FFD060; --yellow-glow: rgba(255,208,96,0.1);
+    --purple: #A78BFA; --blue: #60A5FA;
+    --border: rgba(255,255,255,0.07); --border-orange: rgba(255,107,53,0.25);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Sarabun',sans-serif; font-size:14px; line-height:1.65; }
+
+  .hero {
+    background: linear-gradient(135deg, #0A0A0F 0%, #12101E 100%);
+    border-bottom: 1px solid var(--border-orange);
+    padding: 44px 20px 32px; text-align:center; position:relative; overflow:hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+    width:400px; height:200px;
+    background:radial-gradient(ellipse, rgba(96,165,250,0.12) 0%, transparent 70%);
+  }
+  .hero-badge {
+    display:inline-block; font-family:'Space Mono',monospace; font-size:9px;
+    letter-spacing:4px; text-transform:uppercase; color:var(--blue);
+    border:1px solid rgba(96,165,250,0.3); border-radius:20px; padding:4px 14px; margin-bottom:16px;
+  }
+  .hero h1 { font-size:clamp(22px,5vw,38px); font-weight:800; line-height:1.2; margin-bottom:8px; }
+  .hero h1 em { color:var(--blue); font-style:normal; }
+  .hero-sub { color:var(--dim); font-size:13px; max-width:460px; margin:0 auto; }
+
+  .tabs {
+    display:flex; overflow-x:auto; scrollbar-width:none;
+    background:var(--bg2); border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:50; gap:2px; padding:0 12px;
+  }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab {
+    flex-shrink:0; padding:12px 16px; border:none; background:transparent;
+    color:var(--dim); font-family:'Sarabun',sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all 0.2s;
+  }
+  .tab:hover { color:var(--text); }
+  .tab.active { color:var(--blue); border-bottom-color:var(--blue); }
+
+  .page { display:none; padding:20px 16px 60px; max-width:800px; margin:0 auto; }
+  .page.active { display:block; animation:up 0.35s ease; }
+  @keyframes up { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  .sec-title {
+    display:flex; align-items:center; gap:10px;
+    margin:28px 0 14px; font-size:15px; font-weight:700;
+  }
+  .sec-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .sec-title:first-child { margin-top:8px; }
+
+  .card {
+    background:var(--bg3); border:1px solid var(--border);
+    border-radius:14px; padding:20px; margin-bottom:12px;
+    position:relative; overflow:hidden;
+  }
+  .card-accent { position:absolute; top:0; left:0; right:0; height:2px; }
+  .card-accent.blue { background:linear-gradient(90deg,var(--blue),transparent); }
+  .card-accent.orange { background:linear-gradient(90deg,var(--orange),transparent); }
+  .card-accent.green { background:linear-gradient(90deg,var(--green),transparent); }
+  .card-accent.red { background:linear-gradient(90deg,var(--red),transparent); }
+  .card-accent.yellow { background:linear-gradient(90deg,var(--yellow),transparent); }
+  .card-accent.purple { background:linear-gradient(90deg,var(--purple),transparent); }
+
+  .card-title { font-size:14px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+
+  .ctable { width:100%; border-collapse:collapse; font-size:12.5px; }
+  .ctable th {
+    background:var(--bg4); padding:9px 10px; text-align:left;
+    font-size:10px; letter-spacing:1px; text-transform:uppercase;
+    color:var(--dim); font-family:'Space Mono',monospace; font-weight:400;
+  }
+  .ctable td { padding:9px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  .ctable tr:last-child td { border-bottom:none; }
+  .ctable tr:hover td { background:var(--bg4); }
+
+  .win { color:var(--green); font-weight:700; }
+  .lose { color:var(--red); }
+  .neutral { color:var(--yellow); }
+  .dim-text { color:var(--dim); }
+
+  .badge {
+    display:inline-block; font-size:10px; padding:2px 7px;
+    border-radius:4px; font-weight:700; font-family:'Space Mono',monospace; white-space:nowrap;
+  }
+  .badge-green { background:var(--green-glow); color:var(--green); border:1px solid rgba(0,229,160,0.3); }
+  .badge-red { background:var(--red-glow); color:var(--red); border:1px solid rgba(255,64,96,0.3); }
+  .badge-orange { background:var(--orange-glow); color:var(--orange); border:1px solid var(--border-orange); }
+  .badge-yellow { background:var(--yellow-glow); color:var(--yellow); border:1px solid rgba(255,208,96,0.3); }
+  .badge-blue { background:rgba(96,165,250,0.1); color:var(--blue); border:1px solid rgba(96,165,250,0.3); }
+  .badge-purple { background:rgba(167,139,250,0.1); color:var(--purple); border:1px solid rgba(167,139,250,0.3); }
+
+  .pitem { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); align-items:flex-start; }
+  .pitem:last-child { border-bottom:none; }
+  .pnum {
+    width:30px; height:30px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; font-size:12px; font-weight:700; flex-shrink:0;
+  }
+  .pnum.hot { background:var(--blue); color:white; }
+  .pnum.med { background:var(--bg4); color:var(--yellow); border:1px solid rgba(255,208,96,0.3); }
+  .pnum.cool { background:var(--bg4); color:var(--dim); border:1px solid var(--border); }
+  .ptitle { font-size:14px; font-weight:700; margin-bottom:3px; }
+  .pdesc { font-size:12px; color:var(--dim); line-height:1.55; }
+
+  .warn { background:rgba(255,64,96,0.08); border:1px solid rgba(255,64,96,0.25); border-radius:10px; padding:14px 16px; font-size:13px; margin:12px 0; display:flex; gap:10px; }
+  .tip { background:var(--green-glow); border:1px solid rgba(0,229,160,0.2); border-radius:10px; padding:14px 16px; font-size:13px; margin:12px 0; display:flex; gap:10px; }
+  .info { background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.25); border-radius:10px; padding:14px 16px; font-size:13px; margin:12px 0; display:flex; gap:10px; }
+
+  .formula {
+    background:var(--bg4); border:1px dashed rgba(96,165,250,0.3);
+    border-radius:12px; padding:16px; text-align:center; margin:14px 0;
+    font-family:'Space Mono',monospace; font-size:12px; line-height:2.2; color:var(--dim);
+  }
+  .formula .hl { color:var(--blue); font-size:14px; font-weight:700; }
+  .formula .eq { color:var(--green); }
+
+  .kpi-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .kpi-box { background:var(--bg4); border-radius:10px; padding:14px; border:1px solid var(--border); text-align:center; }
+  .kpi-num { font-size:24px; font-weight:800; font-family:'Space Mono',monospace; line-height:1.1; margin-bottom:4px; }
+  .kpi-label { font-size:11px; color:var(--dim); }
+
+  .timeline { padding-left:20px; position:relative; }
+  .timeline::before { content:''; position:absolute; left:6px; top:10px; bottom:10px; width:2px; background:linear-gradient(180deg,var(--blue) 0%,var(--bg4) 100%); border-radius:2px; }
+  .titem { position:relative; margin-bottom:18px; }
+  .tdot { position:absolute; left:-17px; top:5px; width:10px; height:10px; border-radius:50%; border:2px solid var(--bg3); }
+  .tdot.hot { background:var(--blue); }
+  .tdot.med { background:var(--yellow); }
+  .tdot.cool { background:var(--dim); }
+  .tweek { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:2px; margin-bottom:3px; }
+  .tweek.hot { color:var(--blue); }
+  .tweek.med { color:var(--yellow); }
+  .tweek.cool { color:var(--dim); }
+  .ttitle { font-size:14px; font-weight:700; margin-bottom:3px; }
+  .tdesc { font-size:12px; color:var(--dim); line-height:1.55; }
+
+  .foot { margin-top:28px; padding:16px; background:var(--bg3); border-radius:12px; border:1px solid rgba(96,165,250,0.25); font-size:12px; color:var(--dim); text-align:center; line-height:1.7; }
+  .foot strong { color:var(--blue); }
+
+  p { color:var(--dim); font-size:13px; line-height:1.65; }
+  strong { color:var(--text); }
+
+  .bar-row { display:flex; align-items:center; gap:10px; margin-bottom:7px; font-size:12px; }
+  .bar-label { width:130px; flex-shrink:0; color:var(--dim); }
+  .bar-bg { flex:1; height:6px; background:var(--bg4); border-radius:3px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:3px; }
+  .bar-val { width:40px; text-align:right; font-family:'Space Mono',monospace; font-size:10px; }
+
+  .gap-box {
+    background:var(--bg4); border-radius:12px; padding:16px; margin-bottom:8px;
+    border-left:3px solid var(--blue);
+  }
+  .gap-box.green { border-left-color:var(--green); }
+  .gap-box.orange { border-left-color:var(--orange); }
+  .gap-box.red { border-left-color:var(--red); }
+
+  .gap-title { font-size:13px; font-weight:700; margin-bottom:5px; display:flex; align-items:center; gap:8px; }
+  .gap-desc { font-size:12px; color:var(--dim); line-height:1.55; }
+
+  .price-compare {
+    display:grid; grid-template-columns:1fr 1fr 1fr 1fr;
+    gap:6px; margin-bottom:6px;
+  }
+  .pc-cell {
+    background:var(--bg4); border-radius:8px; padding:10px 8px;
+    text-align:center; border:1px solid var(--border);
+  }
+  .pc-cell.header { background:transparent; border:none; font-size:10px; letter-spacing:1px; color:var(--dim); font-family:'Space Mono',monospace; }
+  .pc-cell.winner { border-color:rgba(0,229,160,0.4); background:rgba(0,229,160,0.06); }
+  .pc-cell.loser { border-color:rgba(255,64,96,0.3); }
+  .pc-sku { font-size:11px; color:var(--dim); margin-bottom:4px; }
+  .pc-price { font-size:15px; font-weight:700; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">ประตูโมเดิร์น × Competitive Analysis 2026</div>
+  <h1>วิเคราะห์<em>ประตูโมเดิร์น</em><br>De vs Tb vs chocksomkid</h1>
+  <p class="hero-sub">ทั้งแบบธรรมดา + ขีดเส้น × ราคา × Gap × กลยุทธ์ชนะ</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="go('market')">📊 ภาพตลาด</button>
+  <button class="tab" onclick="go('price')">💰 เปรียบราคา</button>
+  <button class="tab" onclick="go('gap')">🎯 Gap & Win</button>
+  <button class="tab" onclick="go('sku')">📦 SKU Plan</button>
+  <button class="tab" onclick="go('action')">⚡ Action</button>
+</div>
+
+<!-- PAGE 1: MARKET -->
+<div id="market" class="page active">
+
+  <div class="sec-title">ภาพรวมตลาดประตูโมเดิร์น</div>
+
+  <div class="card">
+    <div class="card-accent blue"></div>
+    <div class="card-title">📊 Store Performance เปรียบกัน</div>
+    <table class="ctable">
+      <tr>
+        <th>ตัวชี้วัด</th>
+        <th>De (DOOR_E_D)</th>
+        <th>Tb (turbo teak)</th>
+        <th>chocksomkid</th>
+      </tr>
+      <tr>
+        <td>Monthly Ranking</td>
+        <td class="win">#98 🏆</td>
+        <td class="neutral">#439</td>
+        <td class="win">#276</td>
+      </tr>
+      <tr>
+        <td>30-Day Sales</td>
+        <td class="win">1,000 ชิ้น</td>
+        <td class="lose">219 ชิ้น</td>
+        <td class="win">3,000 ชิ้น*</td>
+      </tr>
+      <tr>
+        <td>30-Day GMV</td>
+        <td class="win">฿925,000</td>
+        <td class="lose">฿201,261</td>
+        <td>฿1.95M*</td>
+      </tr>
+      <tr>
+        <td>Review</td>
+        <td class="win">4.8★ (345)</td>
+        <td class="neutral">4.8★ (222)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Favorite</td>
+        <td class="win">473</td>
+        <td class="neutral">271</td>
+        <td>234</td>
+      </tr>
+      <tr>
+        <td>ราคาโมเดิร์น 80×200</td>
+        <td class="neutral">฿1,690</td>
+        <td class="neutral">฿1,699</td>
+        <td class="win">฿1,681 (ถูกสุด)</td>
+      </tr>
+    </table>
+    <p style="font-size:11px;color:var(--dim);margin-top:8px">*chocksomkid ตัวเลขรวมทุกสินค้าใน listing หลัก</p>
+  </div>
+
+  <div class="sec-title">Demand Distribution — ตลาดต้องการอะไร</div>
+
+  <div class="card">
+    <div class="card-accent green"></div>
+    <div class="card-title">📈 SKU Share ของ chocksomkid (listing หลัก)</div>
+
+    <div class="bar-row">
+      <div class="bar-label">โมเดิร์น 80×200</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:89%;background:var(--green)"></div></div>
+      <div class="bar-val" style="color:var(--green)">44.55%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">โมเดิร์น 80×180</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:44%;background:var(--green)"></div></div>
+      <div class="bar-val" style="color:var(--green)">19.80%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">90×200</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:14%;background:var(--yellow)"></div></div>
+      <div class="bar-val" style="color:var(--yellow)">6.27%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">70×200</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:10%;background:var(--yellow)"></div></div>
+      <div class="bar-val" style="color:var(--yellow)">4.62%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">เส้นตรง 80×200</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:6%;background:var(--dim)"></div></div>
+      <div class="bar-val" style="color:var(--dim)">2.64%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">เส้นตรง อื่นๆ</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:8%;background:var(--dim)"></div></div>
+      <div class="bar-val" style="color:var(--dim)">~3.3%</div>
+    </div>
+
+    <div class="tip" style="margin-top:14px">
+      <span>💡</span>
+      <div><strong>โมเดิร์นธรรมดา 80×200 + 80×180 = 64.35% ของตลาด</strong><br>
+      ขีดเส้นทั้งหมดรวมกันแค่ ~6% — แต่ราคาสูงกว่า = margin ดีกว่า</div>
+    </div>
+  </div>
+
+  <div class="sec-title">De — SKU Breakdown</div>
+  <div class="card">
+    <div class="card-accent orange"></div>
+    <table class="ctable">
+      <tr><th>SKU</th><th>ราคา</th><th>Share</th><th>Forecast</th></tr>
+      <tr><td><strong>โมเดิร์นขีดตรง 80×200</strong></td><td>฿1,850</td><td class="win">27.81%</td><td class="win">84</td></tr>
+      <tr><td>โมเดิร์นขีดบวก 80×200</td><td>฿1,899</td><td class="neutral">17.88%</td><td class="neutral">54</td></tr>
+      <tr><td>วงกบ 80×200</td><td>฿925</td><td>14.90%</td><td>45</td></tr>
+      <tr><td>โมเดิร์น 80×200</td><td>฿1,690</td><td>12.58%</td><td>38</td></tr>
+      <tr><td>5ฟักปีกนก 80×200</td><td>฿2,156</td><td>11.59%</td><td>35</td></tr>
+      <tr><td>สายฝน 80×200</td><td>฿1,249</td><td>10.93%</td><td>33</td></tr>
+      <tr><td>8ฟัก 80×200</td><td>฿2,156</td><td>4.30%</td><td>13</td></tr>
+      <tr><td>บานเฟี้ยม 40×200</td><td>฿1,100</td><td class="dim-text">—</td><td class="dim-text">—</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- PAGE 2: PRICE -->
+<div id="price" class="page">
+
+  <div class="sec-title">เปรียบราคา SKU ต่อ SKU</div>
+
+  <div class="card">
+    <div class="card-accent blue"></div>
+    <div class="card-title">💰 โมเดิร์นธรรมดา (ไม่มีเส้น)</div>
+    <table class="ctable">
+      <tr><th>SKU</th><th>De</th><th>Tb</th><th>chocksomkid</th><th>สถานะ</th></tr>
+      <tr>
+        <td><strong>80×200</strong></td>
+        <td class="neutral">฿1,690</td>
+        <td class="neutral">฿1,699</td>
+        <td class="lose">฿1,681 (ถูกสุด)</td>
+        <td><span class="badge badge-red">เราแพงกว่า ~฿10-18</span></td>
+      </tr>
+      <tr>
+        <td><strong>80×180</strong></td>
+        <td class="lose">ไม่มี</td>
+        <td class="win">฿1,649 ✅</td>
+        <td>฿1,698</td>
+        <td><span class="badge badge-green">Tb ถูกกว่า ฿49!</span></td>
+      </tr>
+      <tr>
+        <td>90×200</td>
+        <td class="lose">ไม่มี</td>
+        <td>฿1,890</td>
+        <td>฿1,890</td>
+        <td><span class="badge badge-yellow">ราคาเท่ากัน</span></td>
+      </tr>
+      <tr>
+        <td>70×200</td>
+        <td class="lose">ไม่มี</td>
+        <td>฿1,690</td>
+        <td>฿1,690</td>
+        <td><span class="badge badge-yellow">ราคาเท่ากัน</span></td>
+      </tr>
+      <tr>
+        <td>80×180 (Tb)</td>
+        <td class="lose">ไม่มี</td>
+        <td class="win">฿1,649</td>
+        <td>฿1,698</td>
+        <td><span class="badge badge-green">Tb ได้เปรียบ</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-accent purple"></div>
+    <div class="card-title">💰 โมเดิร์นขีดเส้น (De)</div>
+    <table class="ctable">
+      <tr><th>SKU</th><th>De</th><th>Tb</th><th>chocksomkid</th><th>สถานะ</th></tr>
+      <tr>
+        <td><strong>ขีดตรง 80×200</strong></td>
+        <td class="win">฿1,850 ✅</td>
+        <td>฿1,899</td>
+        <td>฿1,890</td>
+        <td><span class="badge badge-green">De ถูกสุด ฿40!</span></td>
+      </tr>
+      <tr>
+        <td>ขีดบวก 80×200</td>
+        <td class="win">฿1,899 ✅</td>
+        <td>฿1,949</td>
+        <td>฿1,890</td>
+        <td><span class="badge badge-yellow">De vs chock ต่าง ฿9</span></td>
+      </tr>
+      <tr>
+        <td>ขีดตรง 80×180</td>
+        <td class="lose">ไม่มี</td>
+        <td>฿1,849</td>
+        <td>฿1,890</td>
+        <td><span class="badge badge-green">Tb ถูกกว่า ฿41</span></td>
+      </tr>
+      <tr>
+        <td>ขีดบวก 80×180</td>
+        <td class="lose">ไม่มี</td>
+        <td>฿1,899</td>
+        <td>฿1,890</td>
+        <td><span class="badge badge-yellow">Tb แพงกว่า ฿9</span></td>
+      </tr>
+      <tr>
+        <td>ขีดบวก 90×200</td>
+        <td class="lose">ไม่มี</td>
+        <td>฿2,150</td>
+        <td>—</td>
+        <td><span class="badge badge-blue">ไม่มีคู่แข่ง</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-accent green"></div>
+    <div class="card-title">💰 วงกบประตู</div>
+    <table class="ctable">
+      <tr><th>SKU</th><th>De</th><th>Tb</th><th>chocksomkid</th><th>สถานะ</th></tr>
+      <tr>
+        <td>วงกบ 80×200</td>
+        <td class="win">฿925 ✅</td>
+        <td>฿919</td>
+        <td>฿890</td>
+        <td><span class="badge badge-red">chock ถูกสุด</span></td>
+      </tr>
+      <tr>
+        <td>วงกบ 80×180</td>
+        <td class="lose">ไม่มี</td>
+        <td>฿919</td>
+        <td>฿890</td>
+        <td><span class="badge badge-red">chock ถูกกว่า ฿29</span></td>
+      </tr>
+      <tr>
+        <td>วงกบ 90×200</td>
+        <td class="lose">ไม่มี</td>
+        <td>฿945</td>
+        <td>฿890</td>
+        <td><span class="badge badge-red">chock ถูกกว่า ฿55</span></td>
+      </tr>
+      <tr>
+        <td>วงกบ 70×200</td>
+        <td class="lose">ไม่มี</td>
+        <td>฿919</td>
+        <td>฿890</td>
+        <td><span class="badge badge-red">chock ถูกกว่า ฿29</span></td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- PAGE 3: GAP -->
+<div id="gap" class="page">
+
+  <div class="sec-title">Gap Analysis — ช่องว่างที่ต้องเจาะ</div>
+
+  <div class="gap-box green">
+    <div class="gap-title">🟢 Gap #1 — โมเดิร์น 80×180 ที่ De ยังไม่มี <span class="badge badge-green">เร่งด่วน</span></div>
+    <div class="gap-desc">demand 19.80% = ~594 ชิ้น/เดือนในตลาด De มีแต่ 80×200 อยู่แล้ว ถ้าเพิ่ม 80×180 เข้า De listing เดียวกัน algorithm จะ boost ทั้ง listing<br>
+    <strong style="color:var(--text)">ราคาแนะนำ: ฿1,649</strong> (เท่า Tb, ถูกกว่า chock ฿49)</div>
+  </div>
+
+  <div class="gap-box green">
+    <div class="gap-title">🟢 Gap #2 — De ขีดตรง 80×200 ราคาชนะแล้ว <span class="badge badge-green">ใช้ได้เลย</span></div>
+    <div class="gap-desc">De ขาย ฿1,850 ถูกกว่า chocksomkid ฿1,890 และ Tb ฿1,899 — แต่ยังขายได้แค่ 84 ชิ้น/เดือน แสดงว่าปัญหาคือ <strong style="color:var(--text)">visibility และ content ไม่ใช่ราคา</strong><br>
+    → เพิ่ม ads + รูปใหม่สำหรับ SKU นี้โดยเฉพาะ</div>
+  </div>
+
+  <div class="gap-box" style="border-left-color:var(--yellow)">
+    <div class="gap-title">🟡 Gap #3 — โมเดิร์นธรรมดา 80×200 แพงกว่า chock ฿9 <span class="badge badge-yellow">ปรับได้</span></div>
+    <div class="gap-desc">De ฿1,690 vs chock ฿1,681 — ต่างแค่ ฿9 แต่ algorithm sort ราคาต่ำก่อน<br>
+    <strong style="color:var(--text)">Option: ลดเป็น ฿1,679</strong> ถูกกว่า chock ฿2 สมองอ่านเป็น 1,6xx ทั้งคู่แต่เราถูกกว่า</div>
+  </div>
+
+  <div class="gap-box orange">
+    <div class="gap-title">🟠 Gap #4 — Tb ranking ต่ำมาก (#439) ทั้งที่ราคาดี <span class="badge badge-orange">แก้ได้</span></div>
+    <div class="gap-desc">Tb มีอายุแค่ 119 วัน + review น้อยกว่า De เกือบครึ่ง — ranking ต่ำเพราะ social proof น้อย ไม่ใช่ราคา<br>
+    <strong style="color:var(--text)">→ เร่ง review campaign สำหรับ Tb โดยเฉพาะ เพื่อดัน ranking</strong></div>
+  </div>
+
+  <div class="gap-box red">
+    <div class="gap-title">🔴 Gap #5 — วงกบแพงกว่า chock ทุก size <span class="badge badge-red">ระวัง</span></div>
+    <div class="gap-desc">chocksomkid ขายวงกบที่ ฿890 เราขาย ฿919-945 — ถ้าลูกค้าซื้อประตู+วงกบพร้อมกัน เขาอาจเลือกคู่แข่งเพราะ bundle ถูกกว่า<br>
+    <strong style="color:var(--text)">→ สร้าง bundle ประตู+วงกบ ราคาพิเศษ เพื่อล็อคออเดอร์ทั้งชุด</strong></div>
+  </div>
+
+  <div class="sec-title">Neuro Insight — ทำไมคนซื้อประตูโมเดิร์น</div>
+
+  <div class="card">
+    <div class="card-accent purple"></div>
+    <div class="card-title">🧠 Identity Signal ของประตูโมเดิร์น</div>
+    <p style="margin-bottom:10px">ประตูโมเดิร์นไม้สัก = <strong>"ฉันมีรสนิยม ทันสมัยแต่ยังเลือกของดี"</strong> — ต่างจากสายฝนที่เป็น functional ล้วนๆ</p>
+    <p style="margin-bottom:10px">ลูกค้ากลุ่มนี้ยอมจ่ายแพงกว่า ถ้า <strong>รูปสวย + story ชัด</strong> เพราะกำลัง justify รสนิยมตัวเอง ไม่ใช่แค่หาของถูก</p>
+    <div class="tip">
+      <span>💡</span>
+      <div><strong>ใช้ keyword :</strong> "ประตูโมเดิร์นไม้สักแท้", "minimal teak door", "ประตูห้องนอนไม้สัก", "ประตูบ้านโมเดิร์น" — แตะ identity มากกว่า spec</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PAGE 4: SKU PLAN -->
+<div id="sku" class="page">
+
+  <div class="sec-title">SKU Plan — เปิดอะไรเพิ่ม ปรับอะไร</div>
+
+  <div class="card">
+    <div class="card-accent blue"></div>
+    <div class="card-title">📦 Priority SKU Actions</div>
+    <table class="ctable">
+      <tr><th>Action</th><th>SKU</th><th>ร้าน</th><th>ราคาแนะนำ</th><th>เหตุผล</th></tr>
+      <tr>
+        <td><span class="badge badge-red">เร่งด่วน</span></td>
+        <td><strong>โมเดิร์น 80×180</strong></td>
+        <td>De</td>
+        <td class="win">฿1,649</td>
+        <td>demand 20% ของตลาด De ไม่มีเลย</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">เร่งด่วน</span></td>
+        <td><strong>โมเดิร์น 80×200</strong></td>
+        <td>De</td>
+        <td class="win">฿1,679</td>
+        <td>ถูกกว่า chock ฿2 ดัน CTR</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-orange">เพิ่ม</span></td>
+        <td>ขีดตรง 80×180</td>
+        <td>De</td>
+        <td class="win">฿1,849</td>
+        <td>ถูกกว่า chock ฿41</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-orange">เพิ่ม</span></td>
+        <td>ขีดตรง 90×200</td>
+        <td>De/Tb</td>
+        <td>฿1,890</td>
+        <td>demand 6.27% margin สูง</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-yellow">พิจารณา</span></td>
+        <td>โมเดิร์น 90×200</td>
+        <td>De</td>
+        <td>฿1,890</td>
+        <td>demand 6.27% ราคาเท่ากัน</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-yellow">พิจารณา</span></td>
+        <td>Bundle ประตู+วงกบ</td>
+        <td>De+Tb</td>
+        <td>ลด ~฿100</td>
+        <td>ล็อคออเดอร์ทั้งชุด AOV สูงขึ้น</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-purple">ยังไม่ทำ</span></td>
+        <td>ขีดเส้น 70×200</td>
+        <td>—</td>
+        <td>—</td>
+        <td>demand รวมแค่ 0.33% ไม่คุ้ม</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="sec-title">Pricing Strategy — โมเดิร์นธรรมดา vs ขีดเส้น</div>
+
+  <div class="card">
+    <div class="card-accent yellow"></div>
+    <div class="card-title">🧮 Tier Pricing ที่เหมาะสม</div>
+    <div class="formula">
+      <div>โมเดิร์นธรรมดา = <span class="hl">Entry tier</span> → แข่งราคา ดึง traffic เข้าร้าน</div>
+      <div>โมเดิร์นขีดเส้น = <span style="color:var(--purple);font-weight:700">Premium tier</span> → margin สูง upsell ได้</div>
+      <div class="eq">วงกบ = Bundle anchor → อย่าขายแพงกว่า chock มาก</div>
+    </div>
+    <p>De ranking #98 = traffic สูงอยู่แล้ว ใช้ธรรมดาราคาดีดึงคนเข้า แล้วให้ขีดเส้น generate margin</p>
+  </div>
+
+</div>
+
+<!-- PAGE 5: ACTION -->
+<div id="action" class="page">
+
+  <div class="sec-title">Action Plan — เรียงตาม Impact</div>
+
+  <div class="card">
+    <div class="card-accent red"></div>
+    <div class="card-title">🔥 ทำทันที — Week 1</div>
+    <div class="pitem">
+      <div class="pnum hot">1</div>
+      <div>
+        <div class="ptitle">เพิ่ม SKU โมเดิร์น 80×180 ใน De ที่ ฿1,649</div>
+        <div class="pdesc">demand 19.80% = ~594 ชิ้น/เดือนในตลาด — De ไม่มีเลย ถ้าได้แค่ 5% = +30 ชิ้น/เดือน ทันที และถูกกว่า chock ฿49 จะ CTR ดีมาก</div>
+      </div>
+    </div>
+    <div class="pitem">
+      <div class="pnum hot">2</div>
+      <div>
+        <div class="ptitle">ปรับ โมเดิร์น 80×200 ใน De จาก ฿1,690 → ฿1,679</div>
+        <div class="pdesc">ถูกกว่า chocksomkid ฿2 — เล็กน้อยมาก แต่ algorithm sort ราคาต่ำก่อน CTR จะขึ้น เสีย margin แค่ ฿11/ชิ้น คุ้มมาก</div>
+      </div>
+    </div>
+    <div class="pitem">
+      <div class="pnum hot">3</div>
+      <div>
+        <div class="ptitle">เพิ่ม Ads ให้ "ขีดตรง 80×200" ใน De โดยเฉพาะ</div>
+        <div class="pdesc">SKU นี้ราคาถูกกว่าคู่แข่งทั้งคู่อยู่แล้ว (฿1,850 vs ฿1,890/฿1,899) แต่ขายได้แค่ 84 ชิ้น — ปัญหาคือ visibility ยิง ads keyword "ประตูโมเดิร์นขีดตรง" จะชนะได้ทันที</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-accent yellow"></div>
+    <div class="card-title">⚡ Week 2-4</div>
+    <div class="pitem">
+      <div class="pnum med">4</div>
+      <div>
+        <div class="ptitle">Review Campaign เร่งที่ Tb โดยเฉพาะ</div>
+        <div class="pdesc">Tb มีแค่ 222 review vs De 345 — ranking ห่างกันมาก (#439 vs #98) การเร่ง review Tb จะดัน ranking ขึ้นเร็วที่สุด เพราะเป็น low-hanging fruit</div>
+      </div>
+    </div>
+    <div class="pitem">
+      <div class="pnum med">5</div>
+      <div>
+        <div class="ptitle">สร้าง Bundle ประตู + วงกบ</div>
+        <div class="pdesc">ขาย "ชุดประตูพร้อมวงกบ" ราคา set ถูกกว่าซื้อแยก ฿100-150 — ล็อคออเดอร์ก่อนลูกค้าไปซื้อวงกบที่ chock ฿890</div>
+      </div>
+    </div>
+    <div class="pitem">
+      <div class="pnum med">6</div>
+      <div>
+        <div class="ptitle">ถ่ายรูป lifestyle สำหรับโมเดิร์น — ต่างจากสายฝน</div>
+        <div class="pdesc">ลูกค้าโมเดิร์นซื้อ "ความรู้สึก" มากกว่า spec — รูปในห้องนอน minimal, กับ bedside lamp, plant เล็กๆ trigger limbic system ได้ดีกว่ารูปขาวล้วน</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-accent purple"></div>
+    <div class="card-title">🚀 Month 2-3</div>
+    <div class="pitem">
+      <div class="pnum cool">7</div>
+      <div>
+        <div class="ptitle">เปิด SKU ขีดตรง 80×180 ใน De ที่ ฿1,849</div>
+        <div class="pdesc">ถูกกว่า chock ฿41 — ถ้า 80×200 ขีดตรงขายดีแล้ว ต่อด้วย 80×180 ทันที demand มีอยู่แน่</div>
+      </div>
+    </div>
+    <div class="pitem">
+      <div class="pnum cool">8</div>
+      <div>
+        <div class="ptitle">เพิ่ม 90×200 (ทั้งธรรมดาและขีดเส้น)</div>
+        <div class="pdesc">demand 6.27% + margin สูงกว่า ถ้าเราผลิตได้ไม่ยาก เป็น upsell ที่ดีมากสำหรับลูกค้าบ้านทางการ</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">KPI ที่ต้องวัด</div>
+  <div class="kpi-grid">
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--blue)">Top 80</div>
+      <div class="kpi-label">Ranking De ใน 60 วัน</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--yellow)">Top 300</div>
+      <div class="kpi-label">Ranking Tb ใน 60 วัน</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--green)">+30</div>
+      <div class="kpi-label">ชิ้น/เดือน จาก 80×180 ใหม่</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--orange)">4x+</div>
+      <div class="kpi-label">ROAS ads ขีดตรง 80×200</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <strong>กฎทอง โมเดิร์น:</strong> De ranking #98 คืออาวุธหลักแล้ว — ทุก action ต้องรับใช้ De ก่อน<br>
+    เพิ่ม 80×180 + ลดราคา 80×200 ฿11 + ads ขีดตรง = 3 อย่างที่ให้ผลเร็วที่สุด<br><br>
+    <strong>Tb:</strong> โฟกัสที่ review campaign อย่างเดียวก่อน จนขึ้น Top 300
+  </div>
+
+</div>
+
+<script>
+  function go(id) {
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.currentTarget.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+</script>
+</body>
+</html>

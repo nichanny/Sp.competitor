@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopee Neuro-Marketing Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #FF6B2B;
+    --orange-light: #FF8C5A;
+    --orange-glow: rgba(255,107,43,0.15);
+    --dark: #0D0D0D;
+    --dark2: #141414;
+    --dark3: #1C1C1C;
+    --dark4: #242424;
+    --text: #F0EDE8;
+    --text-dim: #8A8480;
+    --accent-green: #4ECDC4;
+    --accent-yellow: #FFD93D;
+    --accent-purple: #C77DFF;
+    --accent-red: #FF4D6D;
+    --border: rgba(255,107,43,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .hero {
+    position: relative;
+    padding: 60px 24px 40px;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 0%, rgba(255,107,43,0.12) 0%, transparent 70%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+
+  .hero h1 span { color: var(--orange); }
+
+  .hero-sub {
+    color: var(--text-dim);
+    font-size: 14px;
+    max-width: 480px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.3s forwards;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 16px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--border);
+    background: var(--dark2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 10px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.2s;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+
+  .tab-btn:hover { color: var(--text); background: var(--dark3); }
+  .tab-btn.active {
+    color: var(--orange);
+    border-bottom-color: var(--orange);
+    background: var(--dark3);
+  }
+
+  /* CONTENT */
+  .tab-content { display: none; padding: 24px 16px 60px; max-width: 800px; margin: 0 auto; }
+  .tab-content.active { display: block; animation: fadeUp 0.4s ease forwards; }
+
+  /* CARDS */
+  .card {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--orange), transparent);
+  }
+
+  .card.green::before { background: linear-gradient(90deg, var(--accent-green), transparent); }
+  .card.yellow::before { background: linear-gradient(90deg, var(--accent-yellow), transparent); }
+  .card.purple::before { background: linear-gradient(90deg, var(--accent-purple), transparent); }
+  .card.red::before { background: linear-gradient(90deg, var(--accent-red), transparent); }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title .icon {
+    width: 32px; height: 32px;
+    background: var(--orange-glow);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .card.green .icon { background: rgba(78,205,196,0.15); }
+  .card.yellow .icon { background: rgba(255,217,61,0.15); }
+  .card.purple .icon { background: rgba(199,125,255,0.15); }
+  .card.red .icon { background: rgba(255,77,109,0.15); }
+
+  /* SWOT GRID */
+  .swot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .swot-box {
+    background: var(--dark4);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .swot-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .swot-box.S .swot-label { color: var(--accent-green); }
+  .swot-box.W .swot-label { color: var(--accent-red); }
+  .swot-box.O .swot-label { color: var(--accent-yellow); }
+  .swot-box.T .swot-label { color: var(--accent-purple); }
+
+  .swot-item {
+    font-size: 13px;
+    color: var(--text-dim);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .swot-item:last-child { border-bottom: none; }
+  .swot-item::before { content: '—'; color: rgba(255,255,255,0.2); flex-shrink: 0; margin-top: 1px; }
+
+  /* BRAIN LAYERS */
+  .brain-layer {
+    background: var(--dark4);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--orange);
+    position: relative;
+  }
+
+  .brain-layer.green { border-left-color: var(--accent-green); }
+  .brain-layer.yellow { border-left-color: var(--accent-yellow); }
+  .brain-layer.purple { border-left-color: var(--accent-purple); }
+
+  .brain-layer-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .brain-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--orange-glow);
+    color: var(--orange);
+  }
+
+  .brain-layer.green .brain-badge { background: rgba(78,205,196,0.15); color: var(--accent-green); }
+  .brain-layer.yellow .brain-badge { background: rgba(255,217,61,0.15); color: var(--accent-yellow); }
+  .brain-layer.purple .brain-badge { background: rgba(199,125,255,0.15); color: var(--accent-purple); }
+
+  .brain-layer p { font-size: 13px; color: var(--text-dim); }
+
+  /* PRIORITY LIST */
+  .priority-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    align-items: flex-start;
+  }
+
+  .priority-item:last-child { border-bottom: none; }
+
+  .priority-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--orange);
+    color: white;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .priority-num.dim { background: var(--dark4); color: var(--text-dim); }
+
+  .priority-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .priority-desc { font-size: 13px; color: var(--text-dim); }
+
+  /* TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--dark4);
+    color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .tag.orange { background: var(--orange-glow); color: var(--orange); border-color: rgba(255,107,43,0.3); }
+  .tag.green { background: rgba(78,205,196,0.1); color: var(--accent-green); border-color: rgba(78,205,196,0.3); }
+  .tag.yellow { background: rgba(255,217,61,0.1); color: var(--accent-yellow); border-color: rgba(255,217,61,0.3); }
+
+  /* MATRIX */
+  .matrix-row {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    align-items: center;
+    font-size: 13px;
+  }
+
+  .matrix-row:last-child { border-bottom: none; }
+  .matrix-label { color: var(--text-dim); }
+  .matrix-bar-wrap { background: var(--dark4); border-radius: 4px; height: 6px; overflow: hidden; }
+  .matrix-bar { height: 100%; border-radius: 4px; background: var(--orange); transition: width 1s ease; }
+  .matrix-bar.green { background: var(--accent-green); }
+  .matrix-bar.yellow { background: var(--accent-yellow); }
+  .matrix-score { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+
+  /* FORMULA */
+  .formula {
+    background: var(--dark4);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin: 16px 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+    color: var(--text-dim);
+    border: 1px dashed rgba(255,107,43,0.3);
+  }
+
+  .formula .highlight { color: var(--orange); font-weight: 700; font-size: 15px; }
+  .formula .equal { color: var(--accent-green); }
+
+  /* SECTION HEADER */
+  .section-header {
+    margin: 28px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* CHECKLIST */
+  .checklist-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+    align-items: flex-start;
+  }
+
+  .check-icon {
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    background: var(--orange-glow);
+    border: 1px solid rgba(255,107,43,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .checklist-item.done .check-icon {
+    background: rgba(78,205,196,0.15);
+    border-color: rgba(78,205,196,0.4);
+    color: var(--accent-green);
+  }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--orange), var(--dark4));
+    border-radius: 2px;
+  }
+
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot {
+    position: absolute;
+    left: -20px; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--orange);
+    border: 2px solid var(--dark3);
+  }
+
+  .tl-dot.dim { background: var(--dark4); border-color: var(--border); }
+
+  .tl-week {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--orange);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .tl-week.dim { color: var(--text-dim); }
+  .tl-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .tl-desc { font-size: 13px; color: var(--text-dim); }
+
+  /* KEYFRAMES */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    margin-top: 32px;
+    padding: 16px;
+    background: var(--dark3);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  .footer-note strong { color: var(--orange); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">Shopee Neuro-Marketing Framework × ไม้สัก</div>
+  <h1>ชนะ Shopee ด้วย<br><span>สมอง + กลยุทธ์</span></h1>
+  <p class="hero-sub">Framework ที่รวม SWOT + Neuroscience + จิตวิทยาผู้ซื้อ เพื่อขึ้นอันดับ 1 และกำไรสูงสุด</p>
+</div>
+
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('swot')">📊 SWOT</button>
+  <button class="tab-btn" onclick="showTab('neuro')">🧠 Neuro-Buy</button>
+  <button class="tab-btn" onclick="showTab('ranking')">🏆 Ranking</button>
+  <button class="tab-btn" onclick="showTab('content')">📸 Content</button>
+  <button class="tab-btn" onclick="showTab('roadmap')">🗺 Roadmap</button>
+</div>
+
+<!-- TAB 1: SWOT -->
+<div id="swot" class="tab-content active">
+
+  <div class="section-header">
+    <h2>SWOT — ภาพรวม Portfolio ไม้สัก</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="swot-grid">
+    <div class="swot-box S">
+      <div class="swot-label">S — จุดแข็ง</div>
+      <div class="swot-item">ไม้สักแท้ = differentiation สูงมาก</div>
+      <div class="swot-item">ผลิตเองได้ = ควบคุมคุณภาพ + ต้นทุน</div>
+      <div class="swot-item">สินค้าหลากหลาย (ประตู→ของตกแต่ง)</div>
+      <div class="swot-item">มีช่องทางหลายขา (Shopee+Line OA)</div>
+      <div class="swot-item">ช่างฝีมือมีทักษะสูง</div>
+    </div>
+    <div class="swot-box W">
+      <div class="swot-label">W — จุดอ่อน</div>
+      <div class="swot-item">Ranking ต่ำ → ถูก algorithm กลบ</div>
+      <div class="swot-item">รูปสินค้ายังไม่แข่งขันได้</div>
+      <div class="swot-item">ขาด social proof (review น้อย)</div>
+      <div class="swot-item">Copy/Title ไม่ optimize SEO Shopee</div>
+      <div class="swot-item">ส่งช้า = ลด ranking อัตโนมัติ</div>
+    </div>
+    <div class="swot-box O">
+      <div class="swot-label">O — โอกาส</div>
+      <div class="swot-item">เทรนด์ Japandi / natural ยังแรง</div>
+      <div class="swot-item">WFH ทำให้คนต้องการของตกแต่ง</div>
+      <div class="swot-item">ไม้สัก = premium ที่คู่แข่ง MDF สู้ไม่ได้</div>
+      <div class="swot-item">ของขวัญพรีเมียม = margin สูง</div>
+      <div class="swot-item">Shopee Affiliate ดึง traffic ฟรี</div>
+    </div>
+    <div class="swot-box T">
+      <div class="swot-label">T — ภัยคุกคาม</div>
+      <div class="swot-item">คู่แข่งตัดราคา (MDF/ไม้ปลอม)</div>
+      <div class="swot-item">สินค้านำเข้าจีน design สวย ราคาถูก</div>
+      <div class="swot-item">Algorithm Shopee เปลี่ยนบ่อย</div>
+      <div class="swot-item">ค่าส่งสินค้าไม้ใหญ่สูง</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Gap Analysis — ช่องว่างที่ต้องเจาะ</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🎯</div>ช่องว่างสำคัญ #1 — Story Vacuum</div>
+    <p style="font-size:13px; color:var(--text-dim); margin-bottom:10px;">คู่แข่งส่วนใหญ่ขาย <strong style="color:var(--text)">"สินค้า"</strong> แต่ไม่มีใครขาย <strong style="color:var(--orange)">"เรื่องราว"</strong> ของไม้สักไทย — นี่คือ blue ocean ที่ใช้ต้นทุน 0 แต่สร้าง premium pricing ได้</p>
+    <div class="tags">
+      <span class="tag orange">ทำได้เลย</span>
+      <span class="tag green">ต้นทุน 0</span>
+      <span class="tag">impact สูง</span>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title"><div class="icon">🎯</div>ช่องว่างสำคัญ #2 — Size Niche</div>
+    <p style="font-size:13px; color:var(--text-dim); margin-bottom:10px;">คู่แข่งมักขายแค่ size มาตรฐาน แต่ลูกค้า condo/บ้านเก่ามักต้องการ <strong style="color:var(--text)">ขนาดพิเศษ</strong> — ใครรับทำ custom ได้เร็วและสื่อสารชัด จะชนะได้ในช่อง Long-tail keyword</p>
+    <div class="tags">
+      <span class="tag orange">medium effort</span>
+      <span class="tag green">margin สูง</span>
+      <span class="tag">คู่แข่งน้อย</span>
+    </div>
+  </div>
+
+  <div class="card yellow">
+    <div class="card-title"><div class="icon">🎯</div>ช่องว่างสำคัญ #3 — Review Desert</div>
+    <p style="font-size:13px; color:var(--text-dim); margin-bottom:10px;">สินค้าไม้สักไทยใน Shopee มี review น้อยมากเมื่อเทียบกับ volume สินค้า — ใครสะสม review + รูปจากลูกค้า (UGC) ได้เร็ว algorithm จะ boost ทันที</p>
+    <div class="tags">
+      <span class="tag orange">เร่งด่วน</span>
+      <span class="tag">lever ใหญ่</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- TAB 2: NEURO -->
+<div id="neuro" class="tab-content">
+
+  <div class="section-header">
+    <h2>Neuroscience of Buying — สมองลูกค้าทำงานยังไง</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧠</div>3 สมองที่ต้องชนะ (Triune Brain Model)</div>
+    
+    <div class="brain-layer">
+      <div class="brain-layer-title">
+        Reptilian Brain (สมองสัตว์เลื้อยคลาน)
+        <span class="brain-badge">ตัดสินใจก่อน</span>
+      </div>
+      <p>ทำงานก่อนเหตุผล — ตอบสนองต่อ <strong style="color:var(--text)">ความอยู่รอด / ความสวยงาม / สิ่งที่โดดเด่น</strong><br>
+      <strong style="color:var(--orange)">→ ชนะด้วย:</strong> รูปแรกต้องตีตาใน 0.3 วินาที, background ขาว/น้ำตาล, texture ไม้ชัด</p>
+    </div>
+
+    <div class="brain-layer yellow">
+      <div class="brain-layer-title">
+        Limbic System (สมองอารมณ์)
+        <span class="brain-badge yellow">สร้าง desire</span>
+      </div>
+      <p>ควบคุม emotion และ memory — ซื้อเมื่อ <strong style="color:var(--text)">รู้สึกเชื่อมโยง หรือจินตนาการว่าตัวเองมีของนั้นแล้ว</strong><br>
+      <strong style="color:var(--accent-yellow)">→ ชนะด้วย:</strong> lifestyle photo (ของในบ้านจริง), video unboxing, คำพูดที่แตะ "บ้านอุ่น / ของดีส่งต่อรุ่น"</p>
+    </div>
+
+    <div class="brain-layer green">
+      <div class="brain-layer-title">
+        Neocortex (สมองเหตุผล)
+        <span class="brain-badge green">justify การซื้อ</span>
+      </div>
+      <p>เหตุผลที่คนใช้ <strong style="color:var(--text)">อธิบายว่าทำไมถึงซื้อ</strong> หลังจากอยากได้แล้ว<br>
+      <strong style="color:var(--accent-green)">→ ชนะด้วย:</strong> specs ชัด, comparison table ไม้สักvsMDF, คุ้มค่า long-term, รับประกัน</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Dopamine Triggers — กลไก 5 ตัวที่ทำให้กดซื้อ</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title"><div class="icon">⚡</div>Scarcity + FOMO (กลัวพลาด)</div>
+    <p style="font-size:13px; color:var(--text-dim);">Dopamine พุ่งเมื่อเห็นว่า "เหลือน้อย" หรือ "หมดแล้ว"<br>
+    <strong style="color:var(--text)">ใช้:</strong> "เหลือ 3 ชิ้นสุดท้าย" / "รับออเดอร์รอบหน้าอีก 2 อาทิตย์" / จำกัด batch custom</p>
+  </div>
+
+  <div class="card yellow">
+    <div class="card-title"><div class="icon">⚡</div>Social Proof (คนอื่นเขาเลือก)</div>
+    <p style="font-size:13px; color:var(--text-dim);">Mirror neuron ทำให้สมองลอกพฤติกรรมคนอื่น — review + รูป real ทรงพลังกว่าคำโฆษณา 10 เท่า<br>
+    <strong style="color:var(--text)">ใช้:</strong> ขอรูป/คลิปหลังส่งสินค้า, highlight review ที่พูดถึงคุณภาพไม้</p>
+  </div>
+
+  <div class="card purple">
+    <div class="card-title"><div class="icon">⚡</div>Anchoring (ยึดราคา)</div>
+    <p style="font-size:13px; color:var(--text-dim);">สมองตัดสิน "แพง/ถูก" จาก reference แรกที่เห็น<br>
+    <strong style="color:var(--text)">ใช้:</strong> มี SKU ราคาสูงไว้ anchor เช่น set premium 3,500 → ทำให้ 1,200 ดูสมเหตุสมผล</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">⚡</div>Loss Aversion (กลัวสูญเสีย)</div>
+    <p style="font-size:13px; color:var(--text-dim);">สมองรู้สึกเสียใจจากการ "สูญเสีย" มากกว่าดีใจจากการ "ได้รับ" ถึง 2.5 เท่า<br>
+    <strong style="color:var(--text)">ใช้:</strong> "ถ้าไม่ใช้ไม้สักแท้ ต้องเปลี่ยนใหม่ใน 5 ปี" / คำนวณต้นทุนระยะยาวให้เห็น</p>
+  </div>
+
+  <div class="card red">
+    <div class="card-title"><div class="icon">⚡</div>Identity Signaling (แสดงตัวตน)</div>
+    <p style="font-size:13px; color:var(--text-dim);">คนซื้อของที่บอกว่า "ฉันเป็นคนแบบนี้" — ไม้สักแท้บอกว่า "ฉันเลือกของดี ไม่เอาของปลอม"<br>
+    <strong style="color:var(--text)">ใช้:</strong> positioning "สำหรับคนที่ไม่ประนีประนอมเรื่องคุณภาพ" / "ส่งต่อรุ่นลูกได้"</p>
+  </div>
+
+  <div class="formula">
+    <div>สูตร Conversion Shopee ที่ดี</div>
+    <div class="highlight">รูปตีตา × Social Proof × Anchor Price × Story</div>
+    <div class="equal">= กดซื้อโดยไม่ต้องคิดนาน</div>
+  </div>
+
+</div>
+
+<!-- TAB 3: RANKING -->
+<div id="ranking" class="tab-content">
+
+  <div class="section-header">
+    <h2>Shopee Algorithm — ตัวแปรที่ควบคุมได้</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📈</div>Score ที่ Algorithm ชั่งน้ำหนัก</div>
+    
+    <div class="matrix-row">
+      <div class="matrix-label">CTR (คลิก/impression)</div>
+      <div class="matrix-bar-wrap"><div class="matrix-bar" style="width:95%"></div></div>
+      <div class="matrix-score">น้ำหนัก ★★★★★</div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label">Conversion Rate</div>
+      <div class="matrix-bar-wrap"><div class="matrix-bar" style="width:90%"></div></div>
+      <div class="matrix-score">น้ำหนัก ★★★★★</div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label">Ship On Time</div>
+      <div class="matrix-bar-wrap"><div class="matrix-bar green" style="width:85%"></div></div>
+      <div class="matrix-score">น้ำหนัก ★★★★☆</div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label">Review Score</div>
+      <div class="matrix-bar-wrap"><div class="matrix-bar green" style="width:80%"></div></div>
+      <div class="matrix-score">น้ำหนัก ★★★★☆</div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label">Chat Response Rate</div>
+      <div class="matrix-bar-wrap"><div class="matrix-bar yellow" style="width:70%"></div></div>
+      <div class="matrix-score">น้ำหนัก ★★★☆☆</div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label">Ads (Boost)</div>
+      <div class="matrix-bar-wrap"><div class="matrix-bar yellow" style="width:65%"></div></div>
+      <div class="matrix-score">น้ำหนัก ★★★☆☆</div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label">Keyword Match</div>
+      <div class="matrix-bar-wrap"><div class="matrix-bar" style="width:75%"></div></div>
+      <div class="matrix-score">น้ำหนัก ★★★★☆</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>SEO Shopee — สูตร Title ที่ชนะ</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card yellow">
+    <div class="card-title"><div class="icon">🔤</div>โครงสร้าง Title ที่ algorithm รัก</div>
+    <div class="formula" style="text-align:left; font-size:12px; line-height:2.2;">
+      <span style="color:var(--accent-green);">[Keyword หลัก]</span> + <span style="color:var(--orange);">[วัสดุ]</span> + <span style="color:var(--accent-yellow);">[ขนาด/รุ่น]</span> + <span style="color:var(--accent-purple);">[Feature/USP]</span><br>
+      <span style="color:var(--text-dim); font-size:11px;">ตัวอย่าง: <span style="color:var(--text)">ประตูไม้สัก บานเดี่ยว 80x200 แข็งแรง ทนทาน ส่งฟรี</span></span>
+    </div>
+    <div style="font-size:13px; color:var(--text-dim);">
+      <strong style="color:var(--text);">Keyword ที่ต้องยัด:</strong> ไม้สัก, ไม้สักแท้, ประตูไม้, วงกบ, ของตกแต่งบ้าน<br>
+      <strong style="color:var(--text);">ห้ามใส่:</strong> ชื่อร้าน, ตัวพิมพ์ใหญ่ทั้งหมด, อักขระพิเศษ !!!
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Quick Wins — ทำได้เลย impact ทันที</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">1</div>
+    <div>
+      <div class="priority-title">ส่งตรงเวลา 100% — ก่อนทำอย่างอื่น</div>
+      <div class="priority-desc">Ship On Time penalty จาก Shopee คือตัวที่กด ranking ลงแรงที่สุด ถ้าแก้จุดนี้ได้ Ranking จะค่อยๆ ขึ้นเองโดยไม่ต้องเพิ่ม ads</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">2</div>
+    <div>
+      <div class="priority-title">Rewrite title + description ทุก SKU ด้วย keyword</div>
+      <div class="priority-desc">ใช้เวลา 1-2 ชั่วโมง แต่ผล organic ranking ดีขึ้นใน 1-2 สัปดาห์ ไม่มีต้นทุนเพิ่ม</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">3</div>
+    <div>
+      <div class="priority-title">Review Campaign — ขอรูปหลังส่งสินค้า</div>
+      <div class="priority-desc">ส่ง message หลังส่งของ 3 วัน ขอรูปแลก coupon 30-50 บาท — 10 review แรกเปลี่ยน algorithm ได้ชัดเจน</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num dim">4</div>
+    <div>
+      <div class="priority-title">รูปแรก — A/B Test ด้วย Shopee Boost</div>
+      <div class="priority-desc">ลอง 2 รูปหน้า สัปดาห์ละรูป ดู CTR — รูปที่ชนะคือรูปที่ algorithm จะ push ต่อ</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num dim">5</div>
+    <div>
+      <div class="priority-title">เปิด Shopee Ads แบบ Smart — ไม่ใช่ Auto</div>
+      <div class="priority-desc">ตั้ง Manual keyword bid สำหรับ keyword ที่ conversion rate สูง แทนที่จะให้ Auto burn งบกับ keyword กว้างๆ</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TAB 4: CONTENT -->
+<div id="content" class="tab-content">
+
+  <div class="section-header">
+    <h2>รูปสินค้า — โครงสร้าง 5 ภาพที่ต้องมี</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">1</div>
+    <div>
+      <div class="priority-title">Hero Shot — ตีตาใน 0.3 วินาที</div>
+      <div class="priority-desc">พื้นหลังขาว/น้ำตาลอ่อน, ไม้อยู่ตรงกลาง, เห็น texture ชัด, แสงดี ไม่มีเงา — นี่คือรูปที่ algorithm ใช้วัด CTR</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">2</div>
+    <div>
+      <div class="priority-title">Lifestyle Shot — จินตนาการในบ้านจริง</div>
+      <div class="priority-desc">ถ่ายในบ้าน/มุมจริง มีของ prop เช่น ต้นไม้เล็ก/หนังสือ/กาแฟ — trigger limbic brain ให้ลูกค้า "เห็นตัวเอง" ใช้สินค้า</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">3</div>
+    <div>
+      <div class="priority-title">Detail Shot — texture + คุณภาพ</div>
+      <div class="priority-desc">ใกล้มาก เห็น grain ไม้, รอยต่อ, ผิวเรียบ — สร้างความเชื่อมั่นและ justify ราคาที่สูงกว่า MDF</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">4</div>
+    <div>
+      <div class="priority-title">Size Reference — วัดเทียบให้เห็น</div>
+      <div class="priority-desc">ถ่ายเทียบกับคน, เมตรไม้, หรือ infographic ขนาด — ลดความกังวลเรื่อง "ใหญ่เกินไปไหม" ก่อนซื้อ</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">5</div>
+    <div>
+      <div class="priority-title">Social Proof Shot — รูปลูกค้าจริง</div>
+      <div class="priority-desc">รูปลูกค้าติดตั้งแล้ว + quote สั้นๆ — mirror neuron ทำให้คนอื่น "อยากเป็นแบบนั้นบ้าง"</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Copy Psychology — คำที่สมองซื้อ</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">✍️</div>Words ที่ trigger dopamine</div>
+    <div class="tags">
+      <span class="tag orange">ไม้สักแท้ 100%</span>
+      <span class="tag orange">ส่งต่อรุ่นลูกได้</span>
+      <span class="tag orange">ผลิตโดยช่างฝีมือ</span>
+      <span class="tag green">ทนทาน 20+ ปี</span>
+      <span class="tag green">ไม่มีสารเคมีอันตราย</span>
+      <span class="tag yellow">ขนาด custom ได้</span>
+      <span class="tag yellow">จากป่าที่ถูกกฎหมาย</span>
+      <span class="tag">Made in Thailand</span>
+      <span class="tag">ซื้อครั้งเดียว ไม่ต้องเปลี่ยน</span>
+    </div>
+  </div>
+
+  <div class="card red">
+    <div class="card-title"><div class="icon">🚫</div>คำที่ต้องหลีกเลี่ยง</div>
+    <div class="tags">
+      <span class="tag">ราคาถูก</span>
+      <span class="tag">พร้อมส่ง</span>
+      <span class="tag">ของดีราคาไม่แพง</span>
+      <span class="tag">ลดราคา XX%</span>
+    </div>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:10px;">คำเหล่านี้ทำลาย premium positioning และดึงลูกค้าที่ sensitive เรื่องราคา ซึ่งมักเป็น segment ที่ margin ต่ำที่สุด</p>
+  </div>
+
+</div>
+
+<!-- TAB 5: ROADMAP -->
+<div id="roadmap" class="tab-content">
+
+  <div class="section-header">
+    <h2>90-Day Battle Plan — ทำน้อย ได้มาก</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">WEEK 1-2 — Foundation Fix</div>
+      <div class="tl-title">แก้ปัญหาพื้นฐานก่อนยิง ads</div>
+      <div class="tl-desc">✓ Audit ทุก SKU: title, keyword, รูปแรก<br>
+      ✓ ตั้งระบบส่งของให้ On Time 100%<br>
+      ✓ ตอบ chat ภายใน 1 ชั่วโมง (ตั้ง auto-reply)<br>
+      ✓ ระบุ Top 3 SKU ที่จะโฟกัสก่อน</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">WEEK 3-4 — Content Attack</div>
+      <div class="tl-title">ยิง content + สะสม social proof</div>
+      <div class="tl-desc">✓ ถ่ายรูปใหม่ Top 3 SKU ครบ 5 แบบ<br>
+      ✓ Rewrite description ด้วย framework Neuro-Copy<br>
+      ✓ เริ่ม review campaign (ขอรูปหลังส่ง 3 วัน)<br>
+      ✓ เปิด Shopee Ads Manual สำหรับ Top 3 SKU</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">WEEK 5-8 — Scale Winner</div>
+      <div class="tl-title">ดู data แล้ว double down</div>
+      <div class="tl-desc">✓ SKU ไหน CTR ดี → เพิ่ม ads budget<br>
+      ✓ Keyword ไหน convert → bid เพิ่ม<br>
+      ✓ เพิ่ม lifestyle content ใน description (video)<br>
+      ✓ เริ่ม bundle offer สำหรับ upsell</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dim"></div>
+      <div class="tl-week dim">WEEK 9-12 — Top of Mind</div>
+      <div class="tl-title">สร้าง brand moat ที่คู่แข่งลอกไม่ได้</div>
+      <div class="tl-desc">✓ สร้าง Story ร้าน (about us + origin story)<br>
+      ✓ เปิด Flash Sale เฉพาะ follower ร้าน<br>
+      ✓ ดัน Affiliate ให้ช่วย push traffic<br>
+      ✓ วัดผล: ranking, conversion, revenue vs เดือน 1</div>
+    </div>
+
+  </div>
+
+  <div class="section-header">
+    <h2>KPI ที่ต้องวัดทุกสัปดาห์</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title"><div class="icon">📊</div>Metrics Dashboard รายสัปดาห์</div>
+    <div class="matrix-row">
+      <div class="matrix-label" style="font-size:13px;">CTR รูปหน้า</div>
+      <div style="font-size:13px; color:var(--text-dim);">เป้า &gt; 2.5% ถ้าต่ำกว่า → เปลี่ยนรูป</div>
+      <div></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label" style="font-size:13px;">Conversion</div>
+      <div style="font-size:13px; color:var(--text-dim);">เป้า &gt; 3% ถ้าต่ำ → แก้ราคา/copy</div>
+      <div></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label" style="font-size:13px;">Ship Rate</div>
+      <div style="font-size:13px; color:var(--text-dim);">ต้อง 95%+ ไม่มีข้อแม้</div>
+      <div></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label" style="font-size:13px;">Review Score</div>
+      <div style="font-size:13px; color:var(--text-dim);">ต้อง 4.8+ ตอบทุก review</div>
+      <div></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-label" style="font-size:13px;">ROAS (Ads)</div>
+      <div style="font-size:13px; color:var(--text-dim);">เป้า &gt; 4x ถ้าต่ำกว่า → หยุด optimize</div>
+      <div></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Framework นี้ใช้หลัก <strong>Pareto 80/20</strong> — Focus ที่ <strong>Top 3 SKU + Ship On Time + รูป</strong><br>
+    3 อย่างนี้คิดเป็น 80% ของ ranking impact ทั้งหมด ทำส่วนอื่นต่อเมื่อ 3 อย่างนี้ solid แล้ว
+  </div>
+
+</div>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>

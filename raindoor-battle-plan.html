@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ประตูสายฝน — Battle Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0F;
+    --bg2: #111118;
+    --bg3: #18181F;
+    --bg4: #1E1E28;
+    --text: #EEEAF5;
+    --dim: #7A7590;
+    --orange: #FF6B35;
+    --orange-glow: rgba(255,107,53,0.12);
+    --green: #00E5A0;
+    --green-glow: rgba(0,229,160,0.1);
+    --red: #FF4060;
+    --red-glow: rgba(255,64,96,0.1);
+    --yellow: #FFD060;
+    --yellow-glow: rgba(255,208,96,0.1);
+    --purple: #A78BFA;
+    --border: rgba(255,255,255,0.07);
+    --border-orange: rgba(255,107,53,0.25);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0A0A0F 0%, #14101E 100%);
+    border-bottom: 1px solid var(--border-orange);
+    padding: 48px 20px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 400px; height: 200px;
+    background: radial-gradient(ellipse, rgba(255,107,53,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    border: 1px solid var(--border-orange);
+    border-radius: 20px;
+    padding: 4px 14px;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: clamp(24px, 5vw, 40px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .hero h1 em { color: var(--orange); font-style: normal; }
+
+  .hero-sub {
+    color: var(--dim);
+    font-size: 13px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    gap: 2px;
+    padding: 0 12px;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    flex-shrink: 0;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: var(--dim);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+  /* CONTENT */
+  .page { display: none; padding: 20px 16px 60px; max-width: 780px; margin: 0 auto; }
+  .page.active { display: block; animation: up 0.35s ease; }
+  @keyframes up { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* SECTION */
+  .sec-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 28px 0 14px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .sec-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .sec-title:first-child { margin-top: 8px; }
+
+  /* CARD */
+  .card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-accent { position: absolute; top:0; left:0; right:0; height:2px; }
+  .card-accent.orange { background: linear-gradient(90deg, var(--orange), transparent); }
+  .card-accent.green { background: linear-gradient(90deg, var(--green), transparent); }
+  .card-accent.red { background: linear-gradient(90deg, var(--red), transparent); }
+  .card-accent.yellow { background: linear-gradient(90deg, var(--yellow), transparent); }
+  .card-accent.purple { background: linear-gradient(90deg, var(--purple), transparent); }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* COMPARE TABLE */
+  .ctable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .ctable th {
+    background: var(--bg4);
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-family: 'Space Mono', monospace;
+    font-weight: 400;
+  }
+  .ctable td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .ctable tr:last-child td { border-bottom: none; }
+  .ctable tr:hover td { background: var(--bg4); }
+
+  .win { color: var(--green); font-weight: 700; }
+  .lose { color: var(--red); }
+  .neutral { color: var(--yellow); }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+  }
+  .badge-green { background: var(--green-glow); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
+  .badge-red { background: var(--red-glow); color: var(--red); border: 1px solid rgba(255,64,96,0.3); }
+  .badge-orange { background: var(--orange-glow); color: var(--orange); border: 1px solid var(--border-orange); }
+  .badge-yellow { background: var(--yellow-glow); color: var(--yellow); border: 1px solid rgba(255,208,96,0.3); }
+  .badge-purple { background: rgba(167,139,250,0.1); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+
+  /* SKU GRID */
+  .sku-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .sku-box {
+    background: var(--bg4);
+    border-radius: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
+
+  .sku-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+
+  .sku-share {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
+
+  .sku-share.big { color: var(--green); }
+  .sku-share.mid { color: var(--yellow); }
+  .sku-share.small { color: var(--dim); }
+
+  .sku-detail { font-size: 12px; color: var(--dim); }
+
+  /* PRIORITY LIST */
+  .plist { }
+  .pitem {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .pitem:last-child { border-bottom: none; }
+
+  .pnum {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .pnum.hot { background: var(--orange); color: white; }
+  .pnum.med { background: var(--bg4); color: var(--yellow); border: 1px solid rgba(255,208,96,0.3); }
+  .pnum.cool { background: var(--bg4); color: var(--dim); border: 1px solid var(--border); }
+
+  .ptitle { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+  .pdesc { font-size: 12px; color: var(--dim); line-height: 1.5; }
+
+  /* IMPACT BAR */
+  .impact-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .impact-label { width: 120px; flex-shrink: 0; color: var(--dim); }
+  .impact-bar-bg { flex: 1; height: 6px; background: var(--bg4); border-radius: 3px; overflow: hidden; }
+  .impact-bar { height: 100%; border-radius: 3px; }
+  .impact-score { width: 36px; text-align: right; font-family: 'Space Mono', monospace; font-size: 10px; }
+
+  /* FORMULA BOX */
+  .formula {
+    background: var(--bg4);
+    border: 1px dashed var(--border-orange);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    margin: 14px 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 2;
+    color: var(--dim);
+  }
+  .formula .hl { color: var(--orange); font-size: 15px; font-weight: 700; }
+  .formula .eq { color: var(--green); }
+
+  /* TIMELINE */
+  .timeline { padding-left: 20px; position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px; top: 10px; bottom: 10px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--orange) 0%, var(--bg4) 100%);
+    border-radius: 2px;
+  }
+  .titem { position: relative; margin-bottom: 18px; }
+  .tdot {
+    position: absolute;
+    left: -17px; top: 5px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--bg3);
+  }
+  .tdot.hot { background: var(--orange); }
+  .tdot.med { background: var(--yellow); }
+  .tdot.cool { background: var(--dim); }
+
+  .tweek {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 3px;
+  }
+  .tweek.hot { color: var(--orange); }
+  .tweek.med { color: var(--yellow); }
+  .tweek.cool { color: var(--dim); }
+
+  .ttitle { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+  .tdesc { font-size: 12px; color: var(--dim); line-height: 1.55; }
+
+  /* WARNING BOX */
+  .warn {
+    background: rgba(255,64,96,0.08);
+    border: 1px solid rgba(255,64,96,0.25);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    margin: 12px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .tip {
+    background: var(--green-glow);
+    border: 1px solid rgba(0,229,160,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    margin: 12px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  /* PRICE COMPARE */
+  .price-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    font-size: 13px;
+  }
+  .price-row.header {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    color: var(--dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-orange);
+    padding-bottom: 6px;
+  }
+
+  /* KPI */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .kpi-box {
+    background: var(--bg4);
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .kpi-num {
+    font-size: 26px;
+    font-weight: 800;
+    font-family: 'Space Mono', monospace;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .kpi-label { font-size: 11px; color: var(--dim); }
+  .kpi-target { font-size: 11px; margin-top: 4px; }
+
+  /* FOOTER */
+  .foot {
+    margin-top: 28px;
+    padding: 16px;
+    background: var(--bg3);
+    border-radius: 12px;
+    border: 1px solid var(--border-orange);
+    font-size: 12px;
+    color: var(--dim);
+    text-align: center;
+    line-height: 1.7;
+  }
+  .foot strong { color: var(--orange); }
+
+  /* HIGHLIGHT */
+  .hl-green { color: var(--green); font-weight: 700; }
+  .hl-red { color: var(--red); font-weight: 700; }
+  .hl-orange { color: var(--orange); font-weight: 700; }
+  .hl-yellow { color: var(--yellow); font-weight: 700; }
+
+  p { color: var(--dim); font-size: 13px; line-height: 1.65; }
+  strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">ประตูสายฝน × Shopee Strategy 2026</div>
+  <h1>สรุปทั้งหมด +<br><em>Solutions ที่ชนะได้จริง</em></h1>
+  <p class="hero-sub">วิเคราะห์คู่แข่ง 2 ร้าน × ข้อมูล SKU จริง × กลยุทธ์ Neuro-Pricing</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="go('situation')">🔍 สถานการณ์</button>
+  <button class="tab" onclick="go('enemy')">⚔️ คู่แข่ง</button>
+  <button class="tab" onclick="go('sku')">📦 SKU Plan</button>
+  <button class="tab" onclick="go('solutions')">💡 Solutions</button>
+  <button class="tab" onclick="go('roadmap')">🗺 Roadmap</button>
+</div>
+
+<!-- PAGE 1: SITUATION -->
+<div id="situation" class="page active">
+
+  <div class="sec-title">สรุปตัวเลขเรา — ประตูสายฝน 80×200</div>
+
+  <div class="card">
+    <div class="card-accent orange"></div>
+    <div class="card-title">📊 ข้อมูลปัจจุบัน</div>
+    <table class="ctable">
+      <tr><th>ตัวแปร</th><th>ตัวเลข</th><th>สถานะ</th></tr>
+      <tr>
+        <td>ราคาขาย (Sp.De/Tb)</td>
+        <td><strong>฿1,290 / ฿1,289</strong></td>
+        <td><span class="badge badge-red">แพงกว่าคู่แข่ง</span></td>
+      </tr>
+      <tr>
+        <td>ต้นทุนรวม</td>
+        <td><strong>฿589</strong></td>
+        <td><span class="badge badge-orange">ยังบีบได้</span></td>
+      </tr>
+      <tr>
+        <td>ค่าธรรมเนียม Shopee</td>
+        <td><strong>฿357 (27.7%)</strong></td>
+        <td><span class="badge badge-red">สูงมาก</span></td>
+      </tr>
+      <tr>
+        <td>กำไร/ชิ้น</td>
+        <td><strong>฿344</strong></td>
+        <td><span class="badge badge-yellow">พอใช้</span></td>
+      </tr>
+      <tr>
+        <td>Margin</td>
+        <td><strong>26.7%</strong></td>
+        <td><span class="badge badge-yellow">เป้า 25%+ ✓</span></td>
+      </tr>
+      <tr>
+        <td>SKU ที่มี</td>
+        <td><strong>80×200 เพียงอย่างเดียว</strong></td>
+        <td><span class="badge badge-red">ขาด 80×180</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="warn">
+    <span>⚠️</span>
+    <div><strong style="color:var(--red)">จุดอ่อนที่เร่งด่วนที่สุด:</strong> เราไม่มี SKU <strong>80×180</strong> ซึ่งเป็น demand อันดับ 1 ของตลาด (45.82% ของยอดขายคู่แข่ง) — ทุกเดือนที่ไม่มี SKU นี้ เราเสียรายได้ก้อนใหญ่ไปฟรีๆ</div>
+  </div>
+
+  <div class="sec-title">เรา vs ตลาด — Gap ที่ต้องปิด</div>
+
+  <div class="card">
+    <div class="card-accent red"></div>
+    <div class="impact-row">
+      <div class="impact-label">Visibility</div>
+      <div class="impact-bar-bg"><div class="impact-bar" style="width:20%;background:var(--red)"></div></div>
+      <div class="impact-score" style="color:var(--red)">ต่ำ</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">ราคาแข่งขัน</div>
+      <div class="impact-bar-bg"><div class="impact-bar" style="width:35%;background:var(--red)"></div></div>
+      <div class="impact-score" style="color:var(--red)">ต่ำ</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">ความครบ SKU</div>
+      <div class="impact-bar-bg"><div class="impact-bar" style="width:25%;background:var(--yellow)"></div></div>
+      <div class="impact-score" style="color:var(--yellow)">น้อย</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">Margin คุณภาพ</div>
+      <div class="impact-bar-bg"><div class="impact-bar" style="width:70%;background:var(--green)"></div></div>
+      <div class="impact-score" style="color:var(--green)">ดี</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">วัตถุดิบ/ผลิต</div>
+      <div class="impact-bar-bg"><div class="impact-bar" style="width:85%;background:var(--green)"></div></div>
+      <div class="impact-score" style="color:var(--green)">แข็ง</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PAGE 2: ENEMY -->
+<div id="enemy" class="page">
+
+  <div class="sec-title">Overview คู่แข่ง 2 ราย</div>
+
+  <div class="card">
+    <div class="card-accent orange"></div>
+    <table class="ctable">
+      <tr>
+        <th>ตัวชี้วัด</th>
+        <th>KKB Wood</th>
+        <th>chocksomkid</th>
+        <th>เรา</th>
+      </tr>
+      <tr>
+        <td>Monthly Ranking</td>
+        <td class="neutral">#661</td>
+        <td class="win">#276 🏆</td>
+        <td class="lose">ไม่ทราบ</td>
+      </tr>
+      <tr>
+        <td>อายุร้าน</td>
+        <td>226 วัน</td>
+        <td class="win">993 วัน</td>
+        <td>?</td>
+      </tr>
+      <tr>
+        <td>30-Day Sales</td>
+        <td>996 ชิ้น</td>
+        <td class="win">3,000 ชิ้น</td>
+        <td class="lose">?</td>
+      </tr>
+      <tr>
+        <td>30-Day GMV</td>
+        <td>฿1.09M</td>
+        <td class="win">฿1.95M</td>
+        <td class="lose">?</td>
+      </tr>
+      <tr>
+        <td>ราคา 80×180</td>
+        <td>฿1,200</td>
+        <td>฿1,182</td>
+        <td class="lose">ไม่มี SKU</td>
+      </tr>
+      <tr>
+        <td>ราคา 80×200</td>
+        <td>฿1,250</td>
+        <td>฿1,182</td>
+        <td class="lose">฿1,290 (+฿108)</td>
+      </tr>
+      <tr>
+        <td>Stock ต่อ SKU</td>
+        <td>200</td>
+        <td class="win">3,500–4,800</td>
+        <td>?</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="sec-title">SKU Distribution — ตลาดต้องการอะไร</div>
+
+  <div class="card">
+    <div class="card-accent green"></div>
+    <div class="card-title">📊 chocksomkid SKU Share (3,000 ชิ้น/เดือน)</div>
+    <div class="sku-grid">
+      <div class="sku-box">
+        <div class="sku-name">80×180</div>
+        <div class="sku-share big">45.82%</div>
+        <div class="sku-detail">~1,375 ชิ้น/เดือน · ฿1,182</div>
+      </div>
+      <div class="sku-box">
+        <div class="sku-name">80×200</div>
+        <div class="sku-share big">39.13%</div>
+        <div class="sku-detail">~1,174 ชิ้น/เดือน · ฿1,182</div>
+      </div>
+      <div class="sku-box">
+        <div class="sku-name">90×200</div>
+        <div class="sku-share mid">7.69%</div>
+        <div class="sku-detail">~231 ชิ้น/เดือน · ฿1,350</div>
+      </div>
+      <div class="sku-box">
+        <div class="sku-name">100×200</div>
+        <div class="sku-share mid">5.35%</div>
+        <div class="sku-detail">~161 ชิ้น/เดือน · ฿1,590</div>
+      </div>
+    </div>
+    <div class="tip">
+      <span>💡</span>
+      <div><strong>80×180 + 80×200</strong> รวมกันคิดเป็น <span class="hl-green">84.95%</span> ของยอดขายทั้งหมด — ถ้าเราครอบคลุมสอง SKU นี้ได้ดี เราเล่นในตลาดที่ใหญ่ที่สุดแล้ว</div>
+    </div>
+  </div>
+
+  <div class="sec-title">จุดอ่อนของคู่แข่ง — ช่องที่เราเจาะได้</div>
+
+  <div class="card">
+    <div class="card-accent purple"></div>
+    <div class="card-title">🎯 Weakness ที่เห็นจากข้อมูล</div>
+    <div class="plist">
+      <div class="pitem">
+        <div class="pnum hot">1</div>
+        <div>
+          <div class="ptitle">chocksomkid — ราคาเดียวทุก size</div>
+          <div class="pdesc">80×180, 80×200, 70×200 ขายราคาเท่ากันหมด (฿1,182) — แสดงว่าไม่ได้ optimize ราคาตาม demand รูปแบบนี้เปิดช่องให้เราตั้งราคา 80×180 สูงกว่า เพราะ demand สูงกว่า</div>
+        </div>
+      </div>
+      <div class="pitem">
+        <div class="pnum hot">2</div>
+        <div>
+          <div class="ptitle">KKB Wood — อายุร้านน้อย ranking ยังต่ำ</div>
+          <div class="pdesc">226 วัน ranking #661 — ยังไม่ stable ถ้าเราเร่ง review และ content ดีกว่า มีโอกาสแซงได้ใน 2-3 เดือน</div>
+        </div>
+      </div>
+      <div class="pitem">
+        <div class="pnum med">3</div>
+        <div>
+          <div class="ptitle">ทั้งคู่ไม่มี "Story" ของสินค้า</div>
+          <div class="pdesc">จากชื่อร้านและ brand: None — ไม่มีการสร้าง brand story เรื่องไม้สัก เปิดช่องให้เราชนะด้วย content และ positioning</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PAGE 3: SKU PLAN -->
+<div id="sku" class="page">
+
+  <div class="sec-title">SKU Strategy — เปิดอะไร ราคาเท่าไหร่</div>
+
+  <div class="card">
+    <div class="card-accent green"></div>
+    <div class="card-title">📦 Recommended SKU Lineup</div>
+    <div class="price-row header">
+      <div>SKU</div>
+      <div>ราคาเราแนะนำ</div>
+      <div>chocksomkid</div>
+      <div>Priority</div>
+    </div>
+    <div class="price-row">
+      <div><strong>80×180</strong></div>
+      <div><span class="hl-orange">฿1,249</span></div>
+      <div style="color:var(--dim)">฿1,182</div>
+      <div><span class="badge badge-red">เร่งด่วน #1</span></div>
+    </div>
+    <div class="price-row">
+      <div><strong>80×200</strong></div>
+      <div><span class="hl-orange">฿1,249</span> <small style="color:var(--dim)">(ลดจาก ฿1,290)</small></div>
+      <div style="color:var(--dim)">฿1,182</div>
+      <div><span class="badge badge-red">ปรับทันที</span></div>
+    </div>
+    <div class="price-row">
+      <div><strong>90×200</strong></div>
+      <div><span class="hl-yellow">฿1,490</span></div>
+      <div style="color:var(--dim)">฿1,350</div>
+      <div><span class="badge badge-yellow">Phase 2</span></div>
+    </div>
+    <div class="price-row">
+      <div><strong>100×200</strong></div>
+      <div><span class="hl-yellow">฿1,790</span></div>
+      <div style="color:var(--dim)">฿1,590</div>
+      <div><span class="badge badge-yellow">Phase 2</span></div>
+    </div>
+    <div class="price-row">
+      <div><strong>70×200</strong></div>
+      <div><span style="color:var(--dim)">฿1,149</span></div>
+      <div style="color:var(--dim)">฿1,182</div>
+      <div><span class="badge badge-purple">ชนะราคา</span></div>
+    </div>
+  </div>
+
+  <div class="sec-title">Neuro Pricing Logic — ทำไมถึงตั้งราคานี้</div>
+
+  <div class="card">
+    <div class="card-accent yellow"></div>
+    <div class="card-title">🧠 ฿1,249 คือราคาที่เหมาะที่สุด</div>
+    <div class="plist">
+      <div class="pitem">
+        <div class="pnum hot">A</div>
+        <div>
+          <div class="ptitle">ต่ำกว่า ฿1,290 เดิม → สมองรู้สึกดีขึ้น</div>
+          <div class="pdesc">Anchoring effect — ลูกค้าที่เคยเห็นเราแต่ไม่ซื้อ รู้สึกว่า "ลดแล้ว" และ FOMO trigger ทำงาน</div>
+        </div>
+      </div>
+      <div class="pitem">
+        <div class="pnum hot">B</div>
+        <div>
+          <div class="ptitle">สูงกว่า chocksomkid ฿67 → signal คุณภาพ</div>
+          <div class="pdesc">สมองอ่าน "แพงกว่านิดหน่อย = ดีกว่านิดหน่อย" ถ้าเรามีรูปดีกว่าและ story ชัดกว่า ฿67 นี้กลับเป็น advantage ไม่ใช่ข้อเสีย</div>
+        </div>
+      </div>
+      <div class="pitem">
+        <div class="pnum med">C</div>
+        <div>
+          <div class="ptitle">Charm Pricing — ฿1,249 ดีกว่า ฿1,250</div>
+          <div class="pdesc">System 1 ของสมองอ่านเลขซ้ายสุดก่อน "1,2" vs "1,2" — แต่ ฿1,249 รู้สึกอยู่ใน range ฿1,1xx มากกว่า ฿1,2xx</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="formula">
+      <div>Margin หลังลดราคา 80×200 เป็น ฿1,249</div>
+      <div class="hl">฿1,249 − ฿589 ต้นทุน − ฿345 ธรรมเนียม* = ฿315 กำไร</div>
+      <div class="eq">Margin ~25.2% — ยังอยู่เหนือเป้า 25%</div>
+      <div style="font-size:10px; margin-top:6px; color:var(--dim)">*ค่าธรรมเนียมประมาณการจาก % เดิม ต้องคำนวณจริงใน cost calculator</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PAGE 4: SOLUTIONS -->
+<div id="solutions" class="page">
+
+  <div class="sec-title">Solutions ทั้งหมด — เรียงตาม Impact</div>
+
+  <div class="card">
+    <div class="card-accent orange"></div>
+    <div class="card-title">🔥 ทำได้เลย — Impact ทันที (Week 1-2)</div>
+    <div class="plist">
+
+      <div class="pitem">
+        <div class="pnum hot">S1</div>
+        <div>
+          <div class="ptitle">เพิ่ม SKU 80×180 — ทันที</div>
+          <div class="pdesc">Demand 45.82% ของตลาด = ~1,375 ชิ้น/เดือนในหมวดนี้ ถ้าเราได้แค่ 5% ของ demand นั้น = <span class="hl-green">+69 ชิ้น/เดือน</span> เพิ่มรายได้ทันที<br>ราคาแนะนำ: <strong>฿1,249</strong></div>
+        </div>
+      </div>
+
+      <div class="pitem">
+        <div class="pnum hot">S2</div>
+        <div>
+          <div class="ptitle">ปรับราคา 80×200 จาก ฿1,290 → ฿1,249</div>
+          <div class="pdesc">ลด ฿41 ช่วย CTR ขึ้น เพราะ Shopee sort ราคาต่ำก่อน — margin ยังอยู่ ~25%+ ไม่กระทบความอยู่รอดของธุรกิจ</div>
+        </div>
+      </div>
+
+      <div class="pitem">
+        <div class="pnum hot">S3</div>
+        <div>
+          <div class="ptitle">Rewrite Title + Description ด้วย Keyword</div>
+          <div class="pdesc">โครงสร้าง: <strong>"ประตูไม้สายฝน ไม้สักแท้ [ขนาด] บานเดี่ยว ทนทาน ส่งฟรี"</strong><br>Keyword ที่ต้องยัด: ประตูสายฝน, ประตูไม้, ไม้สักแท้, บานเดี่ยว, [ขนาด]</div>
+        </div>
+      </div>
+
+      <div class="pitem">
+        <div class="pnum hot">S4</div>
+        <div>
+          <div class="ptitle">ถ่ายรูปใหม่ — 5 ภาพตาม Neuro Framework</div>
+          <div class="pdesc">① Hero (พื้นขาว texture ชัด) ② Lifestyle (ในบ้านจริง) ③ Close-up เนื้อไม้ ④ เทียบขนาด ⑤ รูปติดตั้งจริง<br>รูปแรกต้องตีตาใน 0.3 วินาที → CTR ขึ้น → Ranking ขึ้น</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-accent yellow"></div>
+    <div class="card-title">⚡ Medium Term — สร้าง Moat (Week 3-6)</div>
+    <div class="plist">
+
+      <div class="pitem">
+        <div class="pnum med">S5</div>
+        <div>
+          <div class="ptitle">Review Campaign — สะสม Social Proof</div>
+          <div class="pdesc">ส่ง message หลังส่งของ 3 วัน: <em>"ขอบคุณที่สั่งซื้อนะคะ/ครับ ถ้าสินค้าถูกใจ รบกวนรีวิวพร้อมรูปด้วยได้เลยนะคะ จะมี coupon ฿50 ส่งให้เพิ่มเติมค่ะ"</em><br>เป้า: 30 review ใน 60 วันแรก</div>
+        </div>
+      </div>
+
+      <div class="pitem">
+        <div class="pnum med">S6</div>
+        <div>
+          <div class="ptitle">Shopee Ads Manual — ยิงแบบ Smart ไม่ใช่ Auto</div>
+          <div class="pdesc">Bid เฉพาะ keyword: "ประตูสายฝน", "ประตูไม้สักแท้", "ประตูไม้บานเดี่ยว"<br>งบแนะนำ: ฿50-100/วัน สำหรับ 80×180 ก่อน ดู ROAS 7 วัน ถ้า &gt;4x ค่อยเพิ่ม</div>
+        </div>
+      </div>
+
+      <div class="pitem">
+        <div class="pnum med">S7</div>
+        <div>
+          <div class="ptitle">Bundle Deal — ประตู + วงกบ</div>
+          <div class="pdesc">เราผลิตวงกบได้อยู่แล้ว สร้าง bundle "ประตูสายฝน + วงกบ พร้อมติดตั้ง" — AOV (ยอดเฉลี่ยต่อออเดอร์) สูงขึ้น margin ต่อออเดอร์ดีขึ้น และ algorithm ชอบ bundle</div>
+        </div>
+      </div>
+
+      <div class="pitem">
+        <div class="pnum med">S8</div>
+        <div>
+          <div class="ptitle">Story Positioning — "ไม้สักแท้จากแพร่"</div>
+          <div class="pdesc">ไม้สักแพร่ = premium ที่คนไทยรู้จัก ใช้ใน bio ร้าน, description, และ packaging<br>Psychological trigger: Identity Signaling — "ฉันเลือกของดี ไม้จริง ไม้แพร่"</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-accent purple"></div>
+    <div class="card-title">🚀 Long Game — ชนะระยะยาว (Month 2-3)</div>
+    <div class="plist">
+
+      <div class="pitem">
+        <div class="pnum cool">S9</div>
+        <div>
+          <div class="ptitle">เปิด SKU 90×200 และ 100×200</div>
+          <div class="pdesc">Demand มีอยู่ (7.69% + 5.35%) และราคาสูงกว่า margin ดีกว่า ถ้า 80×180/200 stable แล้วขยาย</div>
+        </div>
+      </div>
+
+      <div class="pitem">
+        <div class="pnum cool">S10</div>
+        <div>
+          <div class="ptitle">Shopee Affiliate — ดึง traffic ฟรี</div>
+          <div class="pdesc">เปิด commission สำหรับ affiliate 5-8% ต่อชิ้น — จ่ายเฉพาะเมื่อขายได้ ไม่มีความเสี่ยง เราเชี่ยวชาญ affiliate อยู่แล้ว ใช้ความรู้นี้ขับ traffic ให้ตัวเอง</div>
+        </div>
+      </div>
+
+      <div class="pitem">
+        <div class="pnum cool">S11</div>
+        <div>
+          <div class="ptitle">Video Content — Process ไม้ → Viral Potential</div>
+          <div class="pdesc">Short video ขั้นตอนผลิตประตูสายฝน (30-60 วินาที) ลง Shopee Video + TikTok ลิงก์กลับร้าน — ASMR woodworking มี engagement สูงมากในกลุ่มคนรักบ้าน</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="warn">
+    <span>🚫</span>
+    <div><strong style="color:var(--red)">อย่าทำ:</strong> ลดราคาต่ำกว่า ฿1,182 เพื่อสู้ chocksomkid — เขามีต้นทุนและ economy of scale ที่เราไม่รู้ การ price war กับคนที่ขาย 3,000 ชิ้น/เดือน เราจะแพ้ในระยะยาวแน่นอน ชนะด้วย differentiation เท่านั้น</div>
+  </div>
+
+</div>
+
+<!-- PAGE 5: ROADMAP -->
+<div id="roadmap" class="page">
+
+  <div class="sec-title">90-Day Execution Roadmap</div>
+
+  <div class="timeline">
+
+    <div class="titem">
+      <div class="tdot hot"></div>
+      <div class="tweek hot">WEEK 1 — เร่งด่วน</div>
+      <div class="ttitle">เปิด SKU + ปรับราคา + รูปใหม่</div>
+      <div class="tdesc">
+        ✅ S1: เพิ่ม SKU 80×180 ที่ ฿1,249<br>
+        ✅ S2: ปรับ 80×200 เป็น ฿1,249<br>
+        ✅ S3: Rewrite title + keyword<br>
+        ✅ S4: ถ่ายรูปใหม่ Hero + Detail shot
+      </div>
+    </div>
+
+    <div class="titem">
+      <div class="tdot hot"></div>
+      <div class="tweek hot">WEEK 2 — สร้าง Foundation</div>
+      <div class="ttitle">ระบบหลังบ้าน + เริ่ม Ads</div>
+      <div class="tdesc">
+        ✅ S4: ถ่ายรูปครบ 5 ภาพ (Lifestyle + Social proof)<br>
+        ✅ S6: เปิด Shopee Ads Manual ฿50/วัน สำหรับ 80×180<br>
+        ✅ ตั้ง Auto-reply chat + ระบบส่งของ On Time
+      </div>
+    </div>
+
+    <div class="titem">
+      <div class="tdot med"></div>
+      <div class="tweek med">WEEK 3-4 — สะสม Social Proof</div>
+      <div class="ttitle">Review Campaign + Bundle</div>
+      <div class="tdesc">
+        ✅ S5: เริ่ม review campaign ทุก order<br>
+        ✅ S7: สร้าง bundle ประตู + วงกบ<br>
+        ✅ S8: อัปเดต bio ร้านด้วย story "ไม้สักแพร่"<br>
+        📊 ดู data: CTR, Conversion, review ที่ได้
+      </div>
+    </div>
+
+    <div class="titem">
+      <div class="tdot med"></div>
+      <div class="tweek med">MONTH 2 — Scale Winner</div>
+      <div class="ttitle">ขยาย SKU + เพิ่ม Ads Budget</div>
+      <div class="tdesc">
+        ✅ S9: เปิด 90×200 ถ้า 80×180 stable<br>
+        ✅ เพิ่ม ads budget SKU ที่ ROAS &gt;4x<br>
+        ✅ S10: เปิด Affiliate program<br>
+        📊 เป้า: ranking เข้า Top 500 ของหมวด
+      </div>
+    </div>
+
+    <div class="titem">
+      <div class="tdot cool"></div>
+      <div class="tweek cool">MONTH 3 — Top of Mind</div>
+      <div class="ttitle">Content + Brand Building</div>
+      <div class="tdesc">
+        ✅ S11: เริ่ม video content<br>
+        ✅ เปิด 100×200 ถ้าพร้อม<br>
+        📊 วัดผล: ranking vs เดือน 1, revenue growth<br>
+        🎯 เป้า: ranking Top 300 + review 50+ รีวิว
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sec-title">KPI ที่ต้องวัดทุกสัปดาห์</div>
+
+  <div class="kpi-grid">
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--orange)">2.5%+</div>
+      <div class="kpi-label">CTR เป้าหมาย</div>
+      <div class="kpi-target" style="color:var(--dim)">ถ้าต่ำ → เปลี่ยนรูปแรก</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--green)">3%+</div>
+      <div class="kpi-label">Conversion Rate</div>
+      <div class="kpi-target" style="color:var(--dim)">ถ้าต่ำ → แก้ราคา/copy</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--green)">95%+</div>
+      <div class="kpi-label">Ship On Time</div>
+      <div class="kpi-target" style="color:var(--dim)">ไม่มีข้อยกเว้น</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--yellow)">4x+</div>
+      <div class="kpi-label">ROAS เป้า Ads</div>
+      <div class="kpi-target" style="color:var(--dim)">ต่ำกว่า → pause optimize</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--purple)">4.8+</div>
+      <div class="kpi-label">Review Score</div>
+      <div class="kpi-target" style="color:var(--dim)">ตอบทุก review</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-num" style="color:var(--orange)">Top 400</div>
+      <div class="kpi-label">Monthly Ranking</div>
+      <div class="kpi-target" style="color:var(--dim)">เป้าภายใน 60 วัน</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <strong>กฎทอง:</strong> S1 (เปิด 80×180) + S2 (ปรับราคา) + S4 (รูปใหม่)<br>
+    3 อย่างนี้คือ 80% ของผลลัพธ์ทั้งหมด — ทำก่อน อย่างอื่นค่อยตามมา<br><br>
+    <strong>ข้อมูลที่ยังต้องการ:</strong> ranking ปัจจุบัน + จำนวน review + ยอด 30-Day Sales ของเรา<br>
+    เมื่อได้จะวาง ads strategy ได้แม่นขึ้นอีกมาก
+  </div>
+
+</div>
+
+<script>
+  function go(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.currentTarget.classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
