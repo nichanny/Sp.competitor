@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ราคาประตูโมเดิร์น v5</title>
+<title>ราคาประตูโมเดิร์น v6</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -13,7 +13,10 @@
     --border:rgba(255,255,255,0.07);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:'Sarabun',sans-serif; font-size:14px; padding:20px 16px 60px; max-width:860px; margin:0 auto; }
+  body { background:var(--bg); color:var(--text); font-family:'Sarabun',sans-serif; font-size:14px; padding:20px 16px 60px; max-width:900px; margin:0 auto; }
+
+  .back { display:inline-flex; align-items:center; gap:6px; color:var(--dim); font-size:12px; text-decoration:none; margin-bottom:20px; }
+  .back:hover { color:var(--text); }
 
   h1 { font-size:18px; font-weight:700; margin-bottom:4px; }
   .sub { font-size:12px; color:var(--dim); margin-bottom:18px; }
@@ -35,9 +38,8 @@
     font-size:10px; font-weight:600; letter-spacing:3px; text-transform:uppercase;
     color:var(--dim); margin:24px 0 10px;
   }
-
   .tbl-wrap { background:var(--bg3); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:8px; overflow-x:auto; }
-  table { width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed; min-width:600px; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed; min-width:560px; }
   th {
     background:var(--bg4); padding:8px 8px;
     font-size:10px; font-family:'Space Mono',monospace; font-weight:400;
@@ -64,21 +66,25 @@
 </head>
 <body>
 
-<h1>ราคาประตูโมเดิร์น — เปรียบทุก SKU</h1>
-<p class="sub">อัปเดตล่าสุด พ.ค. 2569 | <span style="color:var(--blue)">ใหม่</span> = ปรับราคา | <span style="color:var(--orange)">เพิ่ม</span> = SKU ใหม่ใน De L2</p>
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+
+<h1>ราคาประตู — เปรียบทุก SKU ทุกลาย</h1>
+<p class="sub">อัปเดตล่าสุด มิ.ย. 2569 | <span style="color:var(--blue)">ใหม่</span> = ปรับราคา | <span style="color:var(--orange)">เพิ่ม</span> = SKU ใหม่</p>
 
 <div class="legend">
   <div class="leg"><div class="dot" style="background:var(--green)"></div><span style="color:var(--green)">ถูกที่สุดในแถว</span></div>
   <div class="leg"><div class="dot" style="background:var(--red)"></div><span style="color:var(--red)">แพงที่สุดในแถว</span></div>
-  <div class="leg"><div class="dot" style="background:var(--blue)"></div><span style="color:var(--blue)">ราคาใหม่ (ปรับแล้ว)</span></div>
+  <div class="leg"><div class="dot" style="background:var(--blue)"></div><span style="color:var(--blue)">ราคาใหม่</span></div>
   <div class="leg"><div class="dot" style="background:var(--orange)"></div><span style="color:var(--orange)">เพิ่ม SKU ใหม่</span></div>
   <div class="leg"><div class="dot" style="background:var(--yellow)"></div><span style="color:var(--yellow)">pre-order</span></div>
 </div>
 
 <div class="filter-bar">
   <button class="btn active" onclick="filter('all',this)">ทั้งหมด</button>
-  <button class="btn" onclick="filter('plain',this)">ธรรมดา</button>
+  <button class="btn" onclick="filter('modern',this)">โมเดิร์น</button>
   <button class="btn" onclick="filter('line',this)">ขีดเส้น</button>
+  <button class="btn" onclick="filter('panel',this)">ฟัก/ปีกนก</button>
+  <button class="btn" onclick="filter('wangkob',this)">วงกบ</button>
   <button class="btn" onclick="filter('80',this)">80 cm</button>
   <button class="btn" onclick="filter('90',this)">90 cm</button>
   <button class="btn" onclick="filter('70',this)">70 cm</button>
@@ -88,63 +94,64 @@
 <div id="out"></div>
 
 <script>
-// n=ราคาใหม่, a=SKU ใหม่ที่เพิ่ง add, p=pre-order
 const D = [
-  { g:'โมเดิร์นธรรมดา', t:'plain', rows:[
-    { s:'โมเดิร์น', z:'80×200',  de1:1690, de2:1690,          tb:{v:1689,n:1}, chock:{v:1681},     pg:1696 },
-    { s:'โมเดิร์น', z:'80×180',  de1:null, de2:{v:1678,n:1},  tb:{v:1678,n:1}, chock:{v:1698},     pg:null },
-    { s:'โมเดิร์น', z:'90×200',  de1:null, de2:1790,          tb:1890,         chock:{v:1890},     pg:1696 },
-    { s:'โมเดิร์น', z:'70×200',  de1:null, de2:1690,          tb:{v:1688,n:1}, chock:{v:1690},     pg:null },
-    { s:'โมเดิร์น', z:'100×200', de1:null, de2:null,          tb:null,         chock:{v:3150,p:1}, pg:2490 },
+  { g:'โมเดิร์นธรรมดา', t:'modern', rows:[
+    { s:'โมเดิร์น', z:'80×200', de1:1690, de2:1690, tb:{v:1689,n:1}, chock:{v:1681}, pg:1696 },
+    { s:'โมเดิร์น', z:'80×180', de1:null, de2:{v:1678,n:1}, tb:{v:1678,n:1}, chock:{v:1698}, pg:null },
+    { s:'โมเดิร์น', z:'90×200', de1:null, de2:1790, tb:1890, chock:{v:1890}, pg:1696 },
+    { s:'โมเดิร์น', z:'70×200', de1:null, de2:1690, tb:{v:1688,n:1}, chock:{v:1690}, pg:null },
+    { s:'โมเดิร์น', z:'100×200', de1:null, de2:null, tb:null, chock:{v:3150,p:1}, pg:2490 },
   ]},
   { g:'ขีดตรง (เส้นตรง)', t:'line', rows:[
-    { s:'ขีดตรง', z:'80×200',  de1:{v:1885,n:1}, de2:{v:1885,a:1}, tb:1899,          chock:{v:1890},     pg:2090 },
-    { s:'ขีดตรง', z:'80×180',  de1:null,         de2:{v:1889,a:1}, tb:{v:1888,n:1},  chock:{v:1890},     pg:null },
-    { s:'ขีดตรง', z:'90×200',  de1:null,         de2:{v:2330,a:1}, tb:{v:2300,n:1},  chock:{v:2390},     pg:2390 },
-    { s:'ขีดตรง', z:'70×200',  de1:null,         de2:{v:1888,a:1}, tb:1899,          chock:{v:1890},     pg:null },
-    { s:'ขีดตรง', z:'100×200', de1:null,         de2:null,         tb:null,          chock:{v:3350,p:1}, pg:2490 },
+    { s:'ขีดตรง', z:'80×200', de1:{v:1885,n:1}, de2:{v:1885,a:1}, tb:1899, chock:{v:1890}, pg:2090 },
+    { s:'ขีดตรง', z:'80×180', de1:null, de2:{v:1889,a:1}, tb:{v:1888,n:1}, chock:{v:1890}, pg:null },
+    { s:'ขีดตรง', z:'90×200', de1:null, de2:{v:2330,a:1}, tb:{v:2300,n:1}, chock:{v:2390}, pg:2390 },
+    { s:'ขีดตรง', z:'70×200', de1:null, de2:{v:1888,a:1}, tb:1899, chock:{v:1890}, pg:null },
+    { s:'ขีดตรง', z:'100×200', de1:null, de2:null, tb:null, chock:{v:3350,p:1}, pg:2490 },
   ]},
   { g:'ขีดบวก (ผูกโบว์)', t:'line', rows:[
-    { s:'ขีดบวก', z:'80×200',  de1:1899, de2:{v:1899,a:1}, tb:1949,          chock:{v:1890},     pg:2090 },
-    { s:'ขีดบวก', z:'80×180',  de1:null, de2:{v:1899,a:1}, tb:{v:1888,n:1},  chock:{v:1890},     pg:null },
-    { s:'ขีดบวก', z:'90×200',  de1:null, de2:{v:2450,a:1}, tb:{v:2430,n:1},  chock:{v:null},     pg:2590 },
-    { s:'ขีดบวก', z:'70×200',  de1:null, de2:{v:1899,a:1}, tb:1949,          chock:{v:null},     pg:null },
-    { s:'ขีดบวก', z:'100×200', de1:null, de2:null,          tb:null,          chock:{v:3350,p:1}, pg:null },
+    { s:'ขีดบวก', z:'80×200', de1:1899, de2:{v:1899,a:1}, tb:1949, chock:{v:1890}, pg:2090 },
+    { s:'ขีดบวก', z:'80×180', de1:null, de2:{v:1899,a:1}, tb:{v:1888,n:1}, chock:{v:1890}, pg:null },
+    { s:'ขีดบวก', z:'90×200', de1:null, de2:{v:2450,a:1}, tb:{v:2430,n:1}, chock:{v:null}, pg:2590 },
+    { s:'ขีดบวก', z:'70×200', de1:null, de2:{v:1899,a:1}, tb:1949, chock:{v:null}, pg:null },
+    { s:'ขีดบวก', z:'100×200', de1:null, de2:null, tb:null, chock:{v:3350,p:1}, pg:null },
   ]},
-  { g:'วงกบประตู', t:'plain', rows:[
-    { s:'วงกบ', z:'80×200',  de1:925,  de2:925,  tb:919,  chock:{v:890},     pg:null },
-    { s:'วงกบ', z:'80×180',  de1:null, de2:925,  tb:919,  chock:{v:890},     pg:null },
-    { s:'วงกบ', z:'90×200',  de1:null, de2:945,  tb:null, chock:{v:890},     pg:null },
-    { s:'วงกบ', z:'70×200',  de1:null, de2:925,  tb:null, chock:{v:890},     pg:null },
+  { g:'5ฟักปีกนก', t:'panel', rows:[
+    { s:'5ฟักปีกนก', z:'80×200', de1:2156, de2:null, tb:null, chock:{v:2190}, pg:null },
+    { s:'5ฟักปีกนก', z:'90×200', de1:null, de2:null, tb:null, chock:{v:2750,p:1}, pg:null },
+    { s:'5ฟักปีกนก', z:'100×200', de1:null, de2:null, tb:null, chock:{v:3150,p:1}, pg:null },
+  ]},
+  { g:'8ฟัก', t:'panel', rows:[
+    { s:'8ฟัก', z:'80×200', de1:2156, de2:null, tb:null, chock:{v:2190}, pg:null },
+    { s:'8ฟัก', z:'90×200', de1:null, de2:null, tb:null, chock:{v:2750,p:1}, pg:null },
+    { s:'8ฟัก', z:'100×200', de1:null, de2:null, tb:null, chock:{v:3150,p:1}, pg:null },
+  ]},
+  { g:'วงกบประตู', t:'wangkob', rows:[
+    { s:'วงกบ', z:'80×200', de1:925, de2:925, tb:919, chock:{v:890}, pg:null },
+    { s:'วงกบ', z:'80×180', de1:null, de2:925, tb:919, chock:{v:890}, pg:null },
+    { s:'วงกบ', z:'90×200', de1:null, de2:945, tb:null, chock:{v:890}, pg:null },
+    { s:'วงกบ', z:'70×200', de1:null, de2:925, tb:null, chock:{v:890}, pg:null },
     { s:'วงกบ', z:'100×200', de1:null, de2:null, tb:null, chock:{v:990,p:1}, pg:null },
   ]}
 ];
 
 function rv(x){ return x && typeof x==='object' ? x.v : x; }
-
-function allNums(r){
-  return [r.de1,r.de2,r.tb,r.chock,r.pg].map(rv).filter(v=>v!=null);
-}
-
+function allNums(r){ return [r.de1,r.de2,r.tb,r.chock,r.pg].map(rv).filter(v=>v!=null); }
 function cls(x,r){
   const v=rv(x); if(!v) return 'na';
-  const ns=allNums(r);
-  if(ns.length<2) return 'mid';
+  const ns=allNums(r); if(ns.length<2) return 'mid';
   if(v===Math.min(...ns)) return 'win';
   if(v===Math.max(...ns)) return 'lose';
   return 'mid';
 }
-
-function cell(x,r){
+function fmtCell(x,r){
   const v=rv(x);
   if(!v) return `<span class="na">—</span>`;
   const c=cls(x,r);
-  const isNew = x && typeof x==='object' && x.n;
-  const isAdd = x && typeof x==='object' && x.a;
-  const isPre = x && typeof x==='object' && x.p;
-  const b = isAdd ? `<span class="badge-add">เพิ่ม</span>`
-           : isNew ? `<span class="badge-new">ใหม่</span>`
-           : isPre ? `<span class="badge-pre">pre</span>` : '';
+  const isNew=x&&typeof x==='object'&&x.n;
+  const isAdd=x&&typeof x==='object'&&x.a;
+  const isPre=x&&typeof x==='object'&&x.p;
+  const b=isAdd?`<span class="badge-add">เพิ่ม</span>`:isNew?`<span class="badge-new">ใหม่</span>`:isPre?`<span class="badge-pre">pre</span>`:'';
   return `<span class="${c}">฿${v.toLocaleString()}</span>${b}`;
 }
 
@@ -153,28 +160,24 @@ function render(fk){
   D.forEach(g=>{
     const rows=g.rows.filter(r=>{
       if(fk==='all') return true;
-      if(fk==='plain') return g.t==='plain';
+      if(fk==='modern') return g.t==='modern';
       if(fk==='line') return g.t==='line';
+      if(fk==='panel') return g.t==='panel';
+      if(fk==='wangkob') return g.t==='wangkob';
       return r.z.startsWith(fk);
     });
     if(!rows.length) return;
     html+=`<div class="group-label">${g.g}</div>
     <div class="tbl-wrap"><table>
+      <colgroup><col style="width:28%"><col style="width:13%"><col style="width:13%"><col style="width:13%"><col style="width:15%"><col style="width:14%"></colgroup>
       <thead><tr>
-        <th style="text-align:left;width:26%">SKU</th>
-        <th style="width:13%">De L1</th>
-        <th style="width:13%">De L2</th>
-        <th style="width:13%">Tb</th>
-        <th style="width:17%">Chock</th>
-        <th style="width:14%">PG Wood</th>
+        <th style="text-align:left">SKU</th>
+        <th>De L1</th><th>De L2</th><th>Tb</th><th>Chock</th><th>PG Wood</th>
       </tr></thead>
       <tbody>${rows.map(r=>`<tr>
         <td><span class="sku">${r.s}</span><span class="size">${r.z}</span></td>
-        <td>${cell(r.de1,r)}</td>
-        <td>${cell(r.de2,r)}</td>
-        <td>${cell(r.tb,r)}</td>
-        <td>${cell(r.chock,r)}</td>
-        <td>${cell(r.pg,r)}</td>
+        <td>${fmtCell(r.de1,r)}</td><td>${fmtCell(r.de2,r)}</td>
+        <td>${fmtCell(r.tb,r)}</td><td>${fmtCell(r.chock,r)}</td><td>${fmtCell(r.pg,r)}</td>
       </tr>`).join('')}</tbody>
     </table></div>`;
   });
@@ -183,10 +186,8 @@ function render(fk){
 
 function filter(k,btn){
   document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  render(k);
+  btn.classList.add('active'); render(k);
 }
-
 render('all');
 </script>
 </body>
