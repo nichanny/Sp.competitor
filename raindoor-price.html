@@ -35,6 +35,7 @@
   .us-col{color:var(--orange);font-weight:700;}
   .insight{background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.25);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.8;}
   .insight strong{color:var(--orange);}
+  .badge-new{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:3px;background:rgba(96,165,250,0.15);color:var(--blue);border:1px solid rgba(96,165,250,0.35);}
 </style>
 </head>
 <body>
@@ -68,11 +69,12 @@ const D = [
   {z:'70×200', de:null, chock:1182,  lam:1090, ojas:1350, pkd:null,  cwd:990,   fh:1000,  mp:1250 },
   {z:'80×180', de:null, chock:1182,  lam:1200, ojas:1350, pkd:1399,  cwd:1050,  fh:1200,  mp:1250 },
   {z:'80×200', de:1249, chock:1182,  lam:1250, ojas:1350, pkd:1499,  cwd:1050,  fh:1200,  mp:1250 },
-  {z:'90×200', de:null, chock:1350,  lam:1450, ojas:1550, pkd:1899,  cwd:1190,  fh:1400,  mp:1500 },
+  {z:'90×200', de:{v:1449,n:1}, chock:1350,  lam:1450, ojas:1550, pkd:1899,  cwd:1190,  fh:1400,  mp:1500 },
   {z:'100×200',de:null, chock:null,  lam:1600, ojas:1750, pkd:2499,  cwd:1350,  fh:1600,  mp:1800 },
 ];
 
-function vals(r){return[r.de,r.chock,r.lam,r.ojas,r.pkd,r.cwd,r.fh,r.mp].filter(v=>v!=null);}
+function rv(x){return x&&typeof x==='object'?x.v:x;}
+function vals(r){return[r.de,r.chock,r.lam,r.ojas,r.pkd,r.cwd,r.fh,r.mp].map(rv).filter(v=>v!=null);}
 function cls(v,r){
   if(!v)return'na';
   const ns=vals(r);if(ns.length<2)return'mid';
@@ -80,10 +82,13 @@ function cls(v,r){
   if(v===Math.max(...ns))return'lose';
   return'mid';
 }
-function cell(v,r,isUs){
+function cell(x,r,isUs){
+  const v=rv(x);
   if(!v)return'<span class="na">—</span>';
-  if(isUs)return'<span class="us-col">฿'+v.toLocaleString()+'</span>';
-  return'<span class="'+cls(v,r)+'">฿'+v.toLocaleString()+'</span>';
+  const isNew=x&&typeof x==='object'&&x.n;
+  const badge=isNew?'<span class="badge-new">ใหม่</span>':'';
+  if(isUs)return'<span class="us-col">฿'+v.toLocaleString()+'</span>'+badge;
+  return'<span class="'+cls(v,r)+'">฿'+v.toLocaleString()+'</span>'+badge;
 }
 
 function render(fk){
@@ -101,7 +106,7 @@ function render(fk){
   // insight
   document.getElementById('insight-box').innerHTML=`<div class="insight">
     💡 <strong>80×200 De ฿1,249</strong> — ถูกกว่า ojas/ประกายดาว แต่แพงกว่า cwd/full house อยู่<br>
-    🔥 <strong>90×200</strong> — De ยังไม่มีขาย ถ้าเปิดที่ <strong>฿1,349</strong> จะถูกกว่าทุกเจ้ายกเว้น cwd (฿1,190)<br>
+    🔥 <strong>90×200 De ฿1,449</strong> — ถูกกว่าไม้พร้อม ฿51 · คู่แข่งหลักคือไม้พร้อม (9,000+ ชิ้น/เดือน) ไม่ใช่ chocksomkid (title ห่วย ขายได้น้อย)<br>
     💰 <strong>100×200</strong> — ไม่มีคู่แข่ง ready stock เลย ถ้าเปิดที่ <strong>฿1,590</strong> ถูกที่สุดในตลาด margin ดีมาก
   </div>`;
 
