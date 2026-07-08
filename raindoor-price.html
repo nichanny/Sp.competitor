@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ราคาประตูสายฝน — ทุกร้าน</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0A0A0F;--bg2:#111118;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--border:rgba(255,255,255,0.07);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 60px;max-width:1050px;margin:0 auto;}
+  .back{display:inline-flex;align-items:center;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:20px;}
+  .back:hover{color:var(--text);}
+  h1{font-size:18px;font-weight:700;margin-bottom:4px;}
+  .sub{font-size:12px;color:var(--dim);margin-bottom:18px;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px;font-size:12px;}
+  .leg{display:flex;align-items:center;gap:5px;}
+  .dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+  .filter-bar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;}
+  .btn{font-size:12px;padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;transition:all 0.15s;}
+  .btn.active{background:rgba(96,165,250,0.15);color:var(--blue);border-color:rgba(96,165,250,0.4);}
+  .tbl-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:16px;}
+  table{width:100%;border-collapse:collapse;font-size:12px;min-width:860px;}
+  th{background:var(--bg4);padding:9px 10px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;letter-spacing:0.5px;white-space:nowrap;}
+  th:first-child{text-align:left;}
+  th.us{color:var(--orange);}
+  td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:right;vertical-align:middle;white-space:nowrap;}
+  td:first-child{text-align:left;font-weight:600;font-family:'Space Mono',monospace;font-size:11px;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:var(--bg4);}
+  .win{color:var(--green);font-weight:700;}
+  .lose{color:var(--red);}
+  .mid{color:var(--text);}
+  .na{color:rgba(255,255,255,0.15);font-size:12px;}
+  .us-col{color:var(--orange);font-weight:700;}
+  .insight{background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.25);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.8;}
+  .insight strong{color:var(--orange);}
+</style>
+</head>
+<body>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>ราคาประตูสายฝน — เปรียบทุกร้าน</h1>
+<p class="sub">อัปเดต ก.ค. 2569 | 8 ร้านค้า | <span style="color:var(--orange)">สีส้ม = ร้านเรา (De)</span></p>
+
+<div class="legend">
+  <div class="leg"><div class="dot" style="background:var(--green)"></div><span style="color:var(--green)">ถูกที่สุดในแถว</span></div>
+  <div class="leg"><div class="dot" style="background:var(--red)"></div><span style="color:var(--red)">แพงที่สุดในแถว</span></div>
+  <div class="leg"><div class="dot" style="background:rgba(255,255,255,0.1)"></div><span style="color:var(--dim)">ไม่มีขาย</span></div>
+</div>
+
+<div class="filter-bar">
+  <button class="btn active" onclick="filter('all',this)">ทั้งหมด</button>
+  <button class="btn" onclick="filter('70',this)">70 cm</button>
+  <button class="btn" onclick="filter('80',this)">80 cm</button>
+  <button class="btn" onclick="filter('90',this)">90 cm</button>
+  <button class="btn" onclick="filter('100',this)">100 cm</button>
+  <button class="btn" onclick="filter('x180',this)">×180</button>
+  <button class="btn" onclick="filter('x200',this)">×200</button>
+</div>
+
+<div id="insight-box"></div>
+<div id="out"></div>
+
+<script>
+const D = [
+  {z:'70×180', de:null, chock:null,  lam:1090, ojas:1350, pkd:null,  cwd:null,  fh:null,  mp:null },
+  {z:'70×200', de:null, chock:1182,  lam:1090, ojas:1350, pkd:null,  cwd:990,   fh:1000,  mp:1250 },
+  {z:'80×180', de:null, chock:1182,  lam:1200, ojas:1350, pkd:1399,  cwd:1050,  fh:1200,  mp:1250 },
+  {z:'80×200', de:1249, chock:1182,  lam:1250, ojas:1350, pkd:1499,  cwd:1050,  fh:1200,  mp:1250 },
+  {z:'90×200', de:null, chock:1350,  lam:1450, ojas:1550, pkd:1899,  cwd:1190,  fh:1400,  mp:1500 },
+  {z:'100×200',de:null, chock:null,  lam:1600, ojas:1750, pkd:2499,  cwd:1350,  fh:1600,  mp:1800 },
+];
+
+function vals(r){return[r.de,r.chock,r.lam,r.ojas,r.pkd,r.cwd,r.fh,r.mp].filter(v=>v!=null);}
+function cls(v,r){
+  if(!v)return'na';
+  const ns=vals(r);if(ns.length<2)return'mid';
+  if(v===Math.min(...ns))return'win';
+  if(v===Math.max(...ns))return'lose';
+  return'mid';
+}
+function cell(v,r,isUs){
+  if(!v)return'<span class="na">—</span>';
+  if(isUs)return'<span class="us-col">฿'+v.toLocaleString()+'</span>';
+  return'<span class="'+cls(v,r)+'">฿'+v.toLocaleString()+'</span>';
+}
+
+function render(fk){
+  const rows=D.filter(r=>{
+    if(fk==='all')return true;
+    if(fk==='70')return r.z.startsWith('70');
+    if(fk==='80')return r.z.startsWith('80');
+    if(fk==='90')return r.z.startsWith('90');
+    if(fk==='100')return r.z.startsWith('100');
+    if(fk==='x180')return r.z.includes('180');
+    if(fk==='x200')return r.z.includes('200');
+    return true;
+  });
+
+  // insight
+  document.getElementById('insight-box').innerHTML=`<div class="insight">
+    💡 <strong>80×200 De ฿1,249</strong> — ถูกกว่า ojas/ประกายดาว แต่แพงกว่า cwd/full house อยู่<br>
+    🔥 <strong>90×200</strong> — De ยังไม่มีขาย ถ้าเปิดที่ <strong>฿1,349</strong> จะถูกกว่าทุกเจ้ายกเว้น cwd (฿1,190)<br>
+    💰 <strong>100×200</strong> — ไม่มีคู่แข่ง ready stock เลย ถ้าเปิดที่ <strong>฿1,590</strong> ถูกที่สุดในตลาด margin ดีมาก
+  </div>`;
+
+  let html='<div class="tbl-wrap"><table><thead><tr>';
+  html+='<th style="text-align:left">ขนาด</th>';
+  html+='<th class="us">De (เรา)</th>';
+  html+='<th>chocksomkid</th><th>LAMTONMAISAK</th><th>ojas</th><th>ประกายดาว</th><th>cwd</th><th>full house</th><th>ไม้พร้อม</th>';
+  html+='</tr></thead><tbody>';
+  rows.forEach(r=>{
+    html+='<tr><td>'+r.z+'</td>';
+    html+='<td>'+cell(r.de,r,true)+'</td>';
+    html+='<td>'+cell(r.chock,r,false)+'</td>';
+    html+='<td>'+cell(r.lam,r,false)+'</td>';
+    html+='<td>'+cell(r.ojas,r,false)+'</td>';
+    html+='<td>'+cell(r.pkd,r,false)+'</td>';
+    html+='<td>'+cell(r.cwd,r,false)+'</td>';
+    html+='<td>'+cell(r.fh,r,false)+'</td>';
+    html+='<td>'+cell(r.mp,r,false)+'</td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  document.getElementById('out').innerHTML=html;
+}
+
+function filter(k,btn){
+  document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');render(k);
+}
+render('all');
+</script>
+</body>
+</html>
