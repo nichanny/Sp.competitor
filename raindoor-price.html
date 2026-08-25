@@ -104,6 +104,10 @@
   .lsaved{font-size:10px;color:#0a8f60;margin-left:5px;}
   html.light .linput{background:#FFF;border-color:rgba(0,0,0,.15);color:#1C1A18;}
   html.light .lopen{background:#F2F0EC;}
+
+  th.nobadge{opacity:.55;}
+  td.nobadge-cell{opacity:.55;}
+  th.nobadge::after{content:'';}
 </style>
 <script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
 </head>
@@ -258,29 +262,35 @@ function render(fk){
     💰 <strong>100×200</strong> — ไม่มีคู่แข่ง ready stock เลย ถ้าเปิดที่ <strong>฿1,590</strong> ถูกที่สุดในตลาด margin ดีมาก
   </div>`;
 
+  // เรียงคอลัมน์: ร้านเราก่อน → มีป้ายครบ → ป้ายไม่ครบ/ไม่ทราบ → ไม่มีป้าย (ท้ายสุด)
+  function badgeRank(b){
+    if(b.g===true && b.y===true) return 0;      // มีครบทั้งสองป้าย
+    if(b.g===true || b.y===true) return 1;      // มีป้ายเดียว
+    if(b.g===null || b.y===null) return 2;      // ยังไม่ทราบ
+    return 3;                                    // ไม่มีป้ายเลย
+  }
+  const COLS = Object.keys(BADGES).sort((a,b)=>{
+    const A=BADGES[a], B=BADGES[b];
+    if(!!A.us !== !!B.us) return A.us ? -1 : 1;  // ร้านเราขึ้นก่อนเสมอ
+    const r=badgeRank(A)-badgeRank(B);
+    if(r!==0) return r;
+    return 0;
+  });
+
   let html='<div class="tbl-wrap"><table><thead><tr>';
   html+='<th style="text-align:left">ขนาด</th>';
-  html+='<th class="us">De<span class="hdr-badges">'+icons(BADGES.de)+'</span></th>';
-  html+='<th class="us">Tb<span class="hdr-badges">'+icons(BADGES.tb)+'</span></th>';
-  html+='<th>chocksomkid<span class="hdr-badges">'+icons(BADGES.chock)+'</span></th>';
-  html+='<th>LAMTONMAISAK<span class="hdr-badges">'+icons(BADGES.lam)+'</span></th>';
-  html+='<th>ojas<span class="hdr-badges">'+icons(BADGES.ojas)+'</span></th>';
-  html+='<th>ประกายดาว<span class="hdr-badges">'+icons(BADGES.pkd)+'</span></th>';
-  html+='<th>cwd<span class="hdr-badges">'+icons(BADGES.cwd)+'</span></th>';
-  html+='<th>full house<span class="hdr-badges">'+icons(BADGES.fh)+'</span></th>';
-  html+='<th>ไม้พร้อม<span class="hdr-badges">'+icons(BADGES.mp)+'</span></th>';
+  COLS.forEach(k=>{
+    const b=BADGES[k];
+    const cls=b.us?' class="us"':(badgeRank(b)===3?' class="nobadge"':'');
+    html+='<th'+cls+'>'+b.name.replace(' (เรา)','')+'<span class="hdr-badges">'+icons(b)+'</span></th>';
+  });
   html+='</tr></thead><tbody>';
   rows.forEach(r=>{
     html+='<tr><td>'+r.z+'</td>';
-    html+='<td>'+cell(r.de,r,true)+'</td>';
-    html+='<td>'+cell(r.tb,r,true)+'</td>';
-    html+='<td>'+cell(r.chock,r,false)+'</td>';
-    html+='<td>'+cell(r.lam,r,false)+'</td>';
-    html+='<td>'+cell(r.ojas,r,false)+'</td>';
-    html+='<td>'+cell(r.pkd,r,false)+'</td>';
-    html+='<td>'+cell(r.cwd,r,false)+'</td>';
-    html+='<td>'+cell(r.fh,r,false)+'</td>';
-    html+='<td>'+cell(r.mp,r,false)+'</td>';
+    COLS.forEach(k=>{
+      const b=BADGES[k];
+      html+='<td'+(badgeRank(b)===3?' class="nobadge-cell"':'')+'>'+cell(r[k],r,!!b.us)+'</td>';
+    });
     html+='</tr>';
   });
   html+='</tbody></table></div>';
