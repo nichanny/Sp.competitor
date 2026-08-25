@@ -213,12 +213,12 @@ function renderBadges(){
   document.getElementById('badge-note').innerHTML=note;
 }
 const D = [
-  {z:'70×180', de:null, tb:null,          chock:{v:null}, lam:1090, ojas:1350, pkd:null,     cwd:null, fh:null,  mp:null },
-  {z:'70×200', de:null, tb:null,          chock:{v:1290}, lam:1090, ojas:1350, pkd:null,     cwd:990,  fh:1000, mp:1250 },
-  {z:'80×180', de:null, tb:1249,          chock:{v:1290}, lam:1200, ojas:1350, pkd:1399,    cwd:1050, fh:1200, mp:1250 },
+  {z:'70×180', de:null, tb:null,          chock:{v:null}, lam:1090, ojas:1350, pkd:null,     cwd:null, fh:null,  mp:{v:1350,n:1} },
+  {z:'70×200', de:null, tb:null,          chock:{v:1290}, lam:1090, ojas:1350, pkd:null,     cwd:990,  fh:1000, mp:{v:1350,n:1} },
+  {z:'80×180', de:null, tb:1249,          chock:{v:1290}, lam:1200, ojas:1350, pkd:1399,    cwd:1050, fh:1200, mp:{v:1400,n:1} },
   {z:'80×200', de:1249, tb:{v:1249,n:1}, chock:{v:1290}, lam:1250, ojas:1350, pkd:1499,    cwd:1050, fh:1200, mp:1250 },
-  {z:'90×200', de:{v:1449,n:1}, tb:{v:1449,n:1}, chock:{v:1450}, lam:{v:1400,n:1}, ojas:1550, pkd:1899,    cwd:1190, fh:1400, mp:1500 },
-  {z:'100×200',de:null, tb:null,          chock:{v:1650}, lam:1600, ojas:1750, pkd:2499,    cwd:1350, fh:1600, mp:1800 },
+  {z:'90×200', de:{v:1449,n:1}, tb:{v:1449,n:1}, chock:{v:1450}, lam:{v:1400,n:1}, ojas:1550, pkd:1899,    cwd:1190, fh:1400, mp:{v:1600,n:1} },
+  {z:'100×200',de:null, tb:null,          chock:{v:1650}, lam:1600, ojas:1750, pkd:2499,    cwd:1350, fh:1600, mp:{v:1900,n:1} },
 ];
 
 function rv(x){return x&&typeof x==='object'?x.v:x;}
@@ -254,7 +254,7 @@ function render(fk){
   // insight
   document.getElementById('insight-box').innerHTML=`<div class="insight">
     💡 <strong>80×200 De ฿1,249</strong> — ถูกกว่า ojas/ประกายดาว แต่แพงกว่า cwd/full house อยู่<br>
-    🔥 <strong>90×200 De ฿1,449</strong> — ถูกกว่าไม้พร้อม ฿51 · คู่แข่งหลักคือไม้พร้อม (9,000+ ชิ้น/เดือน) ไม่ใช่ chocksomkid (title ห่วย ขายได้น้อย)<br>
+    🔥 <strong>90×200 De ฿1,449</strong> — ถูกกว่าไม้พร้อม ฿151 · <strong>แก้ข้อมูลเดิม:</strong> ไม้พร้อมขายรวมทั้งร้าน 221 ชิ้น/เดือน (ไม่ใช่ 9,000) · LAMTONMAISAK ฿1,400 ถูกกว่าเรา ฿49<br>
     💰 <strong>100×200</strong> — ไม่มีคู่แข่ง ready stock เลย ถ้าเปิดที่ <strong>฿1,590</strong> ถูกที่สุดในตลาด margin ดีมาก
   </div>`;
 

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ไม้พร้อม — สินค้าและราคา</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,0.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:920px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.35);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:20px;}
+.back:hover{color:var(--text);}
+h1{font-size:19px;font-weight:700;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:18px;}
+.summary{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px;}
+.sum{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;flex:1;min-width:95px;text-align:center;}
+.sum-n{font-size:19px;font-weight:700;font-family:'Space Mono',monospace;}
+.sum-l{font-size:11px;color:var(--dim);}
+.note{border-radius:10px;padding:11px 14px;font-size:12px;margin-bottom:12px;line-height:1.75;}
+.note.fix{background:rgba(255,64,96,.09);border:1px solid rgba(255,64,96,.3);}
+.note.fix b{color:var(--red);}
+.note.up{background:rgba(255,208,96,.09);border:1px solid rgba(255,208,96,.3);}
+.note.up b{color:var(--yellow);}
+.search-box{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:13px;margin-bottom:14px;}
+.search-box:focus{outline:none;border-color:var(--orange);}
+.filter-bar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;}
+.btn{font-size:12px;padding:5px 13px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(96,165,250,.15);color:var(--blue);border-color:rgba(96,165,250,.4);}
+.listing{background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+.lhead{background:var(--bg4);padding:11px 14px;border-bottom:1px solid var(--border);}
+.ltitle{font-size:13px;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.lmeta{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--dim);font-family:'Space Mono',monospace;}
+.lmeta b{color:var(--text);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{padding:7px 14px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;border-bottom:1px solid var(--border);}
+th:first-child{text-align:left;}
+td{padding:9px 14px;border-bottom:1px solid var(--border);text-align:right;font-family:'Space Mono',monospace;white-space:nowrap;}
+td:first-child{text-align:left;font-family:'Sarabun',sans-serif;font-weight:600;white-space:normal;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg4);}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;}
+.p-hot{background:rgba(255,64,96,.13);color:var(--red);border:1px solid rgba(255,64,96,.3);}
+.p-ok{background:rgba(0,229,160,.12);color:var(--green);border:1px solid rgba(0,229,160,.3);}
+.p-cat{background:rgba(167,139,250,.13);color:var(--purple);border:1px solid rgba(167,139,250,.3);}
+.up-badge{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px;background:rgba(255,64,96,.13);color:var(--red);border:1px solid rgba(255,64,96,.3);}
+.share{color:var(--dim);font-size:11px;}
+.empty{text-align:center;padding:40px;color:var(--dim);}
+html.light{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html.light body{background:#FAFAF8;color:#1C1A18;}
+html.light .btn{border-color:rgba(0,0,0,.2);background:#F2F0EC;color:#5C5850;}
+html.light .btn.active{background:rgba(26,95,170,.12);color:#1A5FAA;border-color:rgba(26,95,170,.4);}
+html.light #theme-toggle{background:#FFF;border-color:rgba(0,0,0,.15);color:#1C1A18;}
+html.light .search-box{background:#FFF;border-color:rgba(0,0,0,.15);color:#1C1A18;}
+html.light tr:hover td{background:#F7F5F1;}
+html.light .note.fix{background:rgba(192,57,43,.06);border-color:rgba(192,57,43,.25);}
+html.light .note.up{background:rgba(139,105,20,.07);border-color:rgba(139,105,20,.25);}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🪵 ไม้พร้อม — สินค้าและราคา</h1>
+<p class="sub">ข้อมูล ณ 25 ส.ค. 2569 · ✅ ป้ายเขียว + ✅ ป้ายเหลือง</p>
+
+<div class="summary" id="summary"></div>
+
+<div class="note fix">
+❗ <b>แก้ข้อมูลที่เคยบันทึกผิด</b> — เดิมบันทึกว่าไม้พร้อมขาย <s>9,000+ ชิ้น/เดือน</s> ซึ่งไม่ถูกต้อง<br>
+ข้อมูลจริงจาก Shopdera: <b>ทั้งร้าน 22 สินค้า · ขายรวม 3,674 ชิ้น · 221 ชิ้น/เดือน</b> · คะแนนเฉลี่ย 4.5★<br>
+→ ไม้พร้อม<b>ไม่ใช่ market leader</b> อย่างที่เข้าใจ · ร้านที่ขายเยอะกว่าคือ Ojas (409/เดือน) และ chocksomkid (824/เดือน เฉพาะ listing โมเดิร์น)
+</div>
+
+<div class="note up">
+📈 <b>ไม้พร้อมขึ้นราคาประตูสายฝนแล้ว</b> (เทียบกับที่บันทึกไว้ ก.ค. 2569) — ขึ้น ฿100-150 เกือบทุกไซซ์ ยกเว้น 80×200 ที่คงเดิม
+</div>
+
+<input type="text" class="search-box" id="search" placeholder="🔍 ค้นหา เช่น สายฝน, 80×200, หน้าต่าง..." oninput="render()">
+<div class="filter-bar" id="filters"></div>
+<div id="out"></div>
+
+<script>
+const L = [
+ {
+  id:'rain', cat:'ประตูสายฝน',
+  title:'ประตูไม้สัก A บานไม้ สักแก่ ลายสายฝน (ใช้ภายนอกได้ กันน้ำ กันมอด กันปลวก)',
+  meta:{rank:'#1198', sold30:39, soldAll:613, rev:'217', star:'4.8', age:'994 วัน', gmv:'฿48,750'},
+  items:[
+   {n:'สายฝน 80×180', p:1400, old:1250, sh:'35.91%', st:489, s30:79},
+   {n:'สายฝน 80×200', p:1250, old:null, sh:'35.00%', st:469, s30:77},
+   {n:'สายฝน 70×180', p:1350, old:1250, sh:'12.27%', st:495, s30:27},
+   {n:'สายฝน 100×200', p:1900, old:1800, sh:'6.82%', st:493, s30:15},
+   {n:'สายฝน 90×200', p:1600, old:1500, sh:'4.55%', st:494, s30:10},
+   {n:'สายฝน 70×200', p:1350, old:1250, sh:'4.55%', st:null, s30:10},
+  ]
+ },
+ {
+  id:'window', cat:'หน้าต่าง',
+  title:'หน้าต่างไม้สัก 50×100, 60×110 บานทึบ โมเดิร์น มินิมอล (ใช้ภายนอกได้)',
+  meta:{rank:null, sold30:80, soldAll:874, rev:'150', star:'4.8', age:'1,005 วัน', gmv:'฿52,000'},
+  items:[
+   {n:'โมเดิร์นขีดบวก (เส้นโบว์) 50×100', p:720, old:null, sh:'53.29%', st:17, s30:81},
+   {n:'โมเดิร์นนอน 50×100', p:650, old:null, sh:'31.58%', st:1, s30:48},
+   {n:'โมเดิร์นขีดบวก (เส้นโบว์) 60×110', p:760, old:null, sh:'7.89%', st:38, s30:12},
+   {n:'โมเดิร์นนอน 60×110', p:740, old:null, sh:'3.95%', st:46, s30:6},
+   {n:'โมเดิร์นช่องกระจก 50×100', p:650, old:null, sh:'3.29%', st:102, s30:5},
+   {n:'โมเดิร์นช่องกระจก 60×110', p:760, old:null, sh:null, st:null, s30:null},
+  ]
+ },
+];
+
+let F='all';
+
+function renderSummary(){
+  const skus=L.reduce((s,l)=>s+l.items.length,0);
+  const all=L.flatMap(l=>l.items.map(i=>i.p));
+  const s30=L.reduce((s,l)=>s+(l.meta.sold30||0),0);
+  document.getElementById('summary').innerHTML=
+   '<div class="sum"><div class="sum-n" style="color:var(--blue)">22</div><div class="sum-l">สินค้าทั้งร้าน</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--purple)">'+skus+'</div><div class="sum-l">SKU ที่เก็บ</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--orange)">221</div><div class="sum-l">ขาย/เดือน ทั้งร้าน</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--red)">3,674</div><div class="sum-l">ขายรวมทั้งร้าน</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--yellow)">4.5★</div><div class="sum-l">คะแนนเฉลี่ย</div></div>';
+}
+function renderFilters(){
+  let h='<button class="btn active" onclick="setF(\'all\',this)">ทั้งหมด</button>';
+  L.forEach(l=>{h+='<button class="btn" onclick="setF(\''+l.id+'\',this)">'+l.cat+'</button>';});
+  document.getElementById('filters').innerHTML=h;
+}
+function metaLine(m){
+  let p=[];
+  if(m.rank) p.push('Ranking <b>'+m.rank+'</b>');
+  if(m.sold30!=null) p.push('ขาย/เดือน <b>'+m.sold30+'</b>');
+  if(m.soldAll) p.push('ขายรวม <b>'+m.soldAll+'</b>');
+  if(m.rev) p.push('รีวิว <b>'+m.rev+'</b> ('+m.star+'★)');
+  if(m.gmv) p.push('GMV30 <b>'+m.gmv+'</b>');
+  if(m.age) p.push('อายุ <b>'+m.age+'</b>');
+  return p.join(' · ');
+}
+function render(){
+  const q=(document.getElementById('search').value||'').trim().toLowerCase();
+  let html='';
+  L.forEach(l=>{
+    if(F!=='all'&&l.id!==F) return;
+    let items=l.items;
+    if(q){
+      const hit=l.title.toLowerCase().includes(q)||l.cat.toLowerCase().includes(q);
+      items=hit?items:items.filter(i=>i.n.toLowerCase().includes(q));
+      if(!items.length) return;
+    }
+    html+='<div class="listing"><div class="lhead">'
+      +'<div class="ltitle">'+l.title+' <span class="pill p-cat">'+l.cat+'</span></div>'
+      +'<div class="lmeta">'+metaLine(l.meta)+'</div></div>'
+      +'<table><thead><tr><th style="text-align:left">SKU</th><th>ราคา</th><th>Share</th><th>สต็อก</th><th>ขาย/เดือน</th></tr></thead><tbody>';
+    items.forEach(i=>{
+      const up = i.old ? '<span class="up-badge">↑฿'+(i.p-i.old)+'</span>' : '';
+      html+='<tr><td>'+i.n+'</td>'
+        +'<td><strong>฿'+i.p.toLocaleString()+'</strong>'+up+'</td>'
+        +'<td class="share">'+(i.sh||'—')+'</td>'
+        +'<td class="share">'+(i.st!=null?i.st.toLocaleString():'—')+'</td>'
+        +'<td>'+(i.s30!=null?'<span class="pill '+(i.s30>=25?'p-hot':'p-ok')+'">'+i.s30+'</span>':'—')+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  document.getElementById('out').innerHTML=html||'<div class="empty">ไม่พบสินค้าที่ค้นหา</div>';
+}
+function setF(f,btn){F=f;document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+renderSummary();renderFilters();render();
+</script>
+</body>
+</html>
