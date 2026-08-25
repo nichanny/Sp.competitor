@@ -59,9 +59,14 @@
   html.light .insight { background:rgba(192,74,26,0.06); border-color:rgba(192,74,26,0.2); }
   html.light .insight strong { color:#C04A1A; }
   html.light #theme-toggle { background:#FFFFFF; border-color:rgba(0,0,0,0.2); color:#1C1A18; }
+
+  #theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,0.35);}
+  #theme-toggle:hover{opacity:0.85;}
+  html.light #theme-toggle{background:#FFFFFF;border-color:rgba(0,0,0,0.15);color:#1C1A18;box-shadow:0 2px 10px rgba(0,0,0,0.12);}
 </style>
 </head>
 <body>
+<button id="theme-toggle" onclick="toggleTheme()">☀️ สว่าง</button>
 
 
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
