@@ -63,10 +63,10 @@
   html.light .p-low{color:#1A7A5E;}
   html.light .p-high{color:#8B6914;}
 </style>
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
 </head>
 <body>
-<button id="theme-toggle" onclick="toggleTheme()">☀️ สว่าง</button>
-
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
 <h1>🏪 ราคาสินค้าร้าน De (DOOR_E_D)</h1>
 <p class="sub">ราคาที่ลูกค้าเห็นปัจจุบัน — อัปเดต 25 ส.ค. 2569 · ตรวจสอบตรงกับไฟล์ Excel ร้าน (49 SKU)</p>
@@ -313,21 +313,20 @@ function setFilter(f,btn){
   render();
 }
 
-function toggleTheme(){
-  const isLight=document.documentElement.classList.toggle('light');
-  document.getElementById('theme-toggle').textContent=isLight?'🌙 มืด':'☀️ สว่าง';
-  localStorage.setItem('spTheme',isLight?'light':'dark');
-}
-(function(){
-  if(localStorage.getItem('spTheme')==='light') document.documentElement.classList.add('light');
-})();
-document.addEventListener('DOMContentLoaded',function(){
-  const b=document.getElementById('theme-toggle');
-  if(b && document.documentElement.classList.contains('light')) b.textContent='🌙 มืด';
-});
-
 renderSummary();
 render();
+</script>
+
+<script>
+function toggleTheme(){
+  const isDark = !document.documentElement.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent = isDark ? '☀️ สว่าง' : '🌙 มืด';
+  localStorage.setItem('spTheme', isDark ? 'dark' : 'light');
+}
+document.addEventListener('DOMContentLoaded',function(){
+  const b=document.getElementById('theme-toggle');
+  if(b) b.textContent = document.documentElement.classList.contains('light') ? '🌙 มืด' : '☀️ สว่าง';
+});
 </script>
 </body>
 </html>

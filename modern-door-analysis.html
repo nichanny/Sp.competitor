@@ -184,9 +184,45 @@
   .pc-cell.loser { border-color:rgba(255,64,96,0.3); }
   .pc-sku { font-size:11px; color:var(--dim); margin-bottom:4px; }
   .pc-price { font-size:15px; font-weight:700; }
+
+  html.light{
+    --bg:#FAFAF8;--bg2:#FFFFFF;--bg3:#FFFFFF;--bg4:#F2F0EC;
+    --text:#1C1A18;--dim:#5C5850;
+    --green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;
+    --border:rgba(0,0,0,0.12);--border-orange:rgba(192,74,26,0.28);
+    --orange-glow:rgba(192,74,26,0.08);--green-glow:rgba(26,122,94,0.08);
+    --red-glow:rgba(192,57,43,0.08);--yellow-glow:rgba(139,105,20,0.08);
+  }
+  html.light body{background:#FAFAF8;color:#1C1A18;}
+  html.light .hero{background:linear-gradient(135deg,#FFFFFF 0%,#F5F2ED 100%);}
+  html.light .hero::before{display:none;}
+  html.light .tabs{background:#FFFFFF;}
+  html.light .tab:hover{color:#1C1A18;}
+  html.light .card,html.light .tbl-wrap,html.light .gap-box,html.light .mini-card,
+  html.light .kpi-box,html.light .sum,html.light .listing,html.light .foot,
+  html.light .swot-box,html.light .brain-layer,html.light .formula,html.light .desc-block{background:#FFFFFF;border-color:rgba(0,0,0,0.1);}
+  html.light .gap-box,html.light .brain-layer{background:#F7F5F1;}
+  html.light th{background:#F2F0EC;}
+  html.light tr:hover td{background:#F7F5F1;}
+  html.light .warn{background:rgba(192,57,43,0.06);border-color:rgba(192,57,43,0.25);}
+  html.light .tip{background:rgba(26,122,94,0.07);border-color:rgba(26,122,94,0.25);}
+  html.light .info{background:rgba(26,95,170,0.06);border-color:rgba(26,95,170,0.25);}
+  html.light .insight{background:rgba(192,74,26,0.06);border-color:rgba(192,74,26,0.22);}
+  html.light .alert-box{background:rgba(192,57,43,0.06);border-color:rgba(192,57,43,0.25);}
+  html.light .na{color:rgba(0,0,0,0.22);}
+  html.light .btn{border-color:rgba(0,0,0,0.2);background:#F2F0EC;color:#5C5850;}
+  html.light .btn.active{background:rgba(192,74,26,0.12);color:#C04A1A;border-color:rgba(192,74,26,0.4);}
+  html.light .search-box,html.light .field input,html.light .field select{background:#FFFFFF;border-color:rgba(0,0,0,0.15);color:#1C1A18;}
+  html.light .pnum.med,html.light .pnum.cool,html.light .rank.r4{background:#F2F0EC;}
+  html.light #theme-toggle{background:#FFFFFF;border-color:rgba(0,0,0,0.15);color:#1C1A18;box-shadow:0 2px 10px rgba(0,0,0,0.12);}
+
+  #theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3,var(--dark3));border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,0.35);}
+  #theme-toggle:hover{opacity:.85;}
 </style>
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
 </head>
 <body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
 
 <div class="hero">
   <div class="hero-badge">ประตูโมเดิร์น × Competitive Analysis 2026</div>
@@ -687,6 +723,18 @@
     event.currentTarget.classList.add('active');
     window.scrollTo({top:0,behavior:'smooth'});
   }
+</script>
+
+<script>
+function toggleTheme(){
+  const isDark = !document.documentElement.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent = isDark ? '☀️ สว่าง' : '🌙 มืด';
+  localStorage.setItem('spTheme', isDark ? 'dark' : 'light');
+}
+document.addEventListener('DOMContentLoaded',function(){
+  const b=document.getElementById('theme-toggle');
+  if(b) b.textContent = document.documentElement.classList.contains('light') ? '🌙 มืด' : '☀️ สว่าง';
+});
 </script>
 </body>
 </html>

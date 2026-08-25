@@ -104,11 +104,10 @@
   #theme-toggle:hover{opacity:0.85;}
   html.light #theme-toggle{background:#FFFFFF;border-color:rgba(0,0,0,0.15);color:#1C1A18;box-shadow:0 2px 10px rgba(0,0,0,0.12);}
 </style>
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
 </head>
 <body>
-<button id="theme-toggle" onclick="toggleTheme()">☀️ สว่าง</button>
-
-
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
 <h1>📈 Price History</h1>
 <p class="sub">บันทึกการเปลี่ยนแปลงราคาทุกร้าน — เรียงตามเวลา</p>
@@ -333,20 +332,17 @@ load().then(data=>{
 });
 </script>
 
+
+
 <script>
 function toggleTheme(){
-  const isLight = document.documentElement.classList.toggle('light');
-  document.getElementById('theme-toggle').textContent = isLight ? '🌙 มืด' : '☀️ สว่าง';
-  localStorage.setItem('spTheme', isLight ? 'light' : 'dark');
+  const isDark = !document.documentElement.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent = isDark ? '☀️ สว่าง' : '🌙 มืด';
+  localStorage.setItem('spTheme', isDark ? 'dark' : 'light');
 }
-(function(){
-  if(localStorage.getItem('spTheme')==='light'){
-    document.documentElement.classList.add('light');
-  }
-})();
 document.addEventListener('DOMContentLoaded',function(){
-  const btn=document.getElementById('theme-toggle');
-  if(btn && document.documentElement.classList.contains('light')) btn.textContent='🌙 มืด';
+  const b=document.getElementById('theme-toggle');
+  if(b) b.textContent = document.documentElement.classList.contains('light') ? '🌙 มืด' : '☀️ สว่าง';
 });
 </script>
 </body>
