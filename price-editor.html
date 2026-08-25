@@ -44,6 +44,23 @@ h1{font-size:19px;font-weight:800;margin-bottom:4px;}
 .pbtn.primary{background:var(--orange);color:#fff;border-color:var(--orange);}
 .pbtn:disabled{opacity:.4;cursor:not-allowed;}
 .loading{text-align:center;padding:40px;color:var(--dim);}
+
+.gh{background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:13px 15px;margin-bottom:16px;}
+.gh-head{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;font-size:13px;font-weight:700;}
+.gh-body{margin-top:11px;display:none;}
+.gh-body.open{display:block;}
+.gh-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:9px;}
+.gh-in{flex:1;min-width:210px;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-family:'Space Mono',monospace;font-size:12px;}
+.gh-in:focus{outline:none;border-color:var(--orange);}
+.gh-note{font-size:11.5px;color:var(--dim);line-height:1.75;}
+.gh-note a{color:var(--orange);}
+.dotst{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle;}
+.st-on{background:var(--green);}
+.st-off{background:var(--dim);opacity:.5;}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:86px;z-index:200;padding:11px 20px;border-radius:11px;font-size:13px;font-weight:600;box-shadow:0 4px 18px rgba(0,0,0,.2);display:none;}
+.toast.ok{background:var(--green);color:#fff;}
+.toast.err{background:var(--red);color:#fff;}
+.toast.wait{background:var(--blue);color:#fff;}
 </style>
 
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
@@ -51,8 +68,28 @@ h1{font-size:19px;font-weight:800;margin-bottom:4px;}
 <p class="sub">แก้ที่นี่ที่เดียว · ทุกโปรแกรมจะดึงราคาใหม่อัตโนมัติ</p>
 
 <div class="steps">
-<b>วิธีใช้</b> — ① แก้ราคาในช่อง ② กด <b>ดาวน์โหลด prices.json</b> ③ เอาไฟล์ไปวางแทนที่ใน GitHub (หรือส่งให้ผมอัปเดตให้)<br>
-<b>หรือ</b> กด <b>คัดลอกให้ Claude</b> แล้ววางในแชท ผมจะอัปเดตขึ้น GitHub ให้ทันที
+<b>วิธีที่เร็วที่สุด</b> — เชื่อมต่อ GitHub ครั้งเดียว (ด้านล่าง) → แก้ราคา → กด <b>💾 บันทึกขึ้นเซิร์ฟเวอร์</b> → ทุกโปรแกรมได้ราคาใหม่ภายใน ~1 นาที <b>อัตโนมัติ</b><br><b>ทางอื่น</b> — กด <b>คัดลอกให้ Claude</b> วางในแชท หรือ <b>ดาวน์โหลด</b> ไปวางใน GitHub เอง
+</div>
+
+
+<div class="gh">
+  <div class="gh-head" onclick="ghToggle()">
+    <span><span class="dotst st-off" id="ghDot"></span>เชื่อมต่อ GitHub — บันทึกแล้วอัปเดตทุกโปรแกรมอัตโนมัติ</span>
+    <span style="font-size:11px;color:var(--dim)" id="ghCaret">▼ ตั้งค่า</span>
+  </div>
+  <div class="gh-body" id="ghBody">
+    <div class="gh-row">
+      <input class="gh-in" id="ghToken" type="password" placeholder="วาง GitHub Token ที่นี่ (ghp_... หรือ github_pat_...)">
+      <button class="pbtn" onclick="ghSave()">บันทึก Token</button>
+      <button class="pbtn" onclick="ghClear()">ลบ Token</button>
+    </div>
+    <div class="gh-note">
+      Token เก็บไว้<b>ในเบราว์เซอร์เครื่องนี้เท่านั้น</b> ไม่ถูกส่งไปที่ไหน นอกจาก GitHub โดยตรง<br>
+      สร้าง Token: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> →
+      เลือก repo <code>nichanny/Sp.competitor</code> → สิทธิ์ <b>Contents: Read and write</b><br>
+      เมื่อเชื่อมแล้ว กดปุ่ม <b>💾 บันทึกขึ้นเซิร์ฟเวอร์</b> ราคาจะไปถึงทุกโปรแกรมภายใน ~1 นาที
+    </div>
+  </div>
 </div>
 
 <div class="ctrl">
@@ -67,10 +104,12 @@ h1{font-size:19px;font-weight:800;margin-bottom:4px;}
   <div class="bgroup">
     <button class="pbtn" onclick="resetAll()" id="bReset" disabled>ยกเลิกการแก้</button>
     <button class="pbtn" onclick="copyForClaude()" id="bCopy" disabled>📋 คัดลอกให้ Claude</button>
-    <button class="pbtn primary" onclick="download()" id="bDl" disabled>⬇️ ดาวน์โหลด prices.json</button>
+    <button class="pbtn" onclick="download()" id="bDl" disabled>⬇️ ดาวน์โหลด</button>
+    <button class="pbtn primary" onclick="publish()" id="bPub" disabled>💾 บันทึกขึ้นเซิร์ฟเวอร์</button>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
 <script src="sp-prices.js"></script>
 <script>
 let DB=null, ORIG=null, CF='all';
@@ -91,7 +130,7 @@ function updateBar(){
   document.getElementById('dirty').innerHTML = d.length
     ? 'แก้ไขแล้ว <b>'+d.length+'</b> รายการ'
     : 'ยังไม่มีการแก้ไข';
-  ['bReset','bCopy','bDl'].forEach(id=>document.getElementById(id).disabled = d.length===0);
+  ['bReset','bCopy','bDl','bPub'].forEach(id=>{const el=document.getElementById(id); if(el) el.disabled = d.length===0;});
 }
 function setVal(i,shop,val){
   const v=val.trim();
@@ -153,12 +192,84 @@ function resetAll(){
   DB.ours=JSON.parse(JSON.stringify(ORIG));
   updateBar(); render();
 }
+
+/* ---------- GitHub publish ---------- */
+const GH_OWNER='nichanny', GH_REPO='Sp.competitor', GH_PATH='prices.json', GH_BRANCH='main';
+const TK='spGhToken';
+
+function ghToken(){ try{return localStorage.getItem(TK)||'';}catch(e){return '';} }
+function ghToggle(){
+  const b=document.getElementById('ghBody');
+  const open=b.classList.toggle('open');
+  document.getElementById('ghCaret').textContent = open?'▲ ปิด':'▼ ตั้งค่า';
+}
+function ghRefresh(){
+  const has=!!ghToken();
+  document.getElementById('ghDot').className='dotst '+(has?'st-on':'st-off');
+  const inp=document.getElementById('ghToken');
+  if(has && inp) inp.placeholder='● เชื่อมต่อแล้ว (ใส่ใหม่เพื่อเปลี่ยน)';
+  updateBar();
+}
+function ghSave(){
+  const v=(document.getElementById('ghToken').value||'').trim();
+  if(!v){ toast('กรุณาวาง Token ก่อน','err'); return; }
+  try{ localStorage.setItem(TK,v); }catch(e){}
+  document.getElementById('ghToken').value='';
+  ghRefresh(); toast('เชื่อมต่อ GitHub แล้ว','ok');
+}
+function ghClear(){
+  try{ localStorage.removeItem(TK); }catch(e){}
+  const inp=document.getElementById('ghToken'); if(inp){inp.value='';inp.placeholder='วาง GitHub Token ที่นี่';}
+  ghRefresh(); toast('ลบ Token แล้ว','ok');
+}
+function toast(msg,kind,ms){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+(kind||'ok'); t.style.display='block';
+  clearTimeout(window.__tt);
+  if(ms!==0) window.__tt=setTimeout(()=>{t.style.display='none';}, ms||2600);
+}
+function b64utf8(str){
+  const bytes=new TextEncoder().encode(str);
+  let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b));
+  return btoa(bin);
+}
+async function publish(){
+  const tok=ghToken();
+  if(!tok){ toast('ยังไม่ได้เชื่อมต่อ GitHub — กดตั้งค่าด้านบน','err',3500); ghToggle(); return; }
+  const btn=document.getElementById('bPub'); btn.disabled=true;
+  toast('กำลังบันทึก...','wait',0);
+  const api='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
+  const hdr={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'};
+  try{
+    const g=await fetch(api+'?ref='+GH_BRANCH+'&t='+Date.now(),{headers:hdr,cache:'no-store'});
+    if(!g.ok) throw new Error(g.status===401?'Token ไม่ถูกต้องหรือหมดอายุ':g.status===404?'ไม่พบไฟล์/repo — เช็คสิทธิ์ Token':'อ่านไฟล์ไม่ได้ ('+g.status+')');
+    const meta=await g.json();
+    const body={
+      message:'Update prices via editor '+fmtDate(),
+      content:b64utf8(JSON.stringify(payload(),null,1)),
+      sha:meta.sha, branch:GH_BRANCH
+    };
+    const p=await fetch(api,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},hdr),body:JSON.stringify(body)});
+    if(!p.ok){
+      const e=await p.json().catch(()=>({}));
+      throw new Error(e.message||('บันทึกไม่สำเร็จ ('+p.status+')'));
+    }
+    ORIG=JSON.parse(JSON.stringify(DB.ours));
+    render(); updateBar();
+    toast('✓ บันทึกแล้ว · ทุกโปรแกรมจะได้ราคาใหม่ภายใน ~1 นาที','ok',5000);
+  }catch(err){
+    toast('❌ '+err.message,'err',5000);
+  }finally{
+    btn.disabled = dirtyList().length===0;
+  }
+}
+
 function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
 document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
 
 SPPrices.load({force:true}).then(db=>{
   DB=db; ORIG=JSON.parse(JSON.stringify(db.ours));
-  renderCats(); render(); updateBar();
+  renderCats(); render(); updateBar(); ghRefresh();
   SPPrices.statusBadge(db);
 }).catch(e=>{
   document.getElementById('out').innerHTML='<div class="loading">โหลดราคาไม่สำเร็จ: '+e.message+'</div>';
