@@ -122,15 +122,15 @@
 // สถานะป้ายเป็นรายเดือน — asOf = เดือนที่ยืนยันข้อมูลล่าสุด
 const BADGE_MONTH = 'ส.ค. 2569';   // เดือนอ้างอิงปัจจุบัน
 const BADGES = {
-  de:   {name:'De (เรา)',      g:true,  y:true,  us:true, asOf:'พ.ค. 2569'},
-  tb:   {name:'Tb (เรา)',      g:true,  y:true,  us:true, asOf:'พ.ค. 2569'},
-  chock:{name:'chocksomkid',   g:true,  y:true,           asOf:'พ.ค. 2569'},
-  lam:  {name:'LAMTONMAISAK',  g:true,  y:true,           asOf:'ก.ค. 2569'},
-  ojas: {name:'ojas',          g:null,  y:null,           asOf:null},
-  pkd:  {name:'ประกายดาว',      g:null,  y:null,           asOf:null},
-  cwd:  {name:'cwd',           g:false, y:false,          asOf:'ก.ค. 2569'},
+  de:   {name:'De (เรา)',      g:true,  y:true,  us:true, asOf:'ส.ค. 2569'},
+  tb:   {name:'Tb (เรา)',      g:true,  y:true,  us:true, asOf:'ส.ค. 2569'},
+  chock:{name:'chocksomkid',   g:true,  y:true,           asOf:'ส.ค. 2569'},
+  lam:  {name:'LAMTONMAISAK',  g:true,  y:true,           asOf:'ส.ค. 2569'},
+  ojas: {name:'ojas',          g:true,  y:true,           asOf:'ส.ค. 2569'},
+  pkd:  {name:'ประกายดาว',      g:true,  y:true,           asOf:'ส.ค. 2569'},
+  cwd:  {name:'cwd',           g:false, y:false,          asOf:'ส.ค. 2569'},
   fh:   {name:'full house',    g:null,  y:null,           asOf:null},
-  mp:   {name:'ไม้พร้อม',       g:true,  y:true,           asOf:'ก.ค. 2569'},
+  mp:   {name:'ไม้พร้อม',       g:true,  y:true,           asOf:'ส.ค. 2569'},
 };
 function isStale(b){ return b.asOf && b.asOf !== BADGE_MONTH; }
 function icons(b){
