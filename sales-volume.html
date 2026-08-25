@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ยอดขายรายเดือน — ทุกร้าน ทุก SKU</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:960px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:18px;}
+h1{font-size:19px;font-weight:800;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:16px;}
+
+.note{border-radius:10px;padding:11px 14px;font-size:12px;margin-bottom:14px;line-height:1.7;background:rgba(139,105,20,.08);border:1px solid rgba(139,105,20,.28);}
+.note b{color:var(--yellow);}
+
+/* shop totals */
+.shops{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-bottom:18px;}
+.shopcard{background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:12px;}
+.sc-name{font-size:12px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.sc-n{font-size:22px;font-weight:800;font-family:'Space Mono',monospace;line-height:1;}
+.sc-l{font-size:10px;color:var(--dim);margin-top:3px;}
+.sc-bar{height:5px;border-radius:3px;background:var(--bg4);margin-top:8px;overflow:hidden;}
+.sc-fill{height:100%;border-radius:3px;}
+
+.ctrl{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.btn{font-size:12px;padding:5px 13px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(192,74,26,.13);color:var(--orange);border-color:rgba(192,74,26,.4);}
+.search-box{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:13px;margin-bottom:12px;}
+.search-box:focus{outline:none;border-color:var(--orange);}
+
+.rowlist{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.r{display:grid;grid-template-columns:26px 1fr 96px 60px;gap:10px;align-items:center;padding:10px 13px;border-bottom:1px solid var(--border);}
+.r:last-child{border-bottom:none;}
+.r:hover{background:var(--bg4);}
+.rank{font-size:11px;font-family:'Space Mono',monospace;color:var(--dim);text-align:right;}
+.rank.top{color:var(--orange);font-weight:700;}
+.nm{font-size:13px;font-weight:600;line-height:1.35;}
+.shop{font-size:10px;padding:1px 7px;border-radius:4px;margin-left:6px;white-space:nowrap;display:inline-block;vertical-align:1px;}
+.bar-wrap{height:7px;border-radius:4px;background:var(--bg4);overflow:hidden;}
+.bar{height:100%;border-radius:4px;}
+.qty{font-size:15px;font-weight:800;font-family:'Space Mono',monospace;text-align:right;}
+.price{font-size:11px;color:var(--dim);font-family:'Space Mono',monospace;}
+.empty{text-align:center;padding:40px;color:var(--dim);}
+.section-h{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin:20px 0 9px;}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>📊 ยอดขายรายเดือน — ทุกร้าน ทุก SKU</h1>
+<p class="sub">ข้อมูล ณ 25 ส.ค. 2569 · เรียงจากขายดีที่สุด</p>
+
+<div class="note">
+⚠️ <b>หมายเหตุเรื่องตัวเลข</b> — ตัวเลขนี้คือ "ยอดขาย SKU" ที่ Shopdera ประเมิน ซึ่งบางครั้งไม่ตรงกับยอดขาย 30 วันระดับ listing เป๊ะๆ · ใช้ดู <b>สัดส่วนและลำดับความนิยม</b> ได้แม่นยำ แต่ตัวเลขสัมบูรณ์ให้ถือเป็นค่าประมาณ<br>
+📌 De และ Tb ไม่มีข้อมูลนี้ เพราะเป็นร้านเราเอง (ดูยอดจริงได้ใน Seller Centre)
+</div>
+
+<div class="section-h">ยอดขายรวมต่อเดือน — แยกตามร้าน</div>
+<div class="shops" id="shops"></div>
+
+<div class="section-h">รายการ SKU ทั้งหมด</div>
+<input type="text" class="search-box" id="search" placeholder="🔍 ค้นหา เช่น 80×200, สายฝน, วงกบ, ขีดตรง..." oninput="render()">
+<div class="ctrl" id="shopFilter"></div>
+<div class="ctrl" id="catFilter"></div>
+<div class="rowlist" id="out"></div>
+
+<script>
+const SHOPS={
+ chock:{name:'chocksomkid', color:'#1A5FAA'},
+ lam:{name:'LAMTONMAISAK', color:'#6D4AA8'},
+ ojas:{name:'Ojas', color:'#1A7A5E'},
+ mp:{name:'ไม้พร้อม', color:'#C04A1A'},
+ pkd:{name:'ประกายดาว', color:'#8B6914'},
+};
+
+// [shop, category, ชื่อ SKU, ราคา, ยอดขาย/เดือน]
+const D=[
+ // chocksomkid — สายฝน
+ ['chock','สายฝน','สายฝน 80×200',1290,132],
+ ['chock','สายฝน','สายฝน 80×180',1290,89],
+ ['chock','สายฝน','สายฝน 90×200',1450,30],
+ ['chock','สายฝน','สายฝน 100×200',1650,18],
+ ['chock','สายฝน','สายฝน 70×200',1290,6],
+ ['chock','สายฝน','สายฝน 60×100',800,2],
+ // chocksomkid — โมเดิร์น listing #146
+ ['chock','โมเดิร์น','โมเดิร์น 80×200',1790,129],
+ ['chock','โมเดิร์น','โมเดิร์น 80×180',1790,50],
+ ['chock','โมเดิร์น','โมเดิร์น 90×200',1990,20],
+ ['chock','ขีดตรง','ขีดตรง 80×200',1990,18],
+ ['chock','โมเดิร์น','โมเดิร์น 70×200',1790,14],
+ ['chock','ขีดตรง','ขีดตรง 90×200',2250,12],
+ ['chock','ขีดตรง','ขีดตรง 80×180',1990,6],
+ ['chock','วงกบ','วงกบ 90×200',1100,3],
+ ['chock','วงกบ','วงกบ 80×200',1100,2],
+ ['chock','วงกบ','วงกบ 80×180',1100,2],
+ ['chock','วงกบ','วงกบ 100×200',1100,1],
+ ['chock','ขีดตรง','ขีดตรง 70×200',1990,1],
+ ['chock','โมเดิร์น','โมเดิร์น 100×200',2590,1],
+ // chocksomkid — รวมหลายลาย
+ ['chock','ขีดบวก','ขีดบวก ขอบ5นิ้ว 80×200',2450,24],
+ ['chock','สายฝน','สายฝน 80×200 (listing รวม)',1350,10],
+ ['chock','ฟัก','8ฟัก 80×200',2350,4],
+ ['chock','โมเดิร์น','โมเดิร์น 70×200 ขอบ4นิ้ว',1790,4],
+ ['chock','โมเดิร์น','โมเดิร์น กรอบบาน4นิ้ว 80×200',1790,2],
+ ['chock','โมเดิร์น','โมเดิร์น 70×200 ขอบ5นิ้ว',2350,1],
+ // chocksomkid — 90×200
+ ['chock','ฟัก','5ฟักปีกนก 90×200',2850,105],
+ ['chock','ขีดบวก','ขีดบวก 90×200',2950,37],
+ ['chock','ขีดตรง','ขีดตรง 90×200 (listing 90)',2950,28],
+ ['chock','ฟัก','8ฟัก 90×200',2850,24],
+ ['chock','โมเดิร์น','โมเดิร์น 90×200 (listing 90)',2850,16],
+ ['chock','สายฝน','สายฝน 90×200 (listing 90)',1990,9],
+ // chocksomkid — วงกบ
+ ['chock','วงกบ','วงกบ 80×200 (listing วงกบ)',1100,150],
+ ['chock','วงกบ','วงกบ 100×200 (listing วงกบ)',1100,46],
+ ['chock','วงกบ','วงกบ 90×200 (listing วงกบ)',1100,46],
+ ['chock','วงกบ','วงกบ 160×200',1290,32],
+ ['chock','วงกบ','วงกบ 70×200',1100,15],
+ ['chock','วงกบ','วงกบ 80×180 (listing วงกบ)',1100,13],
+ ['chock','วงกบ','วงกบ 200×200',1290,13],
+ ['chock','วงกบ','วงกบ 180×200',1290,8],
+ ['chock','วงกบ','วงกบ 100×120',500,2],
+ // chocksomkid — วงกบกลม
+ ['chock','วงกบกลม','วงกบกลม 3 ช่อง 100',2280,53],
+ ['chock','วงกบกลม','วงกบกลม 3 ช่อง 120',2350,27],
+ ['chock','วงกบกลม','วงกบกลม 3 ช่อง 150',2650,9],
+ ['chock','วงกบกลม','วงกบกลม 80',1550,113],
+ ['chock','วงกบกลม','วงกบกลม 60',1142,47],
+ ['chock','วงกบกลม','วงกบกลม 40',950,12],
+
+ // LAMTONMAISAK — Listing A
+ ['lam','สายฝน','สายฝน 80×180 (A)',1200,40],
+ ['lam','สายฝน','สายฝน 80×200 (A)',1250,23],
+ ['lam','สายฝน','สายฝน 70×200 (A)',1090,13],
+ ['lam','สายฝน','สายฝน 70×180 (A)',1090,12],
+ ['lam','สายฝน','สายฝน 100×200 (A)',1600,7],
+ ['lam','สายฝน','สายฝน 90×200 (A)',1400,3],
+ ['lam','วงกบ','วงกบ 80×200 (A)',1130,1],
+ // LAMTONMAISAK — Listing B
+ ['lam','สายฝน','สายฝน 80×180 (B)',1200,62],
+ ['lam','สายฝน','สายฝน 80×200 (B)',1250,37],
+ ['lam','สายฝน','สายฝน 70×180 (B)',1090,29],
+ ['lam','สายฝน','สายฝน 70×200 (B)',1090,19],
+ ['lam','สายฝน','สายฝน 100×200 (B)',1600,16],
+ ['lam','สายฝน','สายฝน 90×200 (B)',1400,10],
+ ['lam','วงกบ','วงกบ 80×200 (B)',1130,6],
+ ['lam','วงกบ','วงกบ 70×200 (B)',990,5],
+ ['lam','วงกบ','วงกบ 100×200 (B)',1470,1],
+
+ // Ojas — ประตู
+ ['ojas','โมเดิร์น','โมเดิร์น 80×200',1890,56],
+ ['ojas','ขีดตรง','ขีดตรง 80×200',2090,51],
+ ['ojas','ขีดบวก','ขีดบวก 80×200',2000,41],
+ ['ojas','ขีดตรง','ขีดตรง 90×200',2290,24],
+ ['ojas','ขีดตรง','ขีดตรง 100×200',2490,22],
+ ['ojas','โมเดิร์น','โมเดิร์น 90×200',2000,20],
+ ['ojas','ขีดบวก','ขีดบวก 100×200',2490,16],
+ ['ojas','ขีดบวก','ขีดบวก 90×200',2290,15],
+ ['ojas','โมเดิร์น','โมเดิร์น 100×200',2200,14],
+ ['ojas','โมเดิร์น','โมเดิร์น 80×180',1800,14],
+ ['ojas','ขีดบวก','ขีดบวก 80×180',2090,7],
+ ['ojas','โมเดิร์น','โมเดิร์น 70×180',1890,7],
+ ['ojas','ขีดตรง','ขีดตรง 80×180',2090,7],
+ ['ojas','โมเดิร์น','โมเดิร์น 70×200',1890,4],
+ ['ojas','อื่นๆ','ลายอิฐ 90×200',2290,3],
+ ['ojas','ขีดบวก','ขีดบวก 70×200',2090,3],
+ ['ojas','ขีดตรง','ขีดตรง 70×200',2090,1],
+ ['ojas','อื่นๆ','โมเดิร์นลูกฟัก 4นิ้ว 80×200',1790,1],
+ ['ojas','อื่นๆ','ลายอิฐ 70×180',2090,1],
+ ['ojas','ขีดบวก','ขีดบวก 70×180',2090,1],
+ // Ojas — วงกบ
+ ['ojas','วงกบ','วงกบ 80×200 ไม่ทำสี',1250,106],
+ ['ojas','วงกบ','วงกบ 90×200 ไม่ทำสี',1350,34],
+ ['ojas','วงกบ','วงกบ 100×200 ไม่ทำสี',1450,28],
+ ['ojas','วงกบ','วงกบ 200×200 ไม่ทำสี',1950,10],
+ ['ojas','วงกบ','วงกบ 70×200 ไม่ทำสี',1250,8],
+ ['ojas','วงกบ','วงกบ 160×200 ไม่ทำสี',1750,6],
+ ['ojas','วงกบ','วงกบ 140×200 ไม่ทำสี',1650,2],
+ ['ojas','วงกบ','วงกบ 180×200 ไม่ทำสี',1850,1],
+
+ // ไม้พร้อม — สายฝน
+ ['mp','สายฝน','สายฝน 80×180',1400,79],
+ ['mp','สายฝน','สายฝน 80×200',1250,77],
+ ['mp','สายฝน','สายฝน 70×180',1350,27],
+ ['mp','สายฝน','สายฝน 100×200',1900,15],
+ ['mp','สายฝน','สายฝน 90×200',1600,10],
+ ['mp','สายฝน','สายฝน 70×200',1350,10],
+ // ไม้พร้อม — หน้าต่าง
+ ['mp','หน้าต่าง','หน้าต่างขีดบวก 50×100',720,81],
+ ['mp','หน้าต่าง','หน้าต่างโมเดิร์นนอน 50×100',650,48],
+ ['mp','หน้าต่าง','หน้าต่างขีดบวก 60×110',760,12],
+ ['mp','หน้าต่าง','หน้าต่างโมเดิร์นนอน 60×110',740,6],
+ ['mp','หน้าต่าง','หน้าต่างช่องกระจก 50×100',650,5],
+
+ // ประกายดาว
+ ['pkd','ขีดตรง','ขีดตรง 4ขีด 80×200',1799,300],
+ ['pkd','หน้าต่าง','หน้าต่างสายฝน 60×100',367,51],
+ ['pkd','หน้าต่าง','หน้าต่างสายฝน 60×110',399,49],
+ ['pkd','หน้าต่าง','หน้าต่างขีดตรง 50×100',699,33],
+ ['pkd','หน้าต่าง','หน้าต่างสายฝน 50×100',399,29],
+ ['pkd','หน้าต่าง','หน้าต่างขีดตรง 60×110',699,20],
+ ['pkd','หน้าต่าง','หน้าต่างขีดบวก 60×100',799,19],
+ ['pkd','หน้าต่าง','หน้าต่างขีดบวก 50×100',799,17],
+ ['pkd','หน้าต่าง','หน้าต่างขีดตรง 50×150',1599,10],
+ ['pkd','หน้าต่าง','หน้าต่างขีดตรง 60×100',699,7],
+ ['pkd','หน้าต่าง','หน้าต่างขีดบวก 60×110',799,2],
+ ['pkd','หน้าต่าง','หน้าต่างสายฝน 70×100',750,1],
+];
+
+let SF='all', CF='all';
+
+function shopTotals(){
+  const t={};
+  D.forEach(([s,,,,q])=>{t[s]=(t[s]||0)+q;});
+  return t;
+}
+function renderShops(){
+  const t=shopTotals();
+  const max=Math.max(...Object.values(t));
+  let h='';
+  Object.entries(t).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{
+    const s=SHOPS[k];
+    h+='<div class="shopcard">'
+      +'<div class="sc-name"><span>'+s.name+'</span></div>'
+      +'<div class="sc-n" style="color:'+s.color+'">'+v.toLocaleString()+'</div>'
+      +'<div class="sc-l">ชิ้น/เดือน · '+D.filter(d=>d[0]===k).length+' SKU</div>'
+      +'<div class="sc-bar"><div class="sc-fill" style="width:'+(v/max*100)+'%;background:'+s.color+'"></div></div>'
+      +'</div>';
+  });
+  document.getElementById('shops').innerHTML=h;
+}
+function renderFilters(){
+  let h='<button class="btn active" onclick="setSF(\'all\',this)">ทุกร้าน</button>';
+  Object.entries(SHOPS).forEach(([k,s])=>{h+='<button class="btn" onclick="setSF(\''+k+'\',this)">'+s.name+'</button>';});
+  document.getElementById('shopFilter').innerHTML=h;
+  const cats=[...new Set(D.map(d=>d[1]))];
+  let h2='<button class="btn active" onclick="setCF(\'all\',this)">ทุกประเภท</button>';
+  cats.forEach(c=>{h2+='<button class="btn" onclick="setCF(\''+c+'\',this)">'+c+'</button>';});
+  document.getElementById('catFilter').innerHTML=h2;
+}
+function render(){
+  const q=(document.getElementById('search').value||'').trim().toLowerCase();
+  let rows=D.filter(([s,c,n])=>{
+    if(SF!=='all'&&s!==SF) return false;
+    if(CF!=='all'&&c!==CF) return false;
+    if(q&&!(n.toLowerCase().includes(q)||c.toLowerCase().includes(q))) return false;
+    return true;
+  }).sort((a,b)=>b[4]-a[4]);
+  if(!rows.length){document.getElementById('out').innerHTML='<div class="empty">ไม่พบรายการ</div>';return;}
+  const max=rows[0][4];
+  let h='';
+  rows.forEach(([s,c,n,p,qy],i)=>{
+    const sh=SHOPS[s];
+    h+='<div class="r">'
+      +'<div class="rank'+(i<3?' top':'')+'">'+(i+1)+'</div>'
+      +'<div><div class="nm">'+n+'<span class="shop" style="background:'+sh.color+'22;color:'+sh.color+';border:1px solid '+sh.color+'55">'+sh.name+'</span></div>'
+      +'<div class="price">฿'+p.toLocaleString()+' · '+c+'</div></div>'
+      +'<div class="bar-wrap"><div class="bar" style="width:'+(qy/max*100)+'%;background:'+sh.color+'"></div></div>'
+      +'<div class="qty" style="color:'+sh.color+'">'+qy+'</div>'
+      +'</div>';
+  });
+  document.getElementById('out').innerHTML=h;
+}
+function setSF(f,b){SF=f;document.querySelectorAll('#shopFilter .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function setCF(f,b){CF=f;document.querySelectorAll('#catFilter .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+renderShops();renderFilters();render();
+</script>
+</body>
+</html>
