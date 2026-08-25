@@ -44,10 +44,33 @@
   .badge-pre{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:3px;background:rgba(255,208,96,0.12);color:var(--yellow);border:1px solid rgba(255,208,96,0.3);}
   .alert-box{background:rgba(255,64,96,0.08);border:1px solid rgba(255,64,96,0.3);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.65;}
   .alert-box strong{color:var(--red);}
+
+  html.light {
+    --bg:#FAFAF8; --bg2:#FFFFFF; --bg3:#FFFFFF; --bg4:#F2F0EC;
+    --text:#1C1A18; --dim:#5C5850;
+    --green:#1A7A5E; --red:#C0392B; --yellow:#8B6914; --blue:#1A5FAA; --orange:#C04A1A;
+    --border:rgba(0,0,0,0.12);
+  }
+  html.light body { background:#FAFAF8; color:#1C1A18; }
+  html.light .btn { border-color:rgba(0,0,0,0.2); background:#F2F0EC; color:#5C5850; }
+  html.light .btn.active { background:rgba(26,95,170,0.12); color:#1A5FAA; border-color:rgba(26,95,170,0.4); }
+  html.light table th { background:#F2F0EC; }
+  html.light tr:hover td { background:#F2F0EC; }
+  html.light .win { color:#1A7A5E; }
+  html.light .lose { color:#C0392B; }
+  html.light .mid { color:#1C1A18; }
+  html.light .na { color:rgba(0,0,0,0.25); }
+  html.light .us-col { color:#C04A1A; }
+  html.light .badge-new { background:rgba(26,95,170,0.1); color:#1A5FAA; border-color:rgba(26,95,170,0.3); }
+  html.light .badge-pre { background:rgba(139,105,20,0.1); color:#8B6914; }
+  html.light .badge-add { background:rgba(192,74,26,0.1); color:#C04A1A; }
+  html.light .insight { background:rgba(192,74,26,0.06); border-color:rgba(192,74,26,0.2); }
+  html.light .insight strong { color:#C04A1A; }
+  html.light #theme-toggle { background:#FFFFFF; border-color:rgba(0,0,0,0.2); color:#1C1A18; }
 </style>
 </head>
 <body>
-<button id="theme-toggle" onclick="toggleTheme()" style="position:fixed;top:12px;right:16px;z-index:999;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;">🌙 มืด</button>
+
 
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
 
@@ -183,6 +206,23 @@ function filter(k,btn){
   btn.classList.add('active'); render(k);
 }
 render('all');
+</script>
+
+<script>
+function toggleTheme(){
+  const isLight = document.documentElement.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent = isLight ? '🌙 มืด' : '☀️ สว่าง';
+  localStorage.setItem('spTheme', isLight ? 'light' : 'dark');
+}
+(function(){
+  if(localStorage.getItem('spTheme')==='light'){
+    document.documentElement.classList.add('light');
+  }
+})();
+document.addEventListener('DOMContentLoaded',function(){
+  const btn=document.getElementById('theme-toggle');
+  if(btn && document.documentElement.classList.contains('light')) btn.textContent='🌙 มืด';
+});
 </script>
 </body>
 </html>
