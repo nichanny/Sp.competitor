@@ -77,6 +77,15 @@
   th .hdr-badges{display:block;margin-top:3px;font-size:9px;letter-spacing:0;}
   html.light .ic-off{color:#999;}
   html.light .ic-q{color:#888;}
+
+  .badge-note{background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.28);border-radius:10px;padding:9px 13px;font-size:12px;margin-bottom:10px;line-height:1.7;}
+  .warn-txt{color:var(--yellow);font-weight:600;}
+  .unk-txt{color:var(--dim);font-weight:600;}
+  .sb-date{font-size:10px;color:var(--dim);font-family:'Space Mono',monospace;margin-left:2px;}
+  .shop-badge.stale{border-color:rgba(255,208,96,.45);}
+  .shop-badge.unk{border-style:dashed;opacity:.75;}
+  html.light .badge-note{background:rgba(26,95,170,.06);border-color:rgba(26,95,170,.25);}
+  html.light .warn-txt{color:#8B6914;}
 </style>
 <script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
 </head>
@@ -94,6 +103,7 @@
 </div>
 
 
+<div class="badge-note-wrap" id="badge-note"></div>
 <div class="badge-row" id="badge-row"></div>
 <div class="filter-bar">
   <button class="btn active" onclick="filter('all',this)">ทั้งหมด</button>
@@ -109,17 +119,20 @@
 <div id="out"></div>
 
 <script>
+// สถานะป้ายเป็นรายเดือน — asOf = เดือนที่ยืนยันข้อมูลล่าสุด
+const BADGE_MONTH = 'ส.ค. 2569';   // เดือนอ้างอิงปัจจุบัน
 const BADGES = {
-  de:   {name:'De (เรา)',       g:true,  y:true,  us:true},
-  tb:   {name:'Tb (เรา)',       g:true,  y:true,  us:true},
-  chock:{name:'chocksomkid',    g:true,  y:true},
-  lam:  {name:'LAMTONMAISAK',   g:true,  y:true},
-  ojas: {name:'ojas',           g:null,  y:null},
-  pkd:  {name:'ประกายดาว',       g:null,  y:null},
-  cwd:  {name:'cwd',            g:false, y:false},
-  fh:   {name:'full house',     g:null,  y:null},
-  mp:   {name:'ไม้พร้อม',        g:true,  y:true},
+  de:   {name:'De (เรา)',      g:true,  y:true,  us:true, asOf:'พ.ค. 2569'},
+  tb:   {name:'Tb (เรา)',      g:true,  y:true,  us:true, asOf:'พ.ค. 2569'},
+  chock:{name:'chocksomkid',   g:true,  y:true,           asOf:'พ.ค. 2569'},
+  lam:  {name:'LAMTONMAISAK',  g:true,  y:true,           asOf:'ก.ค. 2569'},
+  ojas: {name:'ojas',          g:null,  y:null,           asOf:null},
+  pkd:  {name:'ประกายดาว',      g:null,  y:null,           asOf:null},
+  cwd:  {name:'cwd',           g:false, y:false,          asOf:'ก.ค. 2569'},
+  fh:   {name:'full house',    g:null,  y:null,           asOf:null},
+  mp:   {name:'ไม้พร้อม',       g:true,  y:true,           asOf:'ก.ค. 2569'},
 };
+function isStale(b){ return b.asOf && b.asOf !== BADGE_MONTH; }
 function icons(b){
   const g = b.g===true ? '<span class="ic ic-g">เขียว</span>'
           : b.g===false ? '<span class="ic ic-off">เขียว</span>'
@@ -130,11 +143,22 @@ function icons(b){
   return g+y;
 }
 function renderBadges(){
-  let h='';
+  let h='', stale=0, unknown=0;
   Object.values(BADGES).forEach(b=>{
-    h+='<div class="shop-badge'+(b.us?' us':'')+'"><span class="sb-name">'+b.name+'</span><span class="sb-icons">'+icons(b)+'</span></div>';
+    const asOf = b.asOf ? b.asOf : 'ยังไม่เคยเช็ค';
+    if(isStale(b)) stale++;
+    if(!b.asOf) unknown++;
+    h+='<div class="shop-badge'+(b.us?' us':'')+(isStale(b)?' stale':'')+(!b.asOf?' unk':'')+'">'
+      +'<span class="sb-name">'+b.name+'</span>'
+      +'<span class="sb-icons">'+icons(b)+'</span>'
+      +'<span class="sb-date">'+asOf+'</span></div>';
   });
   document.getElementById('badge-row').innerHTML=h;
+  let note='<div class="badge-note">📅 <strong>สถานะป้ายเป็นรายเดือน</strong> — เดือนอ้างอิงปัจจุบัน: <strong>'+BADGE_MONTH+'</strong>';
+  if(stale) note+=' · <span class="warn-txt">'+stale+' ร้านข้อมูลเก่ากว่าเดือนปัจจุบัน ควรเช็คใหม่</span>';
+  if(unknown) note+=' · <span class="unk-txt">'+unknown+' ร้านยังไม่เคยเช็ค</span>';
+  note+='</div>';
+  document.getElementById('badge-note').innerHTML=note;
 }
 const D = [
   {z:'70×180', de:null, tb:null,          chock:{v:1290,n:1}, lam:1090, ojas:1350, pkd:null,     cwd:null, fh:null,  mp:null },
