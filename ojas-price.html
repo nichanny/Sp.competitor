@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ojas Woodwork — สินค้าและราคา</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,0.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:920px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.35);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:20px;}
+.back:hover{color:var(--text);}
+h1{font-size:19px;font-weight:700;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:18px;}
+.summary{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px;}
+.sum{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;flex:1;min-width:95px;text-align:center;}
+.sum-n{font-size:19px;font-weight:700;font-family:'Space Mono',monospace;}
+.sum-l{font-size:11px;color:var(--dim);}
+.note{background:rgba(96,165,250,.09);border:1px solid rgba(96,165,250,.3);border-radius:10px;padding:11px 14px;font-size:12px;margin-bottom:12px;line-height:1.75;}
+.note b{color:var(--blue);}
+.note.warn{background:rgba(255,208,96,.09);border-color:rgba(255,208,96,.3);}
+.note.warn b{color:var(--yellow);}
+.search-box{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:13px;margin-bottom:14px;}
+.search-box:focus{outline:none;border-color:var(--orange);}
+.filter-bar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;}
+.btn{font-size:12px;padding:5px 13px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(96,165,250,.15);color:var(--blue);border-color:rgba(96,165,250,.4);}
+.listing{background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+.lhead{background:var(--bg4);padding:11px 14px;border-bottom:1px solid var(--border);}
+.ltitle{font-size:13px;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.lmeta{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--dim);font-family:'Space Mono',monospace;}
+.lmeta b{color:var(--text);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{padding:7px 14px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;border-bottom:1px solid var(--border);}
+th:first-child{text-align:left;}
+td{padding:9px 14px;border-bottom:1px solid var(--border);text-align:right;font-family:'Space Mono',monospace;white-space:nowrap;}
+td:first-child{text-align:left;font-family:'Sarabun',sans-serif;font-weight:600;white-space:normal;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg4);}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;}
+.p-hot{background:rgba(255,64,96,.13);color:var(--red);border:1px solid rgba(255,64,96,.3);}
+.p-ok{background:rgba(0,229,160,.12);color:var(--green);border:1px solid rgba(0,229,160,.3);}
+.p-cat{background:rgba(167,139,250,.13);color:var(--purple);border:1px solid rgba(167,139,250,.3);}
+.share{color:var(--dim);font-size:11px;}
+.empty{text-align:center;padding:40px;color:var(--dim);}
+html.light{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html.light body{background:#FAFAF8;color:#1C1A18;}
+html.light .btn{border-color:rgba(0,0,0,.2);background:#F2F0EC;color:#5C5850;}
+html.light .btn.active{background:rgba(26,95,170,.12);color:#1A5FAA;border-color:rgba(26,95,170,.4);}
+html.light #theme-toggle{background:#FFF;border-color:rgba(0,0,0,.15);color:#1C1A18;}
+html.light .search-box{background:#FFF;border-color:rgba(0,0,0,.15);color:#1C1A18;}
+html.light tr:hover td{background:#F7F5F1;}
+html.light .note{background:rgba(26,95,170,.06);border-color:rgba(26,95,170,.25);}
+html.light .note.warn{background:rgba(139,105,20,.07);border-color:rgba(139,105,20,.25);}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🪚 Ojas Woodwork — สินค้าและราคา</h1>
+<p class="sub">ข้อมูล ณ 25 ส.ค. 2569 · ✅ ป้ายเขียว + ✅ ป้ายเหลือง</p>
+
+<div class="summary" id="summary"></div>
+
+<div class="note">
+📖 <b>คำแปลชื่อลาย</b> — "ลายตรง" = โมเดิร์นขีดตรง · "ลายคาดผูกโบว์" = โมเดิร์นขีดบวก · "ลายโมเดิร์น" = โมเดิร์นธรรมดา
+</div>
+<div class="note warn">
+⚠️ <b>ยังไม่ครบ</b> — listing ประตู มีแถวบนสุดถูกตัดในภาพ (เห็น ...80×180 · ราคา ฿2,0xx · share 0.31%) ยังไม่ทราบชื่อลายแน่ชัด<br>
+📌 วงกบ: ลงเฉพาะ <b>แบบไม่ทำสี</b> ตามที่ระบุ (แบบทำสีสัก/สีโอ๊คไม่ได้ลง)
+</div>
+
+<input type="text" class="search-box" id="search" placeholder="🔍 ค้นหา เช่น ขีดตรง, 80×200, วงกบ, เกล็ด..." oninput="render()">
+<div class="filter-bar" id="filters"></div>
+<div id="out"></div>
+
+<script>
+const L = [
+ {
+  id:'door', cat:'ประตู',
+  title:'ประตูไม้สัก (รวมทุกลาย ทุกขนาด)',
+  meta:{rank:'#261', sold30:409, soldAll:'7k+', rev:'2k', star:'4.9', age:'1,825 วัน', gmv:'฿732,110'},
+  items:[
+   {n:'โมเดิร์น 80×200', p:1890, sh:'17.13%', st:644, s30:56},
+   {n:'ขีดตรง 80×200', p:2090, sh:'15.60%', st:1184, s30:51},
+   {n:'ขีดบวก 80×200', p:2000, sh:'12.54%', st:323, s30:41},
+   {n:'ขีดตรง 90×200', p:2290, sh:'7.34%', st:656, s30:24},
+   {n:'ขีดตรง 100×200', p:2490, sh:'6.73%', st:626, s30:22},
+   {n:'โมเดิร์น 90×200', p:2000, sh:'6.12%', st:null, s30:20},
+   {n:'ขีดบวก 100×200', p:2490, sh:'4.89%', st:null, s30:16},
+   {n:'ขีดบวก 90×200', p:2290, sh:'4.59%', st:null, s30:15},
+   {n:'โมเดิร์น 100×200', p:2200, sh:'4.28%', st:null, s30:14},
+   {n:'โมเดิร์น 80×180', p:1800, sh:'4.28%', st:null, s30:14},
+   {n:'ขีดบวก 80×180', p:2090, sh:'2.14%', st:null, s30:7},
+   {n:'โมเดิร์น 70×180', p:1890, sh:'2.14%', st:null, s30:7},
+   {n:'ขีดตรง 80×180', p:2090, sh:'2.14%', st:null, s30:7},
+   {n:'โมเดิร์น 70×200', p:1890, sh:'1.22%', st:null, s30:4},
+   {n:'ลายอิฐ 90×200', p:2290, sh:'0.92%', st:null, s30:3},
+   {n:'ขีดบวก 70×200', p:2090, sh:'0.92%', st:null, s30:3},
+   {n:'ขีดตรง 70×200', p:2090, sh:'0.31%', st:null, s30:1},
+   {n:'โมเดิร์นลูกฟัก 4 นิ้ว 80×200', p:1790, sh:'0.31%', st:null, s30:1},
+   {n:'ลายอิฐ 70×180', p:2090, sh:'0.31%', st:null, s30:1},
+   {n:'ขีดบวก 70×180', p:2090, sh:'0.31%', st:null, s30:1},
+   {n:'เกล็ดล่าง 100×200', p:2290, sh:null, st:null, s30:null},
+   {n:'เกล็ดบน 90×200', p:2090, sh:null, st:null, s30:null},
+   {n:'เกล็ดบน 80×180', p:1890, sh:null, st:null, s30:null},
+   {n:'เกล็ดล่าง 70×180', p:1890, sh:null, st:null, s30:null},
+  ]
+ },
+ {
+  id:'frame', cat:'วงกบประตู (ไม่ทำสี)',
+  title:'วงกบประตูไม้สัก — เฉพาะแบบไม่ทำสี',
+  meta:{rank:null, sold30:23, soldAll:896, rev:null, star:null, age:'2,224 วัน', gmv:'฿28,750'},
+  items:[
+   {n:'วงกบ 80×200 ไม่ทำสี', p:1250, sh:'47.53%', st:601, s30:106},
+   {n:'วงกบ 90×200 ไม่ทำสี', p:1350, sh:'15.25%', st:906, s30:34},
+   {n:'วงกบ 100×200 ไม่ทำสี', p:1450, sh:'12.56%', st:876, s30:28},
+   {n:'วงกบ 200×200 ไม่ทำสี', p:1950, sh:'4.48%', st:983, s30:10},
+   {n:'วงกบ 70×200 ไม่ทำสี', p:1250, sh:'3.59%', st:null, s30:8},
+   {n:'วงกบ 160×200 ไม่ทำสี', p:1750, sh:'2.69%', st:null, s30:6},
+   {n:'วงกบ 140×200 ไม่ทำสี', p:1650, sh:'0.90%', st:null, s30:2},
+   {n:'วงกบ 180×200 ไม่ทำสี', p:1850, sh:'0.45%', st:null, s30:1},
+  ]
+ },
+];
+
+let F='all';
+
+function renderSummary(){
+  const skus=L.reduce((s,l)=>s+l.items.length,0);
+  const all=L.flatMap(l=>l.items.map(i=>i.p));
+  const s30=L.reduce((s,l)=>s+(l.meta.sold30||0),0);
+  document.getElementById('summary').innerHTML=
+   '<div class="sum"><div class="sum-n" style="color:var(--blue)">'+L.length+'</div><div class="sum-l">Listing</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--purple)">'+skus+'</div><div class="sum-l">SKU</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--orange)">'+s30+'</div><div class="sum-l">ขาย/เดือน รวม</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--green)">฿'+Math.min(...all).toLocaleString()+'</div><div class="sum-l">ต่ำสุด</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--yellow)">฿'+Math.max(...all).toLocaleString()+'</div><div class="sum-l">สูงสุด</div></div>';
+}
+function renderFilters(){
+  let h='<button class="btn active" onclick="setF(\'all\',this)">ทั้งหมด</button>';
+  L.forEach(l=>{h+='<button class="btn" onclick="setF(\''+l.id+'\',this)">'+l.cat+'</button>';});
+  document.getElementById('filters').innerHTML=h;
+}
+function metaLine(m){
+  let p=[];
+  if(m.rank) p.push('Ranking <b>'+m.rank+'</b>');
+  if(m.sold30!=null) p.push('ขาย/เดือน <b>'+m.sold30+'</b>');
+  if(m.soldAll) p.push('ขายรวม <b>'+m.soldAll+'</b>');
+  if(m.rev) p.push('รีวิว <b>'+m.rev+'</b> ('+m.star+'★)');
+  if(m.gmv) p.push('GMV30 <b>'+m.gmv+'</b>');
+  if(m.age) p.push('อายุ <b>'+m.age+'</b>');
+  return p.join(' · ');
+}
+function render(){
+  const q=(document.getElementById('search').value||'').trim().toLowerCase();
+  let html='';
+  L.forEach(l=>{
+    if(F!=='all'&&l.id!==F) return;
+    let items=l.items;
+    if(q){
+      const hit=l.title.toLowerCase().includes(q)||l.cat.toLowerCase().includes(q);
+      items=hit?items:items.filter(i=>i.n.toLowerCase().includes(q));
+      if(!items.length) return;
+    }
+    html+='<div class="listing"><div class="lhead">'
+      +'<div class="ltitle">'+l.title+' <span class="pill p-cat">'+l.cat+'</span></div>'
+      +'<div class="lmeta">'+metaLine(l.meta)+'</div></div>'
+      +'<table><thead><tr><th style="text-align:left">SKU</th><th>ราคา</th><th>Share</th><th>สต็อก</th><th>ขาย/เดือน</th></tr></thead><tbody>';
+    items.forEach(i=>{
+      html+='<tr><td>'+i.n+'</td>'
+        +'<td><strong>฿'+i.p.toLocaleString()+'</strong></td>'
+        +'<td class="share">'+(i.sh||'—')+'</td>'
+        +'<td class="share">'+(i.st!=null?i.st.toLocaleString():'—')+'</td>'
+        +'<td>'+(i.s30!=null?'<span class="pill '+(i.s30>=20?'p-hot':'p-ok')+'">'+i.s30+'</span>':'—')+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  document.getElementById('out').innerHTML=html||'<div class="empty">ไม่พบสินค้าที่ค้นหา</div>';
+}
+function setF(f,btn){F=f;document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+renderSummary();renderFilters();render();
+</script>
+</body>
+</html>
