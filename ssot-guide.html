@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>วิธีเชื่อมโปรแกรมเข้ากับราคากลาง</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:860px;margin:0 auto;line-height:1.7;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:14px;}
+h1{font-size:20px;font-weight:800;margin-bottom:5px;}
+.sub{font-size:12.5px;color:var(--dim);margin-bottom:20px;}
+h2{font-size:15px;font-weight:700;margin:26px 0 10px;display:flex;align-items:center;gap:9px;}
+h2::after{content:'';flex:1;height:1px;background:var(--border);}
+p{font-size:13.5px;margin-bottom:10px;}
+pre{background:var(--bg4);border:1px solid var(--border);border-radius:10px;padding:13px 15px;overflow-x:auto;font-family:'Space Mono',monospace;font-size:12px;line-height:1.75;margin-bottom:12px;}
+code{font-family:'Space Mono',monospace;font-size:12.5px;background:var(--bg4);padding:1px 6px;border-radius:4px;border:1px solid var(--border);}
+pre code{background:none;border:none;padding:0;font-size:12px;}
+.k{color:var(--purple);}.s{color:var(--green);}.c{color:var(--dim);}.f{color:var(--blue);}
+.box{border-radius:11px;padding:13px 16px;font-size:13px;margin-bottom:14px;line-height:1.85;}
+.box.tip{background:rgba(26,122,94,.08);border:1px solid rgba(26,122,94,.28);}
+.box.tip b{color:var(--green);}
+.box.warn{background:rgba(139,105,20,.08);border:1px solid rgba(139,105,20,.28);}
+.box.warn b{color:var(--yellow);}
+.copy{float:right;font-size:11px;padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;margin-top:-4px;}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:14px;}
+th{background:var(--bg4);padding:8px 11px;text-align:left;font-size:10px;font-family:'Space Mono',monospace;color:var(--dim);font-weight:400;border-bottom:1px solid var(--border);}
+td{padding:9px 11px;border-bottom:1px solid var(--border);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🔌 วิธีเชื่อมโปรแกรมเข้ากับราคากลาง</h1>
+<p class="sub">ทำครั้งเดียว · หลังจากนี้ทุกโปรแกรมจะได้ราคาใหม่อัตโนมัติทุกครั้งที่คุณแก้ที่เดียว</p>
+
+<div class="box tip">
+<b>สรุปสั้นที่สุด</b> — ใส่ script 1 บรรทัด แล้วเรียก <code>SPPrices.load()</code> เท่านั้น
+</div>
+
+<h2>ขั้นที่ 1 · ใส่ script</h2>
+<p>วางบรรทัดนี้ก่อน <code>&lt;/body&gt;</code> ของโปรแกรมที่ต้องการ</p>
+<pre><button class="copy" onclick="cp(this,'s1')">คัดลอก</button><code id="s1">&lt;script src="https://nny-spcompetitors.netlify.app/sp-prices.js"&gt;&lt;/script&gt;</code></pre>
+
+<h2>ขั้นที่ 2 · ดึงราคาไปใช้</h2>
+<pre><button class="copy" onclick="cp(this,'s2')">คัดลอก</button><code id="s2">&lt;script&gt;
+SPPrices.load().then(function (db) {
+
+  <span class="c">// ราคาขายของแต่ละ SKU</span>
+  var a = db.price(<span class="s">'สายฝน 80×200'</span>, <span class="s">'de'</span>);   <span class="c">// 1349</span>
+  var b = db.price(<span class="s">'วงกบประตู 90×200'</span>, <span class="s">'tb'</span>); <span class="c">// 1089</span>
+
+  <span class="c">// ค่าส่ง</span>
+  var ship = db.shippingOf(<span class="s">'de'</span>, <span class="s">'door'</span>);      <span class="c">// 250</span>
+
+  <span class="c">// ทั้งหมดในหมวด</span>
+  db.byCat(<span class="s">'วงกบประตู'</span>).forEach(function (r) {
+    console.log(r.sku, r.de, r.tb);
+  });
+
+  <span class="c">// รายชื่อหมวดทั้งหมด</span>
+  console.log(db.cats());
+
+  <span class="c">// เอาไปวาดหน้าจอต่อได้เลย</span>
+  drawMyProgram(db);
+});
+&lt;/script&gt;</code></pre>
+
+<h2>ขั้นที่ 3 · กันโปรแกรมพัง (แนะนำ)</h2>
+<p>ถ้าเน็ตล่ม ให้ใช้สำเนาสำรองที่ฝังไว้ในโปรแกรม โปรแกรมจะไม่มีวางเปล่า</p>
+<pre><button class="copy" onclick="cp(this,'s3')">คัดลอก</button><code id="s3"><span class="k">var</span> FALLBACK = { <span class="c">/* วาง prices.json ที่ดาวน์โหลดมาตรงนี้ */</span> };
+
+SPPrices.load({ fallback: FALLBACK })
+  .then(<span class="k">function</span> (db) {
+    SPPrices.statusBadge(db);  <span class="c">// แสดงป้ายบอกว่าราคาสดหรือเก่า</span>
+    drawMyProgram(db);
+  });</code></pre>
+
+<h2>ฟังก์ชันที่ใช้ได้</h2>
+<table>
+<thead><tr><th>คำสั่ง</th><th>คืนค่า</th></tr></thead>
+<tbody>
+<tr><td><code>db.price(sku, shop)</code></td><td>ราคาของ SKU · shop = <code>'de'</code> หรือ <code>'tb'</code> · ไม่มีคืน <code>null</code></td></tr>
+<tr><td><code>db.byCat(cat)</code></td><td>รายการทั้งหมดในหมวดนั้น</td></tr>
+<tr><td><code>db.cats()</code></td><td>รายชื่อหมวดทั้งหมด</td></tr>
+<tr><td><code>db.shippingOf(shop, kind)</code></td><td>ค่าส่ง · kind = <code>door</code> / <code>frame</code> / <code>round_frame</code></td></tr>
+<tr><td><code>db.ours</code></td><td>ข้อมูลดิบทั้งหมด (array)</td></tr>
+<tr><td><code>db.updated</code></td><td>วันที่อัปเดตล่าสุด</td></tr>
+<tr><td><code>db.stale</code></td><td><code>true</code> = ใช้สำเนาเก่า · <code>false</code> = สดจากเน็ต</td></tr>
+</tbody>
+</table>
+
+<h2>วิธีอัปเดตราคา</h2>
+<table>
+<thead><tr><th>ทาง</th><th>ขั้นตอน</th></tr></thead>
+<tbody>
+<tr><td><b>แก้เอง</b></td><td>เปิด <a href="price-editor.html" style="color:var(--orange)">หน้าแก้ราคากลาง</a> → แก้ → ดาวน์โหลด <code>prices.json</code> → วางแทนที่ใน GitHub</td></tr>
+<tr><td><b>ให้ Claude ทำ</b></td><td>เปิดหน้าแก้ราคา → แก้ → กด <b>คัดลอกให้ Claude</b> → วางในแชท</td></tr>
+<tr><td><b>บอกในแชทตรงๆ</b></td><td>พิมพ์ราคาใหม่มาได้เลย ผมอัปเดต <code>prices.json</code> ให้ทันที</td></tr>
+</tbody>
+</table>
+
+<div class="box warn">
+<b>ข้อควรรู้</b><br>
+• ไฟล์ราคาตั้ง <code>no-cache</code> ไว้แล้ว โปรแกรมจะเห็นราคาใหม่ภายในไม่กี่วินาทีหลัง deploy<br>
+• ตัวเชื่อมเก็บ cache ในเครื่อง 5 นาที เพื่อไม่ให้ยิงถี่เกินไป · ถ้าอยากดึงสดทันทีใช้ <code>SPPrices.load({force:true})</code><br>
+• ชื่อ SKU ต้องตรงกับใน <code>prices.json</code> เป๊ะ (ดูรายชื่อได้จากหน้าแก้ราคา)
+</div>
+
+<h2>ทดสอบว่าเชื่อมสำเร็จ</h2>
+<p>เปิด Console ในเบราว์เซอร์แล้วพิมพ์:</p>
+<pre><button class="copy" onclick="cp(this,'s4')">คัดลอก</button><code id="s4">SPPrices.load().then(db =&gt; console.table(db.ours.slice(0,10)))</code></pre>
+<p>ถ้าเห็นตารางราคาขึ้นมา แปลว่าเชื่อมสำเร็จแล้ว</p>
+
+<script>
+function cp(btn,id){
+  const t=document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t).then(()=>{const o=btn.textContent;btn.textContent='✓ คัดลอกแล้ว';setTimeout(()=>btn.textContent=o,1600);});
+}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+</script>
+</body>
+</html>

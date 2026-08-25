@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แก้ราคากลาง (SSOT)</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 110px;max-width:900px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:14px;}
+h1{font-size:19px;font-weight:800;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:16px;}
+.steps{background:rgba(26,95,170,.07);border:1px solid rgba(26,95,170,.25);border-radius:11px;padding:13px 16px;font-size:12.5px;line-height:1.9;margin-bottom:16px;}
+.steps b{color:var(--blue);}
+.ctrl{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;align-items:center;}
+.btn{font-size:12px;padding:6px 13px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(192,74,26,.13);color:var(--orange);border-color:rgba(192,74,26,.4);}
+.search{flex:1;min-width:180px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:13px;}
+.search:focus{outline:none;border-color:var(--orange);}
+.grp{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin:18px 0 8px;}
+.tbl{background:var(--bg3);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-bottom:10px;}
+.hrow,.row{display:grid;grid-template-columns:1fr 110px 110px;gap:9px;align-items:center;padding:8px 13px;}
+.hrow{background:var(--bg4);font-size:10px;font-family:'Space Mono',monospace;color:var(--dim);}
+.hrow span:not(:first-child),.row input{text-align:right;}
+.row{border-bottom:1px solid var(--border);font-size:13px;}
+.row:last-child{border-bottom:none;}
+.row input{width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:7px;padding:6px 9px;color:var(--text);font-family:'Space Mono',monospace;font-size:13px;}
+.row input:focus{outline:none;border-color:var(--orange);background:var(--bg3);}
+.row input.dirty{border-color:var(--orange);background:rgba(192,74,26,.08);font-weight:700;}
+.skuname{font-weight:600;}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:var(--bg3);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;box-shadow:0 -3px 14px rgba(0,0,0,.08);z-index:100;}
+.dirtytxt{font-size:12.5px;color:var(--dim);}
+.dirtytxt b{color:var(--orange);}
+.bgroup{display:flex;gap:8px;flex-wrap:wrap;}
+.pbtn{font-size:13px;font-weight:600;padding:9px 17px;border-radius:9px;border:1px solid var(--border);background:var(--bg4);color:var(--text);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.pbtn.primary{background:var(--orange);color:#fff;border-color:var(--orange);}
+.pbtn:disabled{opacity:.4;cursor:not-allowed;}
+.loading{text-align:center;padding:40px;color:var(--dim);}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>✏️ แก้ราคากลาง (SSOT)</h1>
+<p class="sub">แก้ที่นี่ที่เดียว · ทุกโปรแกรมจะดึงราคาใหม่อัตโนมัติ</p>
+
+<div class="steps">
+<b>วิธีใช้</b> — ① แก้ราคาในช่อง ② กด <b>ดาวน์โหลด prices.json</b> ③ เอาไฟล์ไปวางแทนที่ใน GitHub (หรือส่งให้ผมอัปเดตให้)<br>
+<b>หรือ</b> กด <b>คัดลอกให้ Claude</b> แล้ววางในแชท ผมจะอัปเดตขึ้น GitHub ให้ทันที
+</div>
+
+<div class="ctrl">
+  <input class="search" id="q" placeholder="🔍 ค้นหา SKU..." oninput="render()">
+  <span id="catbtns" style="display:contents"></span>
+</div>
+
+<div id="out"><div class="loading">กำลังโหลดราคา...</div></div>
+
+<div class="savebar">
+  <span class="dirtytxt" id="dirty">ยังไม่มีการแก้ไข</span>
+  <div class="bgroup">
+    <button class="pbtn" onclick="resetAll()" id="bReset" disabled>ยกเลิกการแก้</button>
+    <button class="pbtn" onclick="copyForClaude()" id="bCopy" disabled>📋 คัดลอกให้ Claude</button>
+    <button class="pbtn primary" onclick="download()" id="bDl" disabled>⬇️ ดาวน์โหลด prices.json</button>
+  </div>
+</div>
+
+<script src="sp-prices.js"></script>
+<script>
+let DB=null, ORIG=null, CF='all';
+
+function fmtDate(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function dirtyList(){
+  if(!DB) return [];
+  const out=[];
+  DB.ours.forEach((r,i)=>{
+    const o=ORIG[i];
+    if(r.de!==o.de) out.push({sku:r.sku,shop:'De',from:o.de,to:r.de});
+    if(r.tb!==o.tb) out.push({sku:r.sku,shop:'Tb',from:o.tb,to:r.tb});
+  });
+  return out;
+}
+function updateBar(){
+  const d=dirtyList();
+  document.getElementById('dirty').innerHTML = d.length
+    ? 'แก้ไขแล้ว <b>'+d.length+'</b> รายการ'
+    : 'ยังไม่มีการแก้ไข';
+  ['bReset','bCopy','bDl'].forEach(id=>document.getElementById(id).disabled = d.length===0);
+}
+function setVal(i,shop,val){
+  const v=val.trim();
+  DB.ours[i][shop] = v==='' ? null : (parseInt(v,10)||null);
+  updateBar();
+  const inp=document.querySelector('[data-i="'+i+'"][data-s="'+shop+'"]');
+  if(inp) inp.classList.toggle('dirty', DB.ours[i][shop]!==ORIG[i][shop]);
+}
+function renderCats(){
+  const cats=DB.cats();
+  let h='<button class="btn active" onclick="setCF(\'all\',this)">ทุกหมวด</button>';
+  cats.forEach(c=>{h+='<button class="btn" onclick="setCF(\''+c+'\',this)">'+c+'</button>';});
+  document.getElementById('catbtns').innerHTML=h;
+}
+function render(){
+  if(!DB) return;
+  const q=(document.getElementById('q').value||'').trim().toLowerCase();
+  const groups={};
+  DB.ours.forEach((r,i)=>{
+    if(CF!=='all'&&r.cat!==CF) return;
+    if(q&&!r.sku.toLowerCase().includes(q)&&!r.cat.toLowerCase().includes(q)) return;
+    (groups[r.cat]=groups[r.cat]||[]).push({r,i});
+  });
+  let h='';
+  Object.entries(groups).forEach(([cat,rows])=>{
+    h+='<div class="grp">'+cat+'</div><div class="tbl">'
+      +'<div class="hrow"><span>SKU</span><span>De</span><span>Tb</span></div>';
+    rows.forEach(({r,i})=>{
+      const dDe=r.de!==ORIG[i].de?' dirty':'', dTb=r.tb!==ORIG[i].tb?' dirty':'';
+      h+='<div class="row"><span class="skuname">'+r.sku+'</span>'
+        +'<input type="number" class="'+dDe.trim()+'" data-i="'+i+'" data-s="de" value="'+(r.de??'')+'" placeholder="—" oninput="setVal('+i+',\'de\',this.value)">'
+        +'<input type="number" class="'+dTb.trim()+'" data-i="'+i+'" data-s="tb" value="'+(r.tb??'')+'" placeholder="—" oninput="setVal('+i+',\'tb\',this.value)">'
+        +'</div>';
+    });
+    h+='</div>';
+  });
+  document.getElementById('out').innerHTML=h||'<div class="loading">ไม่พบรายการ</div>';
+}
+function setCF(v,b){CF=v;document.querySelectorAll('#catbtns .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function payload(){
+  return {schema:DB.schema, updated:fmtDate(), note:DB.note, shipping:DB.shipping, ours:DB.ours};
+}
+function download(){
+  const blob=new Blob([JSON.stringify(payload(),null,1)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='prices.json'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function copyForClaude(){
+  const d=dirtyList();
+  const lines=d.map(x=>'- '+x.sku+' ('+x.shop+'): '+(x.from??'—')+' → '+(x.to??'—'));
+  const txt='อัปเดตราคาใน prices.json ตามนี้ (วันที่ '+fmtDate()+'):\n'+lines.join('\n');
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b=document.getElementById('bCopy'); const t=b.textContent;
+    b.textContent='✓ คัดลอกแล้ว'; setTimeout(()=>b.textContent=t,1800);
+  }).catch(()=>alert(txt));
+}
+function resetAll(){
+  DB.ours=JSON.parse(JSON.stringify(ORIG));
+  updateBar(); render();
+}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+
+SPPrices.load({force:true}).then(db=>{
+  DB=db; ORIG=JSON.parse(JSON.stringify(db.ours));
+  renderCats(); render(); updateBar();
+  SPPrices.statusBadge(db);
+}).catch(e=>{
+  document.getElementById('out').innerHTML='<div class="loading">โหลดราคาไม่สำเร็จ: '+e.message+'</div>';
+});
+</script>
+</body>
+</html>
