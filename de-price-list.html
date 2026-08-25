@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ราคาสินค้าร้าน De — ทั้งหมด</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0A0A0F;--bg2:#111118;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,0.07);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:920px;margin:0 auto;}
+
+  #theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,0.35);}
+  #theme-toggle:hover{opacity:0.85;}
+
+  .back{display:inline-flex;align-items:center;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:20px;}
+  .back:hover{color:var(--text);}
+  h1{font-size:19px;font-weight:700;margin-bottom:4px;}
+  .sub{font-size:12px;color:var(--dim);margin-bottom:20px;}
+
+  .search-box{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:13px;margin-bottom:14px;}
+  .search-box:focus{outline:none;border-color:var(--orange);}
+
+  .filter-bar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;}
+  .btn{font-size:12px;padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;transition:all 0.15s;}
+  .btn.active{background:rgba(255,107,53,0.15);color:var(--orange);border-color:rgba(255,107,53,0.4);}
+
+  .summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .sum{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:90px;text-align:center;}
+  .sum-n{font-size:20px;font-weight:700;font-family:'Space Mono',monospace;margin-bottom:2px;}
+  .sum-l{font-size:11px;color:var(--dim);}
+
+  .listing{background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+  .listing-head{background:var(--bg4);padding:11px 14px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+  .listing-icon{font-size:16px;}
+  .listing-name{font-size:13px;font-weight:700;flex:1;min-width:180px;}
+  .listing-count{font-size:11px;font-family:'Space Mono',monospace;color:var(--dim);}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  td{padding:9px 14px;border-bottom:1px solid var(--border);}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:var(--bg4);}
+  td.price{text-align:right;font-family:'Space Mono',monospace;font-weight:700;white-space:nowrap;width:110px;}
+
+  .tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;margin-left:6px;}
+  .t-door{background:rgba(255,107,53,0.13);color:var(--orange);border:1px solid rgba(255,107,53,0.28);}
+  .t-frame{background:rgba(96,165,250,0.13);color:var(--blue);border:1px solid rgba(96,165,250,0.28);}
+  .t-other{background:rgba(167,139,250,0.13);color:var(--purple);border:1px solid rgba(167,139,250,0.28);}
+
+  .p-low{color:var(--green);}
+  .p-mid{color:var(--text);}
+  .p-high{color:var(--yellow);}
+
+  .empty{text-align:center;padding:40px;color:var(--dim);font-size:13px;}
+
+  html.light{--bg:#FAFAF8;--bg2:#FFFFFF;--bg3:#FFFFFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,0.12);}
+  html.light body{background:#FAFAF8;color:#1C1A18;}
+  html.light .btn{border-color:rgba(0,0,0,0.2);background:#F2F0EC;color:#5C5850;}
+  html.light .btn.active{background:rgba(192,74,26,0.12);color:#C04A1A;border-color:rgba(192,74,26,0.4);}
+  html.light #theme-toggle{background:#FFF;border-color:rgba(0,0,0,0.15);color:#1C1A18;box-shadow:0 2px 10px rgba(0,0,0,0.12);}
+  html.light .search-box{background:#FFF;border-color:rgba(0,0,0,0.15);color:#1C1A18;}
+  html.light tr:hover td{background:#F2F0EC;}
+  html.light .p-low{color:#1A7A5E;}
+  html.light .p-high{color:#8B6914;}
+</style>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">☀️ สว่าง</button>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🏪 ราคาสินค้าร้าน De (DOOR_E_D)</h1>
+<p class="sub">ราคาที่ลูกค้าเห็นปัจจุบัน — อัปเดต 25 ส.ค. 2569</p>
+
+<div class="summary" id="summary"></div>
+
+<input type="text" class="search-box" id="search" placeholder="🔍 ค้นหาสินค้า เช่น สายฝน, 80×200, วงกบ, ขีดตรง..." oninput="render()">
+
+<div class="filter-bar">
+  <button class="btn active" onclick="setFilter('all',this)">ทั้งหมด</button>
+  <button class="btn" onclick="setFilter('door',this)">ประตู</button>
+  <button class="btn" onclick="setFilter('frame',this)">วงกบ</button>
+  <button class="btn" onclick="setFilter('round',this)">วงกบกลม</button>
+  <button class="btn" onclick="setFilter('other',this)">สินค้าอื่น</button>
+</div>
+
+<div id="out"></div>
+
+<script>
+const DATA = [
+  {
+    name:'ประตูห้องนอน ประตูห้องน้ำ ไม้สักแท้ ขนาด 80×200 (รวมทุกลาย)',
+    icon:'🚪', cat:'door',
+    items:[
+      {n:'ประตูสายฝน 80×200', p:1249},
+      {n:'ประตูโมเดิร์น 80×200', p:1690},
+      {n:'โมเดิร์นช่องกระจก 80×200', p:1650},
+      {n:'โมเดิร์นขีดตรง 80×200', p:1885},
+      {n:'โมเดิร์นขีดบวก 80×200', p:1899},
+      {n:'5ฟักปีกนก 80×200', p:2156},
+      {n:'8ฟัก 80×200', p:2156},
+      {n:'วงกบประตู 80×200', p:899},
+    ]
+  },
+  {
+    name:'ประตูห้องนอน ประตูห้องน้ำ ไม้สักแท้ โมเดิร์น (หลายขนาด)',
+    icon:'🚪', cat:'door',
+    items:[
+      {n:'ประตูโมเดิร์น 70×200', p:1690},
+      {n:'ประตูโมเดิร์น 80×180', p:1678},
+      {n:'ประตูโมเดิร์น 80×200', p:1690},
+      {n:'ประตูโมเดิร์น 90×200', p:1790},
+      {n:'ประตูโมเดิร์น 100×200', p:1799},
+      {n:'โมเดิร์นขีดตรง 70×200', p:1888},
+      {n:'โมเดิร์นขีดตรง 80×180', p:1889},
+      {n:'โมเดิร์นขีดตรง 80×200', p:1885},
+      {n:'โมเดิร์นขีดตรง 100×200', p:2480},
+      {n:'โมเดิร์นขีดบวก 70×200', p:1899},
+      {n:'โมเดิร์นขีดบวก 80×180', p:1899},
+      {n:'โมเดิร์นขีดบวก 80×200', p:1899},
+      {n:'โมเดิร์นขีดบวก 100×200', p:2490},
+      {n:'โมเดิร์นช่องกระจก 80×200', p:1650},
+      {n:'โมเดิร์นช่องกระจก 90×200', p:1750},
+      {n:'วงกบประตู 80×180', p:899},
+      {n:'วงกบประตู 80×200', p:899},
+    ]
+  },
+  {
+    name:'ประตูห้องนอน ประตูห้องน้ำ ไม้สักแท้ ขนาด 90×200',
+    icon:'🚪', cat:'door',
+    items:[
+      {n:'ประตูโมเดิร์น 90×200', p:1790},
+      {n:'โมเดิร์นขีดตรง 90×200', p:2330},
+      {n:'โมเดิร์นขีดบวก 90×200', p:2450},
+      {n:'โมเดิร์นช่องกระจก 90×200', p:1750},
+      {n:'วงกบประตู 90×200', p:945},
+    ]
+  },
+  {
+    name:'ประตูไม้สักแท้ ลายโมเดิร์น ขนาด 80×200 ซม.',
+    icon:'🚪', cat:'door',
+    items:[
+      {n:'ไม่ทำสี (งานดิบ)', p:1690},
+    ]
+  },
+  {
+    name:'วงกบประตู (ลิสหลัก)',
+    icon:'🪟', cat:'frame',
+    items:[
+      {n:'วงกบประตู 70×200', p:899},
+      {n:'วงกบประตู 80×180', p:899},
+      {n:'วงกบประตู 80×200', p:899},
+      {n:'วงกบประตู 90×200', p:945},
+      {n:'วงกบประตู 100×200', p:999},
+      {n:'วงกบประตู 160×200', p:1239},
+      {n:'วงกบประตู 180×200', p:1239},
+    ]
+  },
+  {
+    name:'วงกบประตูไม้สักแท้ งานไม้แต่งบ้าน รีโนเวทบ้าน',
+    icon:'🪟', cat:'frame',
+    items:[
+      {n:'วงกบประตู 80×180', p:899},
+      {n:'วงกบประตู 80×200', p:899},
+      {n:'วงกบประตู 90×200', p:945},
+      {n:'วงกบประตู 100×200', p:999},
+      {n:'วงกบประตู 160×200', p:1239},
+    ]
+  },
+  {
+    name:'วงกบกลม 3 ช่องกระจก ไม้สักแท้ หนา 2 นิ้ว กว้าง 4 นิ้ว',
+    icon:'⭕', cat:'round',
+    items:[
+      {n:'แบบ 3 ช่อง 60 cm', p:1790},
+      {n:'แบบ 3 ช่อง 80 cm', p:1950},
+      {n:'แบบ 3 ช่อง 100 cm', p:2285},
+      {n:'แบบ 3 ช่อง 120 cm', p:2690},
+      {n:'แบบวงกลมธรรมดา 80 cm', p:1627},
+    ]
+  },
+  {
+    name:'วงกบกลมไม้สักแท้ และ 3 ช่องกระจก งานเกรดช่างฝีมือ',
+    icon:'⭕', cat:'round',
+    items:[
+      {n:'แบบ 3 ช่อง 100 cm', p:2285},
+      {n:'แบบวงกลมธรรมดา 80 cm', p:1627},
+      {n:'แบบวงกลมธรรมดา 120 cm', p:2135},
+    ]
+  },
+  {
+    name:'บานเฟี้ยมไม้สักแท้ ประตู-หน้าต่าง',
+    icon:'🚪', cat:'other',
+    items:[
+      {n:'40×200', p:999},
+      {n:'50×150', p:699},
+      {n:'50×200', p:999},
+    ]
+  },
+  {
+    name:'ราวบันไดไม้สักทอง ขอบมน ขนาด 7.5×180×2.5',
+    icon:'🪜', cat:'other',
+    items:[
+      {n:'180 ซม.', p:365},
+      {n:'180 ซม. (สักทอง)', p:499},
+    ]
+  },
+  {
+    name:'ฝาบ่อพักไม้สักแท้ ฝาปิดบ่อ ฝาปิดท่อ เสริมเหล็ก',
+    icon:'🔲', cat:'other',
+    items:[
+      {n:'30×40 ไม่ทำสี', p:490},
+      {n:'30×40 สีสักทอง', p:690},
+    ]
+  },
+  {
+    name:'ฝาไม้สักปิดบ่อถังแซก ฝาไม้สักปิดบ่อบำบัด',
+    icon:'🔲', cat:'other',
+    items:[
+      {n:'ฝาปิดกลม (สีสักทอง)', p:1199},
+    ]
+  },
+  {
+    name:'ฝาปิดบ่อบำบัด ฝาปิดถังแซก ไม้สักแท้ ฝาถังบำบัด',
+    icon:'🔲', cat:'other',
+    items:[
+      {n:'ฝาปิดกลม (สีสักทอง)', p:1199},
+    ]
+  },
+  {
+    name:'เก้าอี้ไม้สักเล็กอเนกประสงค์ นั่งซักผ้าได้ แข็งแรง',
+    icon:'🪑', cat:'other',
+    items:[
+      {n:'33×22×10 (เคลือบใส)', p:174},
+    ]
+  },
+  {
+    name:'ขี้เลื่อยไม้สักแท้ แห้ง ไม่ชื้น เนื้อละเอียด',
+    icon:'🪵', cat:'other',
+    items:[
+      {n:'250 กรัม', p:39},
+      {n:'500 กรัม', p:65},
+      {n:'1000 กรัม', p:99},
+    ]
+  },
+  {
+    name:'กาวแห้งเร็ว กาวร้อน ขวดใหญ่สุด 50g',
+    icon:'🧴', cat:'other',
+    items:[
+      {n:'1 ขวด (คละยี่ห้อ)', p:19},
+    ]
+  },
+];
+
+let currentFilter='all';
+
+function priceClass(p){
+  if(p<500) return 'p-low';
+  if(p<1500) return 'p-mid';
+  return 'p-high';
+}
+
+function catTag(cat){
+  if(cat==='door') return '<span class="tag t-door">ประตู</span>';
+  if(cat==='frame') return '<span class="tag t-frame">วงกบ</span>';
+  if(cat==='round') return '<span class="tag t-frame">วงกบกลม</span>';
+  return '<span class="tag t-other">อื่นๆ</span>';
+}
+
+function renderSummary(){
+  const totalListings = DATA.length;
+  const totalSKU = DATA.reduce((s,l)=>s+l.items.length,0);
+  const allPrices = DATA.flatMap(l=>l.items.map(i=>i.p));
+  const min = Math.min(...allPrices);
+  const max = Math.max(...allPrices);
+  document.getElementById('summary').innerHTML=`
+    <div class="sum"><div class="sum-n" style="color:var(--orange)">${totalListings}</div><div class="sum-l">Listing</div></div>
+    <div class="sum"><div class="sum-n" style="color:var(--blue)">${totalSKU}</div><div class="sum-l">SKU ทั้งหมด</div></div>
+    <div class="sum"><div class="sum-n" style="color:var(--green)">฿${min}</div><div class="sum-l">ราคาต่ำสุด</div></div>
+    <div class="sum"><div class="sum-n" style="color:var(--yellow)">฿${max.toLocaleString()}</div><div class="sum-l">ราคาสูงสุด</div></div>
+  `;
+}
+
+function render(){
+  const q=(document.getElementById('search').value||'').trim().toLowerCase();
+  let html='';
+  DATA.forEach(listing=>{
+    if(currentFilter!=='all' && listing.cat!==currentFilter) return;
+    let items=listing.items;
+    if(q){
+      const nameMatch=listing.name.toLowerCase().includes(q);
+      items=nameMatch?items:items.filter(i=>i.n.toLowerCase().includes(q));
+      if(!items.length) return;
+    }
+    html+=`<div class="listing">
+      <div class="listing-head">
+        <span class="listing-icon">${listing.icon}</span>
+        <span class="listing-name">${listing.name}</span>
+        ${catTag(listing.cat)}
+        <span class="listing-count">${items.length} SKU</span>
+      </div>
+      <table><tbody>`;
+    items.forEach(i=>{
+      html+=`<tr><td>${i.n}</td><td class="price ${priceClass(i.p)}">฿${i.p.toLocaleString()}</td></tr>`;
+    });
+    html+=`</tbody></table></div>`;
+  });
+  document.getElementById('out').innerHTML = html || '<div class="empty">ไม่พบสินค้าที่ค้นหา</div>';
+}
+
+function setFilter(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function toggleTheme(){
+  const isLight=document.documentElement.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent=isLight?'🌙 มืด':'☀️ สว่าง';
+  localStorage.setItem('spTheme',isLight?'light':'dark');
+}
+(function(){
+  if(localStorage.getItem('spTheme')==='light') document.documentElement.classList.add('light');
+})();
+document.addEventListener('DOMContentLoaded',function(){
+  const b=document.getElementById('theme-toggle');
+  if(b && document.documentElement.classList.contains('light')) b.textContent='🌙 มืด';
+});
+
+renderSummary();
+render();
+</script>
+</body>
+</html>
