@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ราคาประตูโมเดิร์น — เปรียบทุกร้าน</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:1100px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:16px;}
+h1{font-size:19px;font-weight:800;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:14px;}
+.legend{display:flex;flex-wrap:wrap;gap:13px;margin-bottom:14px;font-size:12px;}
+.leg{display:flex;align-items:center;gap:5px;}
+.dot{width:8px;height:8px;border-radius:2px;}
+.ctrl{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.btn{font-size:12px;padding:5px 13px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(192,74,26,.13);color:var(--orange);border-color:rgba(192,74,26,.4);}
+.grp{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin:22px 0 9px;}
+.tbl-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow-x:auto;margin-bottom:10px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:900px;}
+th{background:var(--bg4);padding:8px 9px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;white-space:nowrap;}
+th:first-child{text-align:left;}
+th.us{color:var(--orange);font-weight:700;}
+td{padding:9px 9px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap;font-family:'Space Mono',monospace;}
+td:first-child{text-align:left;font-family:'Sarabun',sans-serif;font-weight:700;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg4);}
+.win{color:var(--green);font-weight:700;}
+.lose{color:var(--red);}
+.mid{color:var(--text);}
+.us-col{color:var(--orange);font-weight:700;}
+.na{color:var(--dim);opacity:.35;}
+.pre{display:inline-block;font-size:9px;padding:1px 4px;border-radius:3px;margin-left:3px;background:rgba(139,105,20,.15);color:var(--yellow);border:1px solid rgba(139,105,20,.3);}
+.sline{font-size:9px;color:var(--dim);font-family:'Space Mono',monospace;margin-top:2px;}
+.sline b{color:var(--text);}
+.insight{background:rgba(192,74,26,.07);border:1px solid rgba(192,74,26,.25);border-radius:11px;padding:12px 15px;font-size:12.5px;line-height:1.85;margin-bottom:16px;}
+.insight b{color:var(--orange);}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🚪 ราคาประตูโมเดิร์น — เปรียบทุกร้าน</h1>
+<p class="sub">De · Tb · chocksomkid · Ojas · ประกายดาว · PG Wood · Donut · อัปเดต 25 ส.ค. 2569</p>
+
+<div class="insight" id="insight"></div>
+
+<div class="legend">
+  <div class="leg"><div class="dot" style="background:var(--green)"></div><span style="color:var(--green)">ถูกที่สุดในแถว</span></div>
+  <div class="leg"><div class="dot" style="background:var(--red)"></div><span style="color:var(--red)">แพงที่สุดในแถว</span></div>
+  <div class="leg"><div class="dot" style="background:var(--orange)"></div><span style="color:var(--orange)">ร้านเรา</span></div>
+  <div class="leg"><span style="color:var(--yellow)">pre</span><span style="color:var(--dim)">= pre-order</span></div>
+  <div class="leg"><span style="color:var(--dim)">ตัวเลขเล็ก = ยอดขาย/เดือน</span></div>
+</div>
+
+<div class="ctrl" id="lay"></div>
+<div class="ctrl" id="size"></div>
+<div id="out"></div>
+
+<script>
+const SHOPS=[
+ {k:'de',   name:'De',          us:true},
+ {k:'tb',   name:'Tb',          us:true},
+ {k:'chock',name:'chocksomkid'},
+ {k:'ojas', name:'Ojas'},
+ {k:'pkd',  name:'ประกายดาว'},
+ {k:'pg',   name:'PG Wood'},
+ {k:'donut',name:'Donut'},
+];
+
+// p = ราคา · s = ยอดขาย/เดือน · pre = pre-order
+const D=[
+ {lay:'โมเดิร์นธรรมดา', z:'70×180',
+  de:null, tb:null, chock:null,
+  ojas:{p:1890,s:7}, pkd:null, pg:null, donut:{p:1500,pre:1,s:3}},
+ {lay:'โมเดิร์นธรรมดา', z:'70×200',
+  de:{p:1689}, tb:{p:1688}, chock:{p:1790,s:14},
+  ojas:{p:1890,s:4}, pkd:null, pg:null, donut:{p:1500,pre:1,s:6}},
+ {lay:'โมเดิร์นธรรมดา', z:'80×180',
+  de:{p:1678}, tb:{p:1678}, chock:{p:1790,s:50},
+  ojas:{p:1800,s:14}, pkd:null, pg:null, donut:{p:1550,pre:1,s:3}},
+ {lay:'โมเดิร์นธรรมดา', z:'80×200',
+  de:{p:1690}, tb:{p:1689}, chock:{p:1790,s:129},
+  ojas:{p:1890,s:56}, pkd:null, pg:{p:1696}, donut:{p:1550,pre:1,s:17}},
+ {lay:'โมเดิร์นธรรมดา', z:'90×200',
+  de:{p:1790}, tb:{p:1890}, chock:{p:1990,s:20},
+  ojas:{p:2000,s:20}, pkd:null, pg:{p:1696}, donut:{p:1600,pre:1,s:11}},
+ {lay:'โมเดิร์นธรรมดา', z:'100×200',
+  de:{p:1799}, tb:{p:1799}, chock:{p:2590,s:1},
+  ojas:{p:2200,s:14}, pkd:null, pg:{p:2490}, donut:{p:1900,pre:1,s:10}},
+
+ {lay:'ขีดตรง', z:'70×200',
+  de:{p:1888}, tb:{p:1899}, chock:{p:1990,s:1},
+  ojas:{p:2090,s:1}, pkd:null, pg:null, donut:null},
+ {lay:'ขีดตรง', z:'80×180',
+  de:{p:1889}, tb:{p:1888}, chock:{p:1990,s:6},
+  ojas:{p:2090,s:7}, pkd:null, pg:null, donut:null},
+ {lay:'ขีดตรง', z:'80×200',
+  de:{p:1885}, tb:{p:1899}, chock:{p:1990,s:18},
+  ojas:{p:2090,s:51}, pkd:{p:1799,s:300}, pg:{p:2090}, donut:null},
+ {lay:'ขีดตรง', z:'90×200',
+  de:{p:2330}, tb:{p:2300}, chock:{p:2250,s:12},
+  ojas:{p:2290,s:24}, pkd:null, pg:{p:2390}, donut:null},
+ {lay:'ขีดตรง', z:'100×200',
+  de:{p:2480}, tb:{p:2485}, chock:{p:2790},
+  ojas:{p:2490,s:22}, pkd:null, pg:{p:2490}, donut:null},
+
+ {lay:'ขีดบวก', z:'70×180',
+  de:null, tb:null, chock:null,
+  ojas:{p:2090,s:1}, pkd:null, pg:null, donut:null},
+ {lay:'ขีดบวก', z:'70×200',
+  de:{p:1899}, tb:{p:1949}, chock:null,
+  ojas:{p:2090,s:3}, pkd:null, pg:null, donut:null},
+ {lay:'ขีดบวก', z:'80×180',
+  de:{p:1899}, tb:{p:1888}, chock:null,
+  ojas:{p:2090,s:7}, pkd:null, pg:null, donut:null},
+ {lay:'ขีดบวก', z:'80×200',
+  de:{p:1899}, tb:{p:1949}, chock:{p:2450,s:24},
+  ojas:{p:2000,s:41}, pkd:null, pg:{p:2090}, donut:null},
+ {lay:'ขีดบวก', z:'90×200',
+  de:{p:2450}, tb:{p:2430}, chock:{p:2950,s:37},
+  ojas:{p:2290,s:15}, pkd:null, pg:{p:2590}, donut:null},
+ {lay:'ขีดบวก', z:'100×200',
+  de:{p:2490}, tb:{p:2490}, chock:null,
+  ojas:{p:2490,s:16}, pkd:null, pg:null, donut:null},
+
+ {lay:'ช่องกระจก', z:'70×180',
+  de:null, tb:null, chock:null, ojas:null, pkd:null, pg:null, donut:{p:1500,pre:1,s:3}},
+ {lay:'ช่องกระจก', z:'70×200',
+  de:null, tb:null, chock:null, ojas:null, pkd:null, pg:null, donut:{p:1500,pre:1,s:6}},
+ {lay:'ช่องกระจก', z:'80×180',
+  de:null, tb:null, chock:null, ojas:null, pkd:null, pg:null, donut:{p:1550,pre:1,s:3}},
+ {lay:'ช่องกระจก', z:'80×200',
+  de:{p:1650}, tb:{p:1650}, chock:null, ojas:null, pkd:null, pg:null, donut:{p:1550,pre:1,s:17}},
+ {lay:'ช่องกระจก', z:'90×200',
+  de:{p:1750}, tb:null, chock:null, ojas:null, pkd:null, pg:null, donut:{p:1600,pre:1,s:11}},
+ {lay:'ช่องกระจก', z:'100×200',
+  de:null, tb:null, chock:null, ojas:null, pkd:null, pg:null, donut:{p:1900,pre:1,s:10}},
+];
+
+let LAY='all', SZ='all';
+
+function vals(r){return SHOPS.map(s=>r[s.k]).filter(x=>x&&x.p).map(x=>x.p);}
+function cell(x,r,us){
+  if(!x||!x.p) return '<span class="na">—</span>';
+  const ns=vals(r);
+  let cls = us ? 'us-col' : 'mid';
+  if(!us && ns.length>1){
+    if(x.p===Math.min(...ns)) cls='win';
+    else if(x.p===Math.max(...ns)) cls='lose';
+  }
+  const pre = x.pre ? '<span class="pre">pre</span>' : '';
+  const sl = x.s!=null ? '<div class="sline"><b>'+x.s+'</b> ชิ้น/ด.</div>' : '';
+  return '<span class="'+cls+'">฿'+x.p.toLocaleString()+'</span>'+pre+sl;
+}
+function renderCtrl(){
+  const lays=[...new Set(D.map(d=>d.lay))];
+  let h='<button class="btn active" onclick="setL(\'all\',this)">ทุกลาย</button>';
+  lays.forEach(l=>{h+='<button class="btn" onclick="setL(\''+l+'\',this)">'+l+'</button>';});
+  document.getElementById('lay').innerHTML=h;
+  const szs=[...new Set(D.map(d=>d.z))];
+  let h2='<button class="btn active" onclick="setS(\'all\',this)">ทุกขนาด</button>';
+  szs.forEach(z=>{h2+='<button class="btn" onclick="setS(\''+z+'\',this)">'+z+'</button>';});
+  document.getElementById('size').innerHTML=h2;
+}
+function render(){
+  const rows=D.filter(d=>(LAY==='all'||d.lay===LAY)&&(SZ==='all'||d.z===SZ));
+  const groups={};
+  rows.forEach(r=>{(groups[r.lay]=groups[r.lay]||[]).push(r);});
+  let html='';
+  Object.entries(groups).forEach(([lay,rs])=>{
+    html+='<div class="grp">'+lay+'</div><div class="tbl-wrap"><table><thead><tr>';
+    html+='<th style="text-align:left">ขนาด</th>';
+    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+'</th>';});
+    html+='</tr></thead><tbody>';
+    rs.forEach(r=>{
+      html+='<tr><td>'+r.z+'</td>';
+      SHOPS.forEach(s=>{html+='<td>'+cell(r[s.k],r,!!s.us)+'</td>';});
+      html+='</tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  document.getElementById('out').innerHTML=html||'<div style="text-align:center;padding:40px;color:var(--dim)">ไม่พบข้อมูล</div>';
+}
+document.getElementById('insight').innerHTML=
+ '🚨 <b>ขีดตรง 80×200</b> — ประกายดาว ฿1,799 ถูกกว่า De (฿1,885) ฿86 และขายได้ <b>300 ชิ้น/เดือน</b> สูงสุดในตลาด<br>'+
+ '✅ <b>โมเดิร์นธรรมดา</b> — De/Tb ถูกที่สุดเกือบทุกไซซ์ (ยกเว้น Donut ที่เป็น pre-order)<br>'+
+ '💰 <b>100×200 โมเดิร์น</b> — De/Tb ฿1,799 ถูกกว่า Ojas ฿401 และ chocksomkid ฿791<br>'+
+ '⚠️ <b>ขีดบวก 90×200</b> — Ojas ฿2,290 ถูกกว่า De ฿160 และ Tb ฿140';
+function setL(v,b){LAY=v;document.querySelectorAll('#lay .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function setS(v,b){SZ=v;document.querySelectorAll('#size .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+renderCtrl();render();
+</script>
+</body>
+</html>
