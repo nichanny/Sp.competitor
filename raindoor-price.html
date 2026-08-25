@@ -111,7 +111,7 @@
 <button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
 <h1>ราคาประตูสายฝน — เปรียบทุกร้าน</h1>
-<p class="sub">อัปเดต ก.ค. 2569 | 8 ร้านค้า | <span style="color:var(--orange)">สีส้ม = ร้านเรา (De)</span></p>
+<p class="sub">อัปเดต ส.ค. 2569 | 8 ร้านค้า | <span style="color:var(--orange)">สีส้ม = ร้านเรา (De)</span></p>
 
 <div class="legend">
   <div class="leg"><div class="dot" style="background:var(--green)"></div><span style="color:var(--green)">ถูกที่สุดในแถว</span></div>
@@ -213,12 +213,12 @@ function renderBadges(){
   document.getElementById('badge-note').innerHTML=note;
 }
 const D = [
-  {z:'70×180', de:null, tb:null,          chock:{v:1290,n:1}, lam:1090, ojas:1350, pkd:null,     cwd:null, fh:null,  mp:null },
-  {z:'70×200', de:null, tb:null,          chock:{v:1290,n:1}, lam:1090, ojas:1350, pkd:null,     cwd:990,  fh:1000, mp:1250 },
-  {z:'80×180', de:null, tb:1249,          chock:{v:1290,n:1}, lam:1200, ojas:1350, pkd:1399,    cwd:1050, fh:1200, mp:1250 },
-  {z:'80×200', de:1249, tb:{v:1249,n:1}, chock:{v:1290,n:1}, lam:1250, ojas:1350, pkd:1499,    cwd:1050, fh:1200, mp:1250 },
-  {z:'90×200', de:{v:1449,n:1}, tb:{v:1449,n:1}, chock:{v:1450,n:1}, lam:1450, ojas:1550, pkd:1899,    cwd:1190, fh:1400, mp:1500 },
-  {z:'100×200',de:null, tb:null,          chock:{v:1650,n:1}, lam:1600, ojas:1750, pkd:2499,    cwd:1350, fh:1600, mp:1800 },
+  {z:'70×180', de:null, tb:null,          chock:{v:null}, lam:1090, ojas:1350, pkd:null,     cwd:null, fh:null,  mp:null },
+  {z:'70×200', de:null, tb:null,          chock:{v:1290}, lam:1090, ojas:1350, pkd:null,     cwd:990,  fh:1000, mp:1250 },
+  {z:'80×180', de:null, tb:1249,          chock:{v:1290}, lam:1200, ojas:1350, pkd:1399,    cwd:1050, fh:1200, mp:1250 },
+  {z:'80×200', de:1249, tb:{v:1249,n:1}, chock:{v:1290}, lam:1250, ojas:1350, pkd:1499,    cwd:1050, fh:1200, mp:1250 },
+  {z:'90×200', de:{v:1449,n:1}, tb:{v:1449,n:1}, chock:{v:1450}, lam:1450, ojas:1550, pkd:1899,    cwd:1190, fh:1400, mp:1500 },
+  {z:'100×200',de:null, tb:null,          chock:{v:1650}, lam:1600, ojas:1750, pkd:2499,    cwd:1350, fh:1600, mp:1800 },
 ];
 
 function rv(x){return x&&typeof x==='object'?x.v:x;}
