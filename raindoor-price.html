@@ -63,6 +63,20 @@
   #theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,0.35);}
   #theme-toggle:hover{opacity:0.85;}
   html.light #theme-toggle{background:#FFFFFF;border-color:rgba(0,0,0,0.15);color:#1C1A18;box-shadow:0 2px 10px rgba(0,0,0,0.12);}
+
+  .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+  .shop-badge{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:7px 11px;font-size:12px;}
+  .shop-badge.us{border-color:rgba(192,74,26,.4);}
+  .sb-name{font-weight:600;}
+  .sb-icons{display:flex;gap:3px;}
+  .ic{font-size:11px;padding:1px 6px;border-radius:4px;font-weight:600;line-height:1.5;}
+  .ic-g{background:rgba(0,180,120,.15);color:#0a8f60;border:1px solid rgba(0,180,120,.35);}
+  .ic-y{background:rgba(220,160,0,.15);color:#a07800;border:1px solid rgba(220,160,0,.35);}
+  .ic-off{background:rgba(150,150,150,.12);color:#999;border:1px solid rgba(150,150,150,.25);text-decoration:line-through;}
+  .ic-q{background:rgba(120,120,120,.12);color:#888;border:1px dashed rgba(120,120,120,.35);}
+  th .hdr-badges{display:block;margin-top:3px;font-size:9px;letter-spacing:0;}
+  html.light .ic-off{color:#999;}
+  html.light .ic-q{color:#888;}
 </style>
 <script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
 </head>
@@ -76,8 +90,11 @@
   <div class="leg"><div class="dot" style="background:var(--green)"></div><span style="color:var(--green)">ถูกที่สุดในแถว</span></div>
   <div class="leg"><div class="dot" style="background:var(--red)"></div><span style="color:var(--red)">แพงที่สุดในแถว</span></div>
   <div class="leg"><div class="dot" style="background:rgba(255,255,255,0.1)"></div><span style="color:var(--dim)">ไม่มีขาย</span></div>
+  <div class="leg"><span style="color:var(--dim)">ป้ายเขียว = Shopee ช่วยค่าส่ง · ป้ายเหลือง = โค้ดส่วนลดร้าน · ? = ยังไม่ทราบ</span></div>
 </div>
 
+
+<div class="badge-row" id="badge-row"></div>
 <div class="filter-bar">
   <button class="btn active" onclick="filter('all',this)">ทั้งหมด</button>
   <button class="btn" onclick="filter('70',this)">70 cm</button>
@@ -92,6 +109,33 @@
 <div id="out"></div>
 
 <script>
+const BADGES = {
+  de:   {name:'De (เรา)',       g:true,  y:true,  us:true},
+  tb:   {name:'Tb (เรา)',       g:true,  y:true,  us:true},
+  chock:{name:'chocksomkid',    g:true,  y:true},
+  lam:  {name:'LAMTONMAISAK',   g:true,  y:true},
+  ojas: {name:'ojas',           g:null,  y:null},
+  pkd:  {name:'ประกายดาว',       g:null,  y:null},
+  cwd:  {name:'cwd',            g:false, y:false},
+  fh:   {name:'full house',     g:null,  y:null},
+  mp:   {name:'ไม้พร้อม',        g:true,  y:true},
+};
+function icons(b){
+  const g = b.g===true ? '<span class="ic ic-g">เขียว</span>'
+          : b.g===false ? '<span class="ic ic-off">เขียว</span>'
+          : '<span class="ic ic-q">เขียว?</span>';
+  const y = b.y===true ? '<span class="ic ic-y">เหลือง</span>'
+          : b.y===false ? '<span class="ic ic-off">เหลือง</span>'
+          : '<span class="ic ic-q">เหลือง?</span>';
+  return g+y;
+}
+function renderBadges(){
+  let h='';
+  Object.values(BADGES).forEach(b=>{
+    h+='<div class="shop-badge'+(b.us?' us':'')+'"><span class="sb-name">'+b.name+'</span><span class="sb-icons">'+icons(b)+'</span></div>';
+  });
+  document.getElementById('badge-row').innerHTML=h;
+}
 const D = [
   {z:'70×180', de:null, tb:null,          chock:{v:1290,n:1}, lam:1090, ojas:1350, pkd:null,     cwd:null, fh:null,  mp:null },
   {z:'70×200', de:null, tb:null,          chock:{v:1290,n:1}, lam:1090, ojas:1350, pkd:null,     cwd:990,  fh:1000, mp:1250 },
@@ -140,9 +184,15 @@ function render(fk){
 
   let html='<div class="tbl-wrap"><table><thead><tr>';
   html+='<th style="text-align:left">ขนาด</th>';
-  html+='<th class="us">De</th>';
-  html+='<th class="us">Tb</th>';
-  html+='<th>chocksomkid</th><th>LAMTONMAISAK</th><th>ojas</th><th>ประกายดาว</th><th>cwd</th><th>full house</th><th>ไม้พร้อม</th>';
+  html+='<th class="us">De<span class="hdr-badges">'+icons(BADGES.de)+'</span></th>';
+  html+='<th class="us">Tb<span class="hdr-badges">'+icons(BADGES.tb)+'</span></th>';
+  html+='<th>chocksomkid<span class="hdr-badges">'+icons(BADGES.chock)+'</span></th>';
+  html+='<th>LAMTONMAISAK<span class="hdr-badges">'+icons(BADGES.lam)+'</span></th>';
+  html+='<th>ojas<span class="hdr-badges">'+icons(BADGES.ojas)+'</span></th>';
+  html+='<th>ประกายดาว<span class="hdr-badges">'+icons(BADGES.pkd)+'</span></th>';
+  html+='<th>cwd<span class="hdr-badges">'+icons(BADGES.cwd)+'</span></th>';
+  html+='<th>full house<span class="hdr-badges">'+icons(BADGES.fh)+'</span></th>';
+  html+='<th>ไม้พร้อม<span class="hdr-badges">'+icons(BADGES.mp)+'</span></th>';
   html+='</tr></thead><tbody>';
   rows.forEach(r=>{
     html+='<tr><td>'+r.z+'</td>';
@@ -165,6 +215,9 @@ function filter(k,btn){
   document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');render(k);
 }
+
+
+renderBadges();
 render('all');
 </script>
 
