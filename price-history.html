@@ -76,9 +76,18 @@
   .sum-box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:12px;flex:1;min-width:100px;text-align:center;}
   .sum-num{font-size:20px;font-weight:700;font-family:'Space Mono',monospace;margin-bottom:2px;}
   .sum-label{color:var(--dim);font-size:11px;}
+
+  /* LIGHT MODE */
+  body.light {
+    --bg:#F8F6F2; --bg2:#FFFFFF; --bg3:#FFFFFF; --bg4:#F0EDE8;
+    --text:#1A1614; --dim:#6B6560;
+    --green:#1A7A5E; --red:#C0392B; --yellow:#B8860B; --blue:#1A5FAA; --orange:#C0491A;
+    --border:rgba(0,0,0,0.1);
+  }
 </style>
 </head>
 <body>
+<button id="theme-toggle" onclick="toggleTheme()" style="position:fixed;top:12px;right:16px;z-index:999;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;">🌙 มืด</button>
 
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
 <h1>📈 Price History</h1>

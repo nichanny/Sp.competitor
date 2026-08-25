@@ -36,9 +36,18 @@
   .insight{background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.25);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.8;}
   .insight strong{color:var(--orange);}
   .badge-new{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:3px;background:rgba(96,165,250,0.15);color:var(--blue);border:1px solid rgba(96,165,250,0.35);}
+
+  /* LIGHT MODE */
+  body.light {
+    --bg:#F8F6F2; --bg2:#FFFFFF; --bg3:#FFFFFF; --bg4:#F0EDE8;
+    --text:#1A1614; --dim:#6B6560;
+    --green:#1A7A5E; --red:#C0392B; --yellow:#B8860B; --blue:#1A5FAA; --orange:#C0491A;
+    --border:rgba(0,0,0,0.1);
+  }
 </style>
 </head>
 <body>
+<button id="theme-toggle" onclick="toggleTheme()" style="position:fixed;top:12px;right:16px;z-index:999;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;">🌙 มืด</button>
 
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
 <h1>ราคาประตูสายฝน — เปรียบทุกร้าน</h1>
