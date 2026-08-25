@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ประวัติราคาร้านเรา — De &amp; Tb</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);--grid:rgba(0,0,0,.07);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);--grid:rgba(255,255,255,.08);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:1000px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:16px;}
+h1{font-size:20px;font-weight:800;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:18px;}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px;}
+.kpi{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.kpi-l{font-size:11px;color:var(--dim);margin-bottom:5px;}
+.kpi-v{font-size:23px;font-weight:800;font-family:'Space Mono',monospace;line-height:1;}
+.kpi-s{font-size:11px;color:var(--dim);margin-top:5px;}
+
+/* tabs */
+.tabs{display:flex;gap:3px;background:var(--bg4);padding:4px;border-radius:11px;margin-bottom:16px;overflow-x:auto;}
+.tab{flex:1;min-width:104px;padding:8px 12px;border:none;background:transparent;color:var(--dim);font-family:'Sarabun',sans-serif;font-size:12.5px;font-weight:600;border-radius:8px;cursor:pointer;white-space:nowrap;}
+.tab.active{background:var(--bg3);color:var(--orange);box-shadow:0 1px 4px rgba(0,0,0,.08);}
+
+.ctrl{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.btn{font-size:12px;padding:5px 13px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(192,74,26,.13);color:var(--orange);border-color:rgba(192,74,26,.4);}
+
+/* SKU card w/ chart */
+.skucard{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:14px 16px;margin-bottom:11px;}
+.sk-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
+.sk-name{font-size:14px;font-weight:700;}
+.sk-cat{font-size:10px;padding:2px 7px;border-radius:4px;margin-left:6px;background:var(--bg4);color:var(--dim);border:1px solid var(--border);}
+.sk-right{text-align:right;}
+.sk-now{font-size:19px;font-weight:800;font-family:'Space Mono',monospace;}
+.sk-chg{font-size:11px;font-family:'Space Mono',monospace;margin-top:2px;}
+.up{color:var(--red);}.down{color:var(--green);}.flat{color:var(--dim);}
+.chart{width:100%;height:64px;display:block;}
+.pts{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);font-family:'Space Mono',monospace;margin-top:4px;}
+
+/* timeline */
+.tl{position:relative;padding-left:18px;}
+.tl::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--border);border-radius:2px;}
+.tl-day{position:relative;margin-bottom:16px;}
+.tl-dot{position:absolute;left:-17px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--orange);border:2px solid var(--bg);}
+.tl-date{font-size:12px;font-weight:700;margin-bottom:7px;font-family:'Space Mono',monospace;color:var(--orange);}
+.tl-items{background:var(--bg3);border:1px solid var(--border);border-radius:11px;overflow:hidden;}
+.tl-row{display:grid;grid-template-columns:42px 1fr auto;gap:9px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12.5px;}
+.tl-row:last-child{border-bottom:none;}
+.shopchip{font-size:9px;padding:2px 6px;border-radius:4px;text-align:center;font-weight:700;font-family:'Space Mono',monospace;}
+.chip-de{background:rgba(192,74,26,.14);color:var(--orange);}
+.chip-tb{background:rgba(109,74,168,.14);color:var(--purple);}
+.pchg{font-family:'Space Mono',monospace;font-size:12px;white-space:nowrap;}
+.pold{color:var(--dim);text-decoration:line-through;font-size:11px;}
+.arr{color:var(--dim);margin:0 4px;}
+.empty{text-align:center;padding:40px;color:var(--dim);}
+.hide{display:none;}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>📉 ประวัติราคาร้านเรา — De &amp; Tb</h1>
+<p class="sub">ติดตามการปรับราคาทุก SKU ตั้งแต่เริ่มต้นจนถึงปัจจุบัน</p>
+
+<div class="kpis" id="kpis"></div>
+
+<div class="tabs">
+  <button class="tab active" onclick="setView('sku',this)">📊 รายการ SKU</button>
+  <button class="tab" onclick="setView('time',this)">🕐 ไทม์ไลน์</button>
+</div>
+
+<div class="ctrl" id="shopF"></div>
+<div class="ctrl" id="catF"></div>
+<div id="out"></div>
+
+<script>
+// ประวัติราคา: [{date, p}] เรียงเก่า→ใหม่
+const H=[
+ // ── ประตูสายฝน ──
+ {cat:'สายฝน', sku:'สายฝน 80×200', shop:'de', pts:[['2026-05-01',1290],['2026-05-22',1249],['2026-08-25',1349]]},
+ {cat:'สายฝน', sku:'สายฝน 80×200', shop:'tb', pts:[['2026-07-26',1249],['2026-08-25',1349]]},
+ {cat:'สายฝน', sku:'สายฝน 80×180', shop:'tb', pts:[['2026-07-26',1249],['2026-08-25',1349]]},
+ {cat:'สายฝน', sku:'สายฝน 70×200', shop:'tb', pts:[['2026-08-25',1349]]},
+ {cat:'สายฝน', sku:'สายฝน 90×200', shop:'de', pts:[['2026-07-10',1449]]},
+ {cat:'สายฝน', sku:'สายฝน 90×200', shop:'tb', pts:[['2026-07-26',1449]]},
+
+ // ── ประตูโมเดิร์น ──
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 70×200', shop:'de', pts:[['2026-06-01',1689],['2026-08-25',1799]]},
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 70×200', shop:'tb', pts:[['2026-06-01',1688],['2026-08-25',1799]]},
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 80×180', shop:'de', pts:[['2026-06-01',1678],['2026-08-25',1810]]},
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 80×180', shop:'tb', pts:[['2026-06-01',1678],['2026-08-25',1810]]},
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 80×200', shop:'de', pts:[['2026-06-01',1690],['2026-08-25',1839]]},
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 80×200', shop:'tb', pts:[['2026-06-01',1689],['2026-08-25',1839]]},
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 90×200', shop:'de', pts:[['2026-06-01',1790],['2026-08-25',1999]]},
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 90×200', shop:'tb', pts:[['2026-06-01',1890],['2026-08-25',1999]]},
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 100×200', shop:'de', pts:[['2026-06-01',1799],['2026-08-25',2150]]},
+ {cat:'โมเดิร์น', sku:'โมเดิร์น 100×200', shop:'tb', pts:[['2026-06-01',1799],['2026-08-25',2150]]},
+
+ // ── ขีดตรง ──
+ {cat:'ขีดตรง', sku:'ขีดตรง 70×200', shop:'de', pts:[['2026-06-01',1888],['2026-08-25',2030]]},
+ {cat:'ขีดตรง', sku:'ขีดตรง 70×200', shop:'tb', pts:[['2026-06-01',1899],['2026-08-25',1999]]},
+ {cat:'ขีดตรง', sku:'ขีดตรง 80×180', shop:'de', pts:[['2026-06-01',1889],['2026-08-25',1999]]},
+ {cat:'ขีดตรง', sku:'ขีดตรง 80×180', shop:'tb', pts:[['2026-06-01',1888],['2026-08-25',2030]]},
+ {cat:'ขีดตรง', sku:'ขีดตรง 80×200', shop:'de', pts:[['2026-06-01',1885],['2026-08-25',2030]]},
+ {cat:'ขีดตรง', sku:'ขีดตรง 80×200', shop:'tb', pts:[['2026-06-01',1899],['2026-08-25',2029]]},
+ {cat:'ขีดตรง', sku:'ขีดตรง 90×200', shop:'de', pts:[['2026-06-01',2330]]},
+ {cat:'ขีดตรง', sku:'ขีดตรง 90×200', shop:'tb', pts:[['2026-06-01',2300],['2026-08-25',2310]]},
+ {cat:'ขีดตรง', sku:'ขีดตรง 100×200', shop:'de', pts:[['2026-06-01',2480],['2026-08-25',2549]]},
+ {cat:'ขีดตรง', sku:'ขีดตรง 100×200', shop:'tb', pts:[['2026-06-01',2485],['2026-08-25',2550]]},
+
+ // ── ขีดบวก ──
+ {cat:'ขีดบวก', sku:'ขีดบวก 70×200', shop:'de', pts:[['2026-06-01',1899],['2026-08-25',2050]]},
+ {cat:'ขีดบวก', sku:'ขีดบวก 70×200', shop:'tb', pts:[['2026-06-01',1949],['2026-08-25',2050]]},
+ {cat:'ขีดบวก', sku:'ขีดบวก 80×180', shop:'de', pts:[['2026-06-01',1899],['2026-08-25',2060]]},
+ {cat:'ขีดบวก', sku:'ขีดบวก 80×180', shop:'tb', pts:[['2026-06-01',1888],['2026-08-25',2069]]},
+ {cat:'ขีดบวก', sku:'ขีดบวก 80×200', shop:'de', pts:[['2026-06-01',1899],['2026-08-25',2050]]},
+ {cat:'ขีดบวก', sku:'ขีดบวก 80×200', shop:'tb', pts:[['2026-06-01',1949],['2026-08-25',2050]]},
+ {cat:'ขีดบวก', sku:'ขีดบวก 90×200', shop:'de', pts:[['2026-06-01',2450],['2026-08-25',2590]]},
+ {cat:'ขีดบวก', sku:'ขีดบวก 90×200', shop:'tb', pts:[['2026-06-01',2430],['2026-08-25',2690]]},
+ {cat:'ขีดบวก', sku:'ขีดบวก 100×200', shop:'de', pts:[['2026-06-01',2490],['2026-08-25',2599]]},
+ {cat:'ขีดบวก', sku:'ขีดบวก 100×200', shop:'tb', pts:[['2026-06-01',2490],['2026-08-25',2690]]},
+
+ // ── ช่องกระจก ──
+ {cat:'ช่องกระจก', sku:'ช่องกระจก 80×200', shop:'de', pts:[['2026-06-28',1650]]},
+ {cat:'ช่องกระจก', sku:'ช่องกระจก 80×200', shop:'tb', pts:[['2026-06-28',1650]]},
+ {cat:'ช่องกระจก', sku:'ช่องกระจก 90×200', shop:'de', pts:[['2026-06-28',1750]]},
+
+ // ── วงกบประตู ──
+ {cat:'วงกบ', sku:'วงกบ 80×180', shop:'de', pts:[['2026-06-01',899],['2026-08-25',1079]]},
+ {cat:'วงกบ', sku:'วงกบ 80×180', shop:'tb', pts:[['2026-06-01',899],['2026-08-25',1080]]},
+ {cat:'วงกบ', sku:'วงกบ 70×200', shop:'de', pts:[['2026-06-01',899],['2026-08-25',1080]]},
+ {cat:'วงกบ', sku:'วงกบ 70×200', shop:'tb', pts:[['2026-06-01',919],['2026-08-25',1079]]},
+ {cat:'วงกบ', sku:'วงกบ 80×200', shop:'de', pts:[['2026-05-01',925],['2026-08-01',899],['2026-08-25',1080]]},
+ {cat:'วงกบ', sku:'วงกบ 80×200', shop:'tb', pts:[['2026-06-01',899],['2026-08-25',1079]]},
+ {cat:'วงกบ', sku:'วงกบ 90×200', shop:'de', pts:[['2026-06-01',945],['2026-08-25',1090]]},
+ {cat:'วงกบ', sku:'วงกบ 90×200', shop:'tb', pts:[['2026-06-01',945],['2026-08-25',1089]]},
+ {cat:'วงกบ', sku:'วงกบ 100×200', shop:'de', pts:[['2026-06-01',999],['2026-08-25',1090]]},
+ {cat:'วงกบ', sku:'วงกบ 100×200', shop:'tb', pts:[['2026-06-01',999],['2026-08-25',1089]]},
+ {cat:'วงกบ', sku:'วงกบ 160×200', shop:'de', pts:[['2026-06-01',1239],['2026-08-25',1299]]},
+ {cat:'วงกบ', sku:'วงกบ 160×200', shop:'tb', pts:[['2026-06-01',1229],['2026-08-25',1299]]},
+ {cat:'วงกบ', sku:'วงกบ 180×200', shop:'de', pts:[['2026-06-01',1239],['2026-08-25',1299]]},
+ {cat:'วงกบ', sku:'วงกบ 180×200', shop:'tb', pts:[['2026-06-01',1229],['2026-08-25',1299]]},
+ {cat:'วงกบ', sku:'วงกบ 200×200', shop:'de', pts:[['2026-08-24',1299],['2026-08-25',1329]]},
+ {cat:'วงกบ', sku:'วงกบ 200×200', shop:'tb', pts:[['2026-06-01',1289],['2026-08-25',1325]]},
+
+ // ── ค่าส่ง ──
+ {cat:'ค่าส่ง', sku:'ค่าส่งประตู', shop:'de', pts:[['2026-05-29',280],['2026-07-08',250]]},
+ {cat:'ค่าส่ง', sku:'ค่าส่งวงกบกลม', shop:'de', pts:[['2026-05-01',240],['2026-05-29',150]]},
+];
+
+const SHOP={de:{n:'De',c:'var(--orange)',chip:'chip-de'},tb:{n:'Tb',c:'var(--purple)',chip:'chip-tb'}};
+let VIEW='sku', SF='all', CF='all';
+
+const first=h=>h.pts[0][1], last=h=>h.pts[h.pts.length-1][1];
+const chg=h=>last(h)-first(h);
+const pct=h=>first(h)?((last(h)-first(h))/first(h)*100):0;
+
+function renderKPI(){
+  const changed=H.filter(h=>h.pts.length>1);
+  const ups=changed.filter(h=>chg(h)>0), downs=changed.filter(h=>chg(h)<0);
+  const avg=changed.length?changed.reduce((a,h)=>a+pct(h),0)/changed.length:0;
+  const big=[...changed].sort((a,b)=>pct(b)-pct(a))[0];
+  document.getElementById('kpis').innerHTML=
+   '<div class="kpi"><div class="kpi-l">SKU ที่ติดตาม</div><div class="kpi-v" style="color:var(--blue)">'+H.length+'</div><div class="kpi-s">De + Tb รวมกัน</div></div>'+
+   '<div class="kpi"><div class="kpi-l">ปรับราคาขึ้น</div><div class="kpi-v" style="color:var(--red)">'+ups.length+'</div><div class="kpi-s">รายการ</div></div>'+
+   '<div class="kpi"><div class="kpi-l">ปรับราคาลง</div><div class="kpi-v" style="color:var(--green)">'+downs.length+'</div><div class="kpi-s">รายการ</div></div>'+
+   '<div class="kpi"><div class="kpi-l">เปลี่ยนแปลงเฉลี่ย</div><div class="kpi-v" style="color:'+(avg>0?'var(--red)':'var(--green)')+'">'+(avg>0?'+':'')+avg.toFixed(1)+'%</div><div class="kpi-s">ทุก SKU ที่เคยปรับ</div></div>'+
+   (big?'<div class="kpi"><div class="kpi-l">ขึ้นมากที่สุด</div><div class="kpi-v" style="color:var(--red);font-size:17px">+'+pct(big).toFixed(1)+'%</div><div class="kpi-s">'+big.sku+' ('+SHOP[big.shop].n+')</div></div>':'');
+}
+function renderFilters(){
+  let h='<button class="btn active" onclick="setSF(\'all\',this)">ทั้ง 2 ร้าน</button>';
+  Object.entries(SHOP).forEach(([k,s])=>{h+='<button class="btn" onclick="setSF(\''+k+'\',this)">'+s.n+'</button>';});
+  document.getElementById('shopF').innerHTML=h;
+  const cats=[...new Set(H.map(x=>x.cat))];
+  let h2='<button class="btn active" onclick="setCF(\'all\',this)">ทุกหมวด</button>';
+  cats.forEach(c=>{h2+='<button class="btn" onclick="setCF(\''+c+'\',this)">'+c+'</button>';});
+  document.getElementById('catF').innerHTML=h2;
+}
+function filtered(){return H.filter(h=>(SF==='all'||h.shop===SF)&&(CF==='all'||h.cat===CF));}
+
+function sparkline(h,color){
+  const W=300,Hh=64,P=8;
+  const ps=h.pts.map(p=>p[1]);
+  const mn=Math.min(...ps), mx=Math.max(...ps), rng=(mx-mn)||1;
+  const n=ps.length;
+  const x=i=>n===1?W/2:P+(W-2*P)*i/(n-1);
+  const y=v=>Hh-P-(Hh-2*P)*((v-mn)/rng);
+  let d='', dots='';
+  ps.forEach((v,i)=>{ d+=(i?' L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1); });
+  ps.forEach((v,i)=>{ dots+='<circle cx="'+x(i).toFixed(1)+'" cy="'+y(v).toFixed(1)+'" r="3.2" fill="'+color+'"/>'; });
+  const area='M'+x(0).toFixed(1)+' '+Hh+' L'+d.slice(1)+' L'+x(n-1).toFixed(1)+' '+Hh+' Z';
+  return '<svg class="chart" viewBox="0 0 '+W+' '+Hh+'" preserveAspectRatio="none" role="img" aria-label="กราฟราคา">'
+   +'<path d="'+area+'" fill="'+color+'" opacity="0.10"/>'
+   +'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>'
+   +dots+'</svg>';
+}
+function renderSKU(){
+  const rows=[...filtered()].sort((a,b)=>Math.abs(pct(b))-Math.abs(pct(a)));
+  if(!rows.length){document.getElementById('out').innerHTML='<div class="empty">ไม่พบรายการ</div>';return;}
+  let h='';
+  rows.forEach(x=>{
+    const s=SHOP[x.shop], d=chg(x), p=pct(x);
+    const cls=d>0?'up':d<0?'down':'flat';
+    const sign=d>0?'+':'';
+    h+='<div class="skucard">'
+     +'<div class="sk-top"><div><span class="sk-name">'+x.sku+'</span>'
+     +'<span class="shopchip '+s.chip+'" style="display:inline-block;margin-left:6px">'+s.n+'</span>'
+     +'<span class="sk-cat">'+x.cat+'</span></div>'
+     +'<div class="sk-right"><div class="sk-now" style="color:'+s.c+'">฿'+last(x).toLocaleString()+'</div>'
+     +'<div class="sk-chg '+cls+'">'+(x.pts.length>1?sign+'฿'+Math.abs(d)+' ('+sign+p.toFixed(1)+'%)':'ยังไม่เคยปรับ')+'</div></div></div>'
+     +sparkline(x,s.c==='var(--orange)'?getComputedStyle(document.documentElement).getPropertyValue('--orange').trim()||'#C04A1A':getComputedStyle(document.documentElement).getPropertyValue('--purple').trim()||'#6D4AA8')
+     +'<div class="pts">'+x.pts.map(p=>'<span>'+p[0].slice(5).replace('-','/')+' ฿'+p[1].toLocaleString()+'</span>').join('')+'</div>'
+     +'</div>';
+  });
+  document.getElementById('out').innerHTML=h;
+}
+function renderTime(){
+  const evs=[];
+  filtered().forEach(x=>{
+    x.pts.forEach((p,i)=>{
+      evs.push({date:p[0], shop:x.shop, sku:x.sku, cat:x.cat, old:i?x.pts[i-1][1]:null, nw:p[1]});
+    });
+  });
+  const byDate={};
+  evs.forEach(e=>{(byDate[e.date]=byDate[e.date]||[]).push(e);});
+  const dates=Object.keys(byDate).sort().reverse();
+  if(!dates.length){document.getElementById('out').innerHTML='<div class="empty">ไม่พบรายการ</div>';return;}
+  let h='<div class="tl">';
+  dates.forEach(d=>{
+    const items=byDate[d].sort((a,b)=>a.sku.localeCompare(b.sku));
+    h+='<div class="tl-day"><div class="tl-dot"></div><div class="tl-date">'+d+' · '+items.length+' รายการ</div><div class="tl-items">';
+    items.forEach(e=>{
+      const s=SHOP[e.shop];
+      let chgTxt;
+      if(e.old==null){ chgTxt='<span style="color:var(--blue)">เปิดใหม่ ฿'+e.nw.toLocaleString()+'</span>'; }
+      else{
+        const d2=e.nw-e.old, c=d2>0?'up':d2<0?'down':'flat';
+        chgTxt='<span class="pold">฿'+e.old.toLocaleString()+'</span><span class="arr">→</span><span class="'+c+'">฿'+e.nw.toLocaleString()+' ('+(d2>0?'+':'')+d2+')</span>';
+      }
+      h+='<div class="tl-row"><span class="shopchip '+s.chip+'">'+s.n+'</span><span>'+e.sku+'</span><span class="pchg">'+chgTxt+'</span></div>';
+    });
+    h+='</div></div>';
+  });
+  h+='</div>';
+  document.getElementById('out').innerHTML=h;
+}
+function render(){ VIEW==='sku'?renderSKU():renderTime(); }
+function setView(v,b){VIEW=v;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function setSF(v,b){SF=v;document.querySelectorAll('#shopF .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function setCF(v,b){CF=v;document.querySelectorAll('#catF .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');render();}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+renderKPI();renderFilters();render();
+</script>
+</body>
+</html>
