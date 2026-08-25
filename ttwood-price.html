@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TTwood — สินค้าและราคา</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:920px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:18px;}
+h1{font-size:19px;font-weight:800;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:16px;}
+.summary{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px;}
+.sum{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;flex:1;min-width:95px;text-align:center;}
+.sum-n{font-size:19px;font-weight:800;font-family:'Space Mono',monospace;}
+.sum-l{font-size:11px;color:var(--dim);}
+.note{border-radius:10px;padding:11px 14px;font-size:12.5px;margin-bottom:14px;line-height:1.8;background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.28);}
+.note b{color:var(--red);}
+.note.info{background:rgba(26,95,170,.07);border-color:rgba(26,95,170,.25);}
+.note.info b{color:var(--blue);}
+.ctrl{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.btn{font-size:12px;padding:5px 13px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(192,74,26,.13);color:var(--orange);border-color:rgba(192,74,26,.4);}
+.tbl{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--bg4);padding:8px 13px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;}
+th:first-child{text-align:left;}
+td{padding:9px 13px;border-bottom:1px solid var(--border);text-align:right;font-family:'Space Mono',monospace;white-space:nowrap;}
+td:first-child{text-align:left;font-family:'Sarabun',sans-serif;font-weight:600;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg4);}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;}
+.p-hot{background:rgba(192,57,43,.13);color:var(--red);border:1px solid rgba(192,57,43,.3);}
+.p-ok{background:rgba(26,122,94,.12);color:var(--green);border:1px solid rgba(26,122,94,.3);}
+.p-lay{background:rgba(109,74,168,.13);color:var(--purple);border:1px solid rgba(109,74,168,.3);margin-left:6px;}
+.share{color:var(--dim);font-size:11px;}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🌲 TTwood — สินค้าและราคา</h1>
+<p class="sub">ข้อมูล ณ 25 ส.ค. 2569 · ✅ ป้ายเขียว + ✅ ป้ายเหลือง</p>
+
+<div class="summary" id="summary"></div>
+
+<div class="note">
+🚨 <b>คู่แข่งระดับ Top — Ranking #94</b><br>
+listing เดียวขาย <b>1,000 ชิ้น/เดือน</b> · GMV 30 วัน <b>฿1,699,000</b> · รีวิว 243 (4.9★) · เปิดมา 809 วัน<br>
+→ สูงกว่า De L1 (#98) และเทียบเท่า chocksomkid listing โมเดิร์น (#146)
+</div>
+
+<div class="note info">
+📖 <b>คำแปล</b> — "ติดเส้น" = โมเดิร์นขีดบวก · "ไม่เส้น" = โมเดิร์นธรรมดา<br>
+🏬 <b>ทั้งร้าน</b> 30 สินค้า · ขายรวม 42,541 ชิ้น · 3,444 ชิ้น/เดือน · ราคาเฉลี่ย ฿281 (มีสินค้าชิ้นเล็กเยอะ)
+</div>
+
+<div class="ctrl" id="filters"></div>
+<div class="tbl" id="out"></div>
+
+<script>
+const ITEMS=[
+ {n:'90×200 ติดเส้น',  lay:'ขีดบวก',  p:2199, sh:'20.66%', st:7,  s:25},
+ {n:'100×200 ติดเส้น', lay:'ขีดบวก',  p:2299, sh:'16.53%', st:6,  s:20},
+ {n:'80×200 ติดเส้น',  lay:'ขีดบวก',  p:2050, sh:'14.05%', st:6,  s:17},
+ {n:'80×200 ไม่เส้น',  lay:'โมเดิร์น', p:1899, sh:'11.57%', st:15, s:14},
+ {n:'80×180 ติดเส้น',  lay:'ขีดบวก',  p:1990, sh:'7.44%',  st:14, s:9},
+ {n:'70×180 ไม่เส้น',  lay:'โมเดิร์น', p:1699, sh:'6.61%',  st:null, s:8},
+ {n:'90×200 ไม่เส้น',  lay:'โมเดิร์น', p:1999, sh:'5.79%',  st:null, s:7},
+ {n:'100×200 ไม่เส้น', lay:'โมเดิร์น', p:1999, sh:'4.96%',  st:null, s:6},
+ {n:'80×180 ไม่เส้น',  lay:'โมเดิร์น', p:1830, sh:'4.13%',  st:null, s:5},
+ {n:'70×180 ติดเส้น',  lay:'ขีดบวก',  p:1940, sh:'4.13%',  st:null, s:5},
+ {n:'70×200 ไม่เส้น',  lay:'โมเดิร์น', p:1750, sh:'2.48%',  st:null, s:3},
+ {n:'70×200 ติดเส้น',  lay:'ขีดบวก',  p:1850, sh:'1.65%',  st:null, s:2},
+];
+let F='all';
+function renderSummary(){
+  const tot=ITEMS.reduce((a,b)=>a+b.s,0);
+  const ps=ITEMS.map(i=>i.p);
+  document.getElementById('summary').innerHTML=
+   '<div class="sum"><div class="sum-n" style="color:var(--red)">#94</div><div class="sum-l">Ranking</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--orange)">1,000</div><div class="sum-l">ขาย/เดือน (listing)</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--purple)">'+ITEMS.length+'</div><div class="sum-l">SKU</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--green)">฿'+Math.min(...ps).toLocaleString()+'</div><div class="sum-l">ต่ำสุด</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--yellow)">฿'+Math.max(...ps).toLocaleString()+'</div><div class="sum-l">สูงสุด</div></div>';
+}
+function renderFilters(){
+  const lays=[...new Set(ITEMS.map(i=>i.lay))];
+  let h='<button class="btn active" onclick="setF(\'all\',this)">ทั้งหมด</button>';
+  lays.forEach(l=>{h+='<button class="btn" onclick="setF(\''+l+'\',this)">'+l+'</button>';});
+  document.getElementById('filters').innerHTML=h;
+}
+function render(){
+  const rows=ITEMS.filter(i=>F==='all'||i.lay===F);
+  let h='<table><thead><tr><th style="text-align:left">SKU</th><th>ราคา</th><th>Share</th><th>สต็อก</th><th>ขาย/เดือน</th></tr></thead><tbody>';
+  rows.forEach(i=>{
+    h+='<tr><td>'+i.n+'<span class="pill p-lay">'+i.lay+'</span></td>'
+      +'<td><strong>฿'+i.p.toLocaleString()+'</strong></td>'
+      +'<td class="share">'+i.sh+'</td>'
+      +'<td class="share">'+(i.st!=null?i.st:'—')+'</td>'
+      +'<td><span class="pill '+(i.s>=10?'p-hot':'p-ok')+'">'+i.s+'</span></td></tr>';
+  });
+  h+='</tbody></table>';
+  document.getElementById('out').innerHTML=h;
+}
+function setF(f,b){F=f;document.querySelectorAll('.btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+renderSummary();renderFilters();render();
+</script>
+</body>
+</html>
