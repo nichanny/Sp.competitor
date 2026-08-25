@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ราคา De vs Tb — เปรียบทุก SKU</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,0.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:900px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.35);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:20px;}
+.back:hover{color:var(--text);}
+h1{font-size:19px;font-weight:700;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:18px;}
+.search-box{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:13px;margin-bottom:14px;}
+.search-box:focus{outline:none;border-color:var(--orange);}
+.filter-bar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;}
+.btn{font-size:12px;padding:5px 13px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(255,107,53,.15);color:var(--orange);border-color:rgba(255,107,53,.4);}
+.summary{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px;}
+.sum{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;flex:1;min-width:85px;text-align:center;}
+.sum-n{font-size:19px;font-weight:700;font-family:'Space Mono',monospace;}
+.sum-l{font-size:11px;color:var(--dim);}
+.grp{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin:22px 0 9px;}
+.tbl{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:10px;}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:420px;}
+th{background:var(--bg4);padding:8px 12px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;letter-spacing:.5px;}
+th:first-child{text-align:left;}
+th.de{color:var(--orange);}th.tb{color:var(--purple);}
+td{padding:9px 12px;border-bottom:1px solid var(--border);text-align:right;font-family:'Space Mono',monospace;white-space:nowrap;}
+td:first-child{text-align:left;font-family:'Sarabun',sans-serif;font-weight:600;white-space:normal;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg4);}
+.na{color:rgba(255,255,255,.18);}
+.low{color:var(--green);font-weight:700;}
+.same{color:var(--text);}
+.high{color:var(--red);}
+.diff{font-size:10px;padding:2px 6px;border-radius:4px;margin-left:5px;font-family:'Space Mono',monospace;}
+.d-de{background:rgba(255,107,53,.13);color:var(--orange);}
+.d-tb{background:rgba(167,139,250,.13);color:var(--purple);}
+.d-eq{background:rgba(255,255,255,.06);color:var(--dim);}
+.empty{text-align:center;padding:40px;color:var(--dim);}
+html.light{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html.light body{background:#FAFAF8;color:#1C1A18;}
+html.light .btn{border-color:rgba(0,0,0,.2);background:#F2F0EC;color:#5C5850;}
+html.light .btn.active{background:rgba(192,74,26,.12);color:#C04A1A;border-color:rgba(192,74,26,.4);}
+html.light #theme-toggle{background:#FFF;border-color:rgba(0,0,0,.15);color:#1C1A18;}
+html.light .search-box{background:#FFF;border-color:rgba(0,0,0,.15);color:#1C1A18;}
+html.light tr:hover td{background:#F2F0EC;}
+html.light .na{color:rgba(0,0,0,.2);}
+</style>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">☀️ สว่าง</button>
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🏪 ราคา De vs Tb — เปรียบทุก SKU</h1>
+<p class="sub">SKU เดียวกันทั้งสองร้าน · ยึดราคาต่ำสุดกรณีพบหลายราคา · อัปเดต 25 ส.ค. 2569</p>
+<div class="summary" id="summary"></div>
+<input type="text" class="search-box" id="search" placeholder="🔍 ค้นหา เช่น สายฝน, 80×200, วงกบ, ราวบันได..." oninput="render()">
+<div class="filter-bar" id="filters"></div>
+<div id="out"></div>
+<script>
+const DATA = {"ประตูสายฝน": [{"n": "สายฝน 80×200", "de": 1249, "tb": 1249}], "ประตูโมเดิร์น": [{"n": "โมเดิร์น 70×200", "de": 1689, "tb": 1688}, {"n": "โมเดิร์น 80×180", "de": 1678, "tb": 1678}, {"n": "โมเดิร์น 80×200", "de": 1690, "tb": 1689}, {"n": "โมเดิร์น 90×200", "de": 1790, "tb": 1890}, {"n": "โมเดิร์น 100×200", "de": 1799, "tb": 1799}], "ขีดตรง": [{"n": "ขีดตรง 70×200", "de": 1888, "tb": 1899}, {"n": "ขีดตรง 80×180", "de": 1889, "tb": 1888}, {"n": "ขีดตรง 80×200", "de": 1885, "tb": 1899}, {"n": "ขีดตรง 90×200", "de": 2330, "tb": 2300}, {"n": "ขีดตรง 100×200", "de": 2480, "tb": 2485}], "ขีดบวก": [{"n": "ขีดบวก 70×200", "de": 1899, "tb": 1949}, {"n": "ขีดบวก 80×180", "de": 1899, "tb": 1888}, {"n": "ขีดบวก 80×200", "de": 1899, "tb": 1949}, {"n": "ขีดบวก 90×200", "de": 2450, "tb": 2430}, {"n": "ขีดบวก 100×200", "de": 2490, "tb": 2490}], "ช่องกระจก": [{"n": "ช่องกระจก 80×200", "de": 1650, "tb": 1650}, {"n": "ช่องกระจก 90×200", "de": 1750, "tb": null}], "ฟัก/ปีกนก": [{"n": "5ฟักปีกนก 80×200", "de": 2156, "tb": 2150}, {"n": "8ฟัก 80×200", "de": 2156, "tb": 2150}], "วงกบประตู": [{"n": "วงกบประตู 50×50", "de": null, "tb": 645}, {"n": "วงกบประตู 70×200", "de": 899, "tb": 919}, {"n": "วงกบประตู 80×180", "de": 899, "tb": 899}, {"n": "วงกบประตู 80×200", "de": 899, "tb": 899}, {"n": "วงกบประตู 90×200", "de": 945, "tb": 945}, {"n": "วงกบประตู 100×200", "de": 999, "tb": 999}, {"n": "วงกบประตู 160×200", "de": 1239, "tb": 1229}, {"n": "วงกบประตู 180×200", "de": 1239, "tb": 1229}, {"n": "วงกบประตู 200×200", "de": null, "tb": 1289}], "วงกบกลม": [{"n": "วงกบกลม 40 ซม.", "de": null, "tb": 970}, {"n": "วงกบกลม 50 ซม.", "de": null, "tb": 1249}, {"n": "วงกบกลม 60 ซม.", "de": null, "tb": 1249}, {"n": "วงกบกลม 80 ซม.", "de": 1627, "tb": 1699}, {"n": "วงกบกลม 100 ซม.", "de": null, "tb": 2219}, {"n": "วงกบกลม 120 ซม.", "de": 2135, "tb": 2399}, {"n": "วงกบกลม 150 ซม.", "de": null, "tb": 2690}], "วงกบกลม 3 ช่อง": [{"n": "3 ช่อง 40 ซม.", "de": null, "tb": 1550}, {"n": "3 ช่อง 50 ซม.", "de": null, "tb": 1650}, {"n": "3 ช่อง 60 ซม.", "de": 1790, "tb": 1799}, {"n": "3 ช่อง 80 ซม.", "de": 1950, "tb": 1950}, {"n": "3 ช่อง 100 ซม.", "de": 2285, "tb": 2295}, {"n": "3 ช่อง 120 ซม.", "de": 2690, "tb": 2699}, {"n": "3 ช่อง 150 ซม.", "de": null, "tb": 3500}], "ราวบันได": [{"n": "ราวบันได 20 ซม.", "de": null, "tb": 85}, {"n": "ราวบันได 50 ซม.", "de": null, "tb": 130}, {"n": "ราวบันได 90 ซม.", "de": null, "tb": 199}, {"n": "ราวบันได 180 ซม.", "de": 365, "tb": 359}, {"n": "ราวบันได 180 ซม. (สักทอง)", "de": 499, "tb": null}, {"n": "ราวบันได 200 ซม.", "de": null, "tb": 399}], "บานเฟี้ยม": [{"n": "บานเฟี้ยม 40×200", "de": 999, "tb": null}, {"n": "บานเฟี้ยม 50×150", "de": 699, "tb": null}, {"n": "บานเฟี้ยม 50×200", "de": 999, "tb": null}], "ฝาบ่อ/ฝาปิด": [{"n": "ฝาบ่อพัก 30×40 ไม่ทำสี", "de": 490, "tb": null}, {"n": "ฝาบ่อพัก 30×40 สีสักทอง", "de": 690, "tb": null}, {"n": "ฝาปิดกลม ไม่ทำสี", "de": null, "tb": 890}, {"n": "ฝาปิดกลม สีสักทอง", "de": 1199, "tb": 1154}, {"n": "ฝาปิดกลม เคลือบใส", "de": null, "tb": 1155}], "สินค้าอื่น": [{"n": "เก้าอี้ไม้สัก 33×22×10 (เคลือบใส)", "de": 174, "tb": null}, {"n": "ขี้เลื่อยไม้สัก 250 g", "de": 39, "tb": 39}, {"n": "ขี้เลื่อยไม้สัก 500 g", "de": 65, "tb": 65}, {"n": "ขี้เลื่อยไม้สัก 1000 g", "de": 99, "tb": 99}, {"n": "กาวร้อน 1 ขวด (คละยี่ห้อ)", "de": 19, "tb": 19}, {"n": "หนวดกุ้งหยดกาว (5 อัน)", "de": null, "tb": 5}, {"n": "29 มม.", "de": null, "tb": 7}, {"n": "33 มม.", "de": null, "tb": 9}]};
+let F='all';
+
+function cell(v,other){
+  if(v===null) return '<span class="na">—</span>';
+  let c='same';
+  if(other!==null){ if(v<other)c='low'; else if(v>other)c='high'; }
+  return '<span class="'+c+'">฿'+v.toLocaleString()+'</span>';
+}
+function diffBadge(de,tb){
+  if(de===null||tb===null) return '';
+  const d=de-tb;
+  if(d===0) return '<span class="diff d-eq">เท่ากัน</span>';
+  if(d<0) return '<span class="diff d-de">De ถูกกว่า ฿'+Math.abs(d)+'</span>';
+  return '<span class="diff d-tb">Tb ถูกกว่า ฿'+d+'</span>';
+}
+function renderSummary(){
+  let all=[],both=0,deOnly=0,tbOnly=0;
+  Object.values(DATA).forEach(items=>items.forEach(i=>{
+    all.push(i);
+    if(i.de!==null&&i.tb!==null)both++;
+    else if(i.de!==null)deOnly++;
+    else tbOnly++;
+  }));
+  document.getElementById('summary').innerHTML=
+   '<div class="sum"><div class="sum-n" style="color:var(--blue)">'+all.length+'</div><div class="sum-l">SKU ทั้งหมด</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--green)">'+both+'</div><div class="sum-l">มีทั้ง 2 ร้าน</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--orange)">'+deOnly+'</div><div class="sum-l">เฉพาะ De</div></div>'+
+   '<div class="sum"><div class="sum-n" style="color:var(--purple)">'+tbOnly+'</div><div class="sum-l">เฉพาะ Tb</div></div>';
+}
+function renderFilters(){
+  let h='<button class="btn active" onclick="setF(\'all\',this)">ทั้งหมด</button>';
+  Object.keys(DATA).forEach(g=>{h+='<button class="btn" onclick="setF(\''+g+'\',this)">'+g+'</button>';});
+  h+='<button class="btn" onclick="setF(\'__deonly\',this)">เฉพาะ De</button>';
+  h+='<button class="btn" onclick="setF(\'__tbonly\',this)">เฉพาะ Tb</button>';
+  document.getElementById('filters').innerHTML=h;
+}
+function render(){
+  const q=(document.getElementById('search').value||'').trim().toLowerCase();
+  let html='';
+  Object.entries(DATA).forEach(([g,items])=>{
+    if(F!=='all'&&!F.startsWith('__')&&g!==F) return;
+    let list=items;
+    if(F==='__deonly') list=list.filter(i=>i.de!==null&&i.tb===null);
+    if(F==='__tbonly') list=list.filter(i=>i.tb!==null&&i.de===null);
+    if(q) list=list.filter(i=>i.n.toLowerCase().includes(q)||g.toLowerCase().includes(q));
+    if(!list.length) return;
+    html+='<div class="grp">'+g+'</div><div class="tbl"><table><thead><tr>'
+        +'<th style="text-align:left">SKU</th><th class="de">De</th><th class="tb">Tb</th><th style="width:150px">เปรียบเทียบ</th>'
+        +'</tr></thead><tbody>';
+    list.forEach(i=>{
+      html+='<tr><td>'+i.n+'</td><td>'+cell(i.de,i.tb)+'</td><td>'+cell(i.tb,i.de)+'</td><td>'+diffBadge(i.de,i.tb)+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  document.getElementById('out').innerHTML=html||'<div class="empty">ไม่พบสินค้าที่ค้นหา</div>';
+}
+function setF(f,btn){F=f;document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+(function(){if(localStorage.getItem('spTheme')==='light')document.documentElement.classList.add('light');})();
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b&&document.documentElement.classList.contains('light'))b.textContent='🌙 มืด';});
+renderSummary();renderFilters();render();
+</script>
+</body>
+</html>
