@@ -108,6 +108,12 @@
   th.nobadge{opacity:.55;}
   td.nobadge-cell{opacity:.55;}
   th.nobadge::after{content:'';}
+
+  .sline{font-size:10px;color:var(--dim);font-family:'Space Mono',monospace;margin-top:3px;display:flex;align-items:center;gap:5px;justify-content:flex-end;}
+  .sline b{color:var(--text);font-weight:700;}
+  .sbar{display:inline-block;width:34px;height:4px;border-radius:2px;background:var(--bg4);overflow:hidden;}
+  .sbar i{display:block;height:100%;border-radius:2px;background:var(--orange);}
+  html.light .sbar{background:#E8E4DE;}
 </style>
 <script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
 </head>
@@ -216,6 +222,16 @@ function renderBadges(){
   note+='</div>';
   document.getElementById('badge-note').innerHTML=note;
 }
+// SALES = ยอดขาย/เดือน (ประมาณจาก Shopdera) · LAM รวม 2 listing
+const SALES = {
+  '70×180': {chock:null, lam:41,  mp:27,  ojas:null, pkd:null, cwd:null, fh:null},
+  '70×200': {chock:6,    lam:32,  mp:10,  ojas:null, pkd:null, cwd:null, fh:null},
+  '80×180': {chock:89,   lam:102, mp:79,  ojas:null, pkd:null, cwd:null, fh:null},
+  '80×200': {chock:132,  lam:60,  mp:77,  ojas:null, pkd:null, cwd:null, fh:null},
+  '90×200': {chock:30,   lam:13,  mp:10,  ojas:null, pkd:null, cwd:null, fh:null},
+  '100×200':{chock:18,   lam:23,  mp:15,  ojas:null, pkd:null, cwd:null, fh:null},
+};
+
 const D = [
   {z:'70×180', de:null, tb:null,          chock:{v:null}, lam:1090, ojas:1350, pkd:null,     cwd:null, fh:null,  mp:{v:1350,n:1} },
   {z:'70×200', de:null, tb:null,          chock:{v:1290}, lam:1090, ojas:1350, pkd:null,     cwd:990,  fh:1000, mp:{v:1350,n:1} },
@@ -227,20 +243,29 @@ const D = [
 
 function rv(x){return x&&typeof x==='object'?x.v:x;}
 function vals(r){return[r.de,r.tb,r.chock,r.lam,r.ojas,r.pkd,r.cwd,r.fh,r.mp].map(rv).filter(v=>v!=null);}
-function cls(v,r){
+function cls2(v,r){
   if(!v)return'na';
   const ns=vals(r);if(ns.length<2)return'mid';
   if(v===Math.min(...ns))return'win';
   if(v===Math.max(...ns))return'lose';
   return'mid';
 }
-function cell(x,r,isUs){
+function cell(x,r,isUs,shopKey){
   const v=rv(x);
   if(!v)return'<span class="na">—</span>';
   const isNew=x&&typeof x==='object'&&x.n;
   const badge=isNew?'<span class="badge-new">ใหม่</span>':'';
-  if(isUs)return'<span class="us-col">฿'+v.toLocaleString()+'</span>'+badge;
-  return'<span class="'+cls(v,r)+'">฿'+v.toLocaleString()+'</span>'+badge;
+  const cls=isUs?'us-col':cls2(v,r);
+  const s = shopKey && SALES[r.z] ? SALES[r.z][shopKey] : null;
+  const salesLine = (s!=null)
+    ? '<div class="sline"><span class="sbar"><i style="width:'+Math.min(100,s/maxSales(r.z)*100)+'%"></i></span><b>'+s+'</b> ชิ้น/ด.</div>'
+    : '';
+  return '<span class="'+cls+'">฿'+v.toLocaleString()+'</span>'+badge+salesLine;
+}
+function maxSales(z){
+  const o=SALES[z]; if(!o) return 1;
+  const vals=Object.values(o).filter(v=>v!=null);
+  return vals.length?Math.max(...vals):1;
 }
 
 function render(fk){
@@ -289,7 +314,7 @@ function render(fk){
     html+='<tr><td>'+r.z+'</td>';
     COLS.forEach(k=>{
       const b=BADGES[k];
-      html+='<td'+(badgeRank(b)===3?' class="nobadge-cell"':'')+'>'+cell(r[k],r,!!b.us)+'</td>';
+      html+='<td'+(badgeRank(b)===3?' class="nobadge-cell"':'')+'>'+cell(r[k],r,!!b.us,k)+'</td>';
     });
     html+='</tr>';
   });
