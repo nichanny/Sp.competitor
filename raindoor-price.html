@@ -86,6 +86,24 @@
   .shop-badge.unk{border-style:dashed;opacity:.75;}
   html.light .badge-note{background:rgba(26,95,170,.06);border-color:rgba(26,95,170,.25);}
   html.light .warn-txt{color:#8B6914;}
+
+  .links-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;}
+  .links-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:13px;font-weight:700;}
+  .links-toggle{font-size:11px;color:var(--dim);font-family:'Space Mono',monospace;}
+  .links-body{margin-top:12px;display:none;}
+  .links-body.open{display:block;}
+  .lrow{display:grid;grid-template-columns:130px 1fr auto;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);}
+  .lrow:last-child{border-bottom:none;}
+  .lshop{font-size:12px;font-weight:600;}
+  .lshop.us{color:var(--orange);}
+  .linput{width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:7px;padding:6px 9px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:12px;}
+  .linput:focus{outline:none;border-color:var(--orange);}
+  .lopen{font-size:11px;padding:5px 11px;border-radius:7px;border:1px solid var(--border);background:var(--bg4);color:var(--dim);cursor:pointer;text-decoration:none;white-space:nowrap;font-family:'Sarabun',sans-serif;}
+  .lopen.on{background:rgba(0,180,120,.13);color:#0a8f60;border-color:rgba(0,180,120,.35);}
+  .lopen.off{opacity:.4;cursor:not-allowed;}
+  .lsaved{font-size:10px;color:#0a8f60;margin-left:5px;}
+  html.light .linput{background:#FFF;border-color:rgba(0,0,0,.15);color:#1C1A18;}
+  html.light .lopen{background:#F2F0EC;}
 </style>
 <script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
 </head>
@@ -103,6 +121,14 @@
 </div>
 
 
+
+<div class="links-wrap">
+  <div class="links-head" onclick="toggleLinks()">
+    <span>🔗 ลิงก์สินค้าแต่ละร้าน <span style="font-weight:400;color:var(--dim);font-size:11px">— วางลิงก์ไว้เช็คราคาได้เร็ว</span></span>
+    <span class="links-toggle" id="lt">▼ เปิด</span>
+  </div>
+  <div class="links-body" id="links-body"></div>
+</div>
 <div class="badge-note-wrap" id="badge-note"></div>
 <div class="badge-row" id="badge-row"></div>
 <div class="filter-bar">
@@ -142,6 +168,32 @@ function icons(b){
           : '<span class="ic ic-q">เหลือง?</span>';
   return g+y;
 }
+
+const LKEY='spShopLinks';
+function loadLinks(){ try{ return JSON.parse(localStorage.getItem(LKEY)||'{}'); }catch(e){ return {}; } }
+function saveLink(k,v){ const d=loadLinks(); if(v.trim()){d[k]=v.trim();}else{delete d[k];} localStorage.setItem(LKEY,JSON.stringify(d)); renderLinks(); }
+function toggleLinks(){
+  const b=document.getElementById('links-body'); const t=document.getElementById('lt');
+  const open=b.classList.toggle('open'); t.textContent=open?'▲ ปิด':'▼ เปิด';
+  localStorage.setItem('spLinksOpen',open?'1':'0');
+}
+function renderLinks(){
+  const d=loadLinks(); let h='';
+  Object.entries(BADGES).forEach(([k,b])=>{
+    const url=d[k]||'';
+    const valid=/^https?:\/\//i.test(url);
+    h+='<div class="lrow">'
+      +'<span class="lshop'+(b.us?' us':'')+'">'+b.name+(url?'<span class="lsaved">●</span>':'')+'</span>'
+      +'<input class="linput" id="lk-'+k+'" value="'+url.replace(/"/g,'&quot;')+'" placeholder="วางลิงก์ Shopee ที่นี่..." '
+      +'onchange="saveLink(\''+k+'\',this.value)" onblur="saveLink(\''+k+'\',this.value)">'
+      +(valid
+        ? '<a class="lopen on" href="'+url.replace(/"/g,'&quot;')+'" target="_blank" rel="noopener">เปิด ↗</a>'
+        : '<span class="lopen off">เปิด ↗</span>')
+      +'</div>';
+  });
+  document.getElementById('links-body').innerHTML=h;
+}
+
 function renderBadges(){
   let h='', stale=0, unknown=0;
   Object.values(BADGES).forEach(b=>{
@@ -242,6 +294,11 @@ function filter(k,btn){
 
 
 renderBadges();
+renderLinks();
+if(localStorage.getItem('spLinksOpen')==='1'){
+  document.getElementById('links-body').classList.add('open');
+  document.getElementById('lt').textContent='▲ ปิด';
+}
 render('all');
 </script>
 
