@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ราคาวงกบประตู — เปรียบทุกร้าน</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:1000px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:16px;}
+h1{font-size:19px;font-weight:800;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:14px;}
+.insight{background:rgba(26,122,94,.08);border:1px solid rgba(26,122,94,.28);border-radius:11px;padding:12px 15px;font-size:12.5px;line-height:1.85;margin-bottom:15px;}
+.insight b{color:var(--green);}
+.legend{display:flex;flex-wrap:wrap;gap:13px;margin-bottom:14px;font-size:12px;}
+.leg{display:flex;align-items:center;gap:5px;}
+.dot{width:8px;height:8px;border-radius:2px;}
+.ctrl{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.btn{font-size:12px;padding:5px 13px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(192,74,26,.13);color:var(--orange);border-color:rgba(192,74,26,.4);}
+.grp{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin:22px 0 9px;}
+.tbl-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow-x:auto;margin-bottom:10px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:700px;}
+th{background:var(--bg4);padding:8px 10px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;white-space:nowrap;}
+th:first-child{text-align:left;}
+th.us{color:var(--orange);font-weight:700;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap;font-family:'Space Mono',monospace;}
+td:first-child{text-align:left;font-family:'Sarabun',sans-serif;font-weight:700;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg4);}
+.win{color:var(--green);font-weight:700;}
+.lose{color:var(--red);}
+.mid{color:var(--text);}
+.us-col{color:var(--orange);font-weight:700;}
+.na{color:var(--dim);opacity:.32;}
+.sline{font-size:9px;color:var(--dim);font-family:'Space Mono',monospace;margin-top:2px;}
+.sline b{color:var(--text);}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🪟 ราคาวงกบประตู — เปรียบทุกร้าน</h1>
+<p class="sub">De · Tb · chocksomkid · LAMTONMAISAK · Ojas · อัปเดต 25 ส.ค. 2569</p>
+
+<div class="insight" id="insight"></div>
+
+<div class="legend">
+  <div class="leg"><div class="dot" style="background:var(--green)"></div><span style="color:var(--green)">ถูกที่สุดในแถว</span></div>
+  <div class="leg"><div class="dot" style="background:var(--red)"></div><span style="color:var(--red)">แพงที่สุดในแถว</span></div>
+  <div class="leg"><div class="dot" style="background:var(--orange)"></div><span style="color:var(--orange)">ร้านเรา</span></div>
+  <div class="leg"><span style="color:var(--dim)">ตัวเลขเล็ก = ยอดขาย/เดือน</span></div>
+</div>
+
+<div class="ctrl" id="typeF"></div>
+<div id="out"></div>
+
+<script>
+const SHOPS=[
+ {k:'de',   name:'De',          us:true},
+ {k:'tb',   name:'Tb',          us:true},
+ {k:'chock',name:'chocksomkid'},
+ {k:'lam',  name:'LAMTONMAISAK'},
+ {k:'ojas', name:'Ojas'},
+];
+
+// p = ราคา · s = ยอดขาย/เดือน
+const D=[
+ // ── วงกบประตูมาตรฐาน ──
+ {t:'วงกบประตู', z:'50×50',   de:null, tb:{p:645}, chock:null, lam:null, ojas:null},
+ {t:'วงกบประตู', z:'70×200',  de:{p:899}, tb:{p:919}, chock:{p:1100,s:15}, lam:{p:990,s:5},  ojas:{p:1250,s:8}},
+ {t:'วงกบประตู', z:'80×180',  de:{p:899}, tb:{p:899}, chock:{p:1100,s:13}, lam:null,          ojas:null},
+ {t:'วงกบประตู', z:'80×200',  de:{p:899}, tb:{p:899}, chock:{p:1100,s:150},lam:{p:1130,s:7}, ojas:{p:1250,s:106}},
+ {t:'วงกบประตู', z:'90×200',  de:{p:945}, tb:{p:945}, chock:{p:1100,s:46}, lam:{p:1330},      ojas:{p:1350,s:34}},
+ {t:'วงกบประตู', z:'100×120', de:null, tb:null, chock:{p:500,s:2}, lam:null, ojas:null},
+ {t:'วงกบประตู', z:'100×200', de:{p:999}, tb:{p:999}, chock:{p:1100,s:46}, lam:{p:1470,s:1}, ojas:{p:1450,s:28}},
+ {t:'วงกบประตู', z:'140×200', de:null, tb:null, chock:null, lam:null, ojas:{p:1650,s:2}},
+ {t:'วงกบประตู', z:'160×200', de:{p:1239}, tb:{p:1229}, chock:{p:1290,s:32}, lam:null, ojas:{p:1750,s:6}},
+ {t:'วงกบประตู', z:'180×200', de:{p:1239}, tb:{p:1229}, chock:{p:1290,s:8},  lam:null, ojas:{p:1850,s:1}},
+ {t:'วงกบประตู', z:'200×200', de:null, tb:{p:1289}, chock:{p:1290,s:13}, lam:null, ojas:{p:1950,s:10}},
+
+ // ── วงกบกลม (ธรรมดา) ──
+ {t:'วงกบกลม', z:'40',  de:null,       tb:{p:970},  chock:{p:950,s:12},  lam:null, ojas:null},
+ {t:'วงกบกลม', z:'50',  de:null,       tb:{p:1249}, chock:null,          lam:null, ojas:null},
+ {t:'วงกบกลม', z:'60',  de:null,       tb:{p:1249}, chock:{p:1142,s:47}, lam:null, ojas:null},
+ {t:'วงกบกลม', z:'80',  de:{p:1627},   tb:{p:1699}, chock:{p:1550,s:113},lam:null, ojas:null},
+ {t:'วงกบกลม', z:'100', de:null,       tb:{p:2219}, chock:null,          lam:null, ojas:null},
+ {t:'วงกบกลม', z:'120', de:{p:2135},   tb:{p:2399}, chock:null,          lam:null, ojas:null},
+ {t:'วงกบกลม', z:'150', de:null,       tb:{p:2690}, chock:null,          lam:null, ojas:null},
+
+ // ── วงกบกลม 3 ช่องกระจก ──
+ {t:'วงกบกลม 3 ช่อง', z:'40',  de:null,     tb:{p:1550}, chock:null,          lam:null, ojas:null},
+ {t:'วงกบกลม 3 ช่อง', z:'50',  de:null,     tb:{p:1650}, chock:null,          lam:null, ojas:null},
+ {t:'วงกบกลม 3 ช่อง', z:'60',  de:{p:1790}, tb:{p:1799}, chock:null,          lam:null, ojas:null},
+ {t:'วงกบกลม 3 ช่อง', z:'80',  de:{p:1950}, tb:{p:1950}, chock:null,          lam:null, ojas:null},
+ {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,s:53}, lam:null, ojas:null},
+ {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,s:27}, lam:null, ojas:null},
+ {t:'วงกบกลม 3 ช่อง', z:'150', de:null,     tb:{p:3500}, chock:{p:2650,s:9},  lam:null, ojas:null},
+];
+
+let TF='all';
+
+function vals(r){return SHOPS.map(s=>r[s.k]).filter(x=>x&&x.p).map(x=>x.p);}
+function cell(x,r,us){
+  if(!x||!x.p) return '<span class="na">—</span>';
+  const ns=vals(r);
+  let cls = us ? 'us-col' : 'mid';
+  if(!us && ns.length>1){
+    if(x.p===Math.min(...ns)) cls='win';
+    else if(x.p===Math.max(...ns)) cls='lose';
+  }
+  const sl = x.s!=null ? '<div class="sline"><b>'+x.s+'</b> ชิ้น/ด.</div>' : '';
+  return '<span class="'+cls+'">฿'+x.p.toLocaleString()+'</span>'+sl;
+}
+function renderCtrl(){
+  const ts=[...new Set(D.map(d=>d.t))];
+  let h='<button class="btn active" onclick="setT(\'all\',this)">ทั้งหมด</button>';
+  ts.forEach(t=>{h+='<button class="btn" onclick="setT(\''+t+'\',this)">'+t+'</button>';});
+  document.getElementById('typeF').innerHTML=h;
+}
+function render(){
+  const rows=D.filter(d=>TF==='all'||d.t===TF);
+  const groups={};
+  rows.forEach(r=>{(groups[r.t]=groups[r.t]||[]).push(r);});
+  let html='';
+  Object.entries(groups).forEach(([t,rs])=>{
+    html+='<div class="grp">'+t+'</div><div class="tbl-wrap"><table><thead><tr>';
+    html+='<th style="text-align:left">ขนาด</th>';
+    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+'</th>';});
+    html+='</tr></thead><tbody>';
+    rs.forEach(r=>{
+      html+='<tr><td>'+r.z+'</td>';
+      SHOPS.forEach(s=>{html+='<td>'+cell(r[s.k],r,!!s.us)+'</td>';});
+      html+='</tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  document.getElementById('out').innerHTML=html||'<div style="text-align:center;padding:40px;color:var(--dim)">ไม่พบข้อมูล</div>';
+}
+document.getElementById('insight').innerHTML=
+ '✅ <b>วงกบประตูมาตรฐาน — De/Tb ถูกที่สุดทุกขนาด</b> · 80×200 เรา ฿899 vs chocksomkid ฿1,100 (ถูกกว่า ฿201) และ Ojas ฿1,250 (ถูกกว่า ฿351)<br>'+
+ '🔥 <b>แต่ chocksomkid ขายได้ 150 ชิ้น/เดือน · Ojas 106 ชิ้น</b> ทั้งที่แพงกว่าเรามาก → ราคาไม่ใช่ปัญหา แต่เป็น <b>visibility และ ranking</b><br>'+
+ '⚠️ <b>วงกบกลม — chocksomkid ถูกกว่าเรา</b> · ขนาด 80 เขา ฿1,550 vs De ฿1,627 / Tb ฿1,699 · และขายได้ 113 ชิ้น/เดือน<br>'+
+ '⚠️ <b>วงกบกลม 3 ช่อง 120-150</b> — chocksomkid ฿2,350/฿2,650 ถูกกว่าเรามาก (De ฿2,690 / Tb ฿2,699-3,500)';
+function setT(v,b){TF=v;document.querySelectorAll('#typeF .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+renderCtrl();render();
+</script>
+</body>
+</html>
