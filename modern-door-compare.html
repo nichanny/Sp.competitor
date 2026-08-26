@@ -62,8 +62,10 @@ tr:hover td{background:var(--bg4);}
 
 <div class="ctrl" id="lay"></div>
 <div class="ctrl" id="size"></div>
+<div id="sb-legend"></div>
 <div id="out"></div>
 
+<script src="shop-badges.js"></script>
 <script>
 const SHOPS=[
  {k:'de',   name:'De',          us:true},
@@ -179,7 +181,7 @@ function render(){
   Object.entries(groups).forEach(([lay,rs])=>{
     html+='<div class="grp">'+lay+'</div><div class="tbl-wrap"><table><thead><tr>';
     html+='<th style="text-align:left">ขนาด</th>';
-    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+'</th>';});
+    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+SPBadges.dots(s.k)+'</th>';});
     html+='</tr></thead><tbody>';
     rs.forEach(r=>{
       html+='<tr><td>'+r.z+'</td>';
@@ -199,6 +201,7 @@ function setL(v,b){LAY=v;document.querySelectorAll('#lay .btn').forEach(x=>x.cla
 function setS(v,b){SZ=v;document.querySelectorAll('#size .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
 function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
 document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+document.getElementById('sb-legend').innerHTML=SPBadges.legend();
 renderCtrl();render();
 </script>
 </body>

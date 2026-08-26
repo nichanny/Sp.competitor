@@ -154,6 +154,7 @@
 <div id="insight-box"></div>
 <div id="out"></div>
 
+<script src="shop-badges.js"></script>
 <script>
 // สถานะป้ายเป็นรายเดือน — asOf = เดือนที่ยืนยันข้อมูลล่าสุด
 const BADGE_MONTH = 'ส.ค. 2569';   // เดือนอ้างอิงปัจจุบัน
@@ -307,7 +308,7 @@ function render(fk){
   COLS.forEach(k=>{
     const b=BADGES[k];
     const cls=b.us?' class="us"':(badgeRank(b)===3?' class="nobadge"':'');
-    html+='<th'+cls+'>'+b.name.replace(' (เรา)','')+'<span class="hdr-badges">'+icons(b)+'</span></th>';
+    html+='<th'+cls+'>'+b.name.replace(' (เรา)','')+SPBadges.dots(k)+'</th>';
   });
   html+='</tr></thead><tbody>';
   rows.forEach(r=>{

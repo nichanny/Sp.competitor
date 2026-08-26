@@ -82,6 +82,7 @@ tr:hover td{background:var(--bg4);}
   <div class="leg"><div class="dot" style="background:var(--purple)"></div><span style="color:var(--purple)">เพดาน = ราคาต่ำสุดของคู่แข่ง (นับเฉพาะที่ยืนยันแล้ว)</span></div>
 </div>
 
+<div id="sb-legend"></div>
 <div id="out"></div>
 
 <div class="grp">📌 ยอดขายสะสมรายไซซ์ — เฉพาะ 5ฟักปีกนก / 8ฟัก</div>
@@ -92,6 +93,7 @@ tr:hover td{background:var(--bg4);}
 </table>
 </div>
 
+<script src="shop-badges.js"></script>
 <script>
 const SHOPS=[
  {k:'de',   name:'De',             us:true},
@@ -176,7 +178,7 @@ function render(){
   Object.entries(groups).forEach(([lay,rs])=>{
     html+='<div class="grp">'+lay+'</div><div class="tbl-wrap"><table><thead><tr>';
     html+='<th style="text-align:left">ขนาด</th>';
-    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+'</th>';});
+    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+SPBadges.dots(s.k)+'</th>';});
     html+='<th class="hd">เพดาน</th><th class="hd">ช่องว่าง</th>';
     html+='</tr></thead><tbody>';
     rs.forEach(r=>{
@@ -210,6 +212,7 @@ document.getElementById('insight').innerHTML=
  '📉 <b>เซกเมนต์เงียบ</b> — 4 ลิสต์รวมกัน 26 ชิ้น/เดือน · 👀 full house เปิด 25 มี.ค. 2026 ได้ 31 ชิ้นใน 154 วัน ramp เร็วสุด';
 function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
 document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+document.getElementById('sb-legend').innerHTML=SPBadges.legend();
 renderMeta();render();renderSku();
 </script>
 </body>
