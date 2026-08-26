@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ราคาประตูฟัก/ปีกนก — เปรียบทุกร้าน</title>
+<title>ราคาประตู 5ฟักปีกนก / 8ฟัก — เปรียบทุกร้าน</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
 <script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
 </head>
@@ -13,7 +13,7 @@
 :root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
 html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:1040px;margin:0 auto;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:960px;margin:0 auto;}
 #theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
 .back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:16px;}
 h1{font-size:19px;font-weight:800;margin-bottom:4px;}
@@ -29,7 +29,7 @@ h1{font-size:19px;font-weight:800;margin-bottom:4px;}
 .dot{width:8px;height:8px;border-radius:2px;}
 .grp{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin:22px 0 9px;}
 .tbl-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow-x:auto;margin-bottom:10px;}
-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:840px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:720px;}
 th{background:var(--bg4);padding:8px 10px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;white-space:nowrap;}
 th:first-child{text-align:left;}
 th.us{color:var(--orange);font-weight:700;}
@@ -43,11 +43,11 @@ tr:hover td{background:var(--bg4);}
 .mid{color:var(--text);}
 .us-col{color:var(--orange);font-weight:700;}
 .na{color:var(--dim);opacity:.32;}
-.srcold{font-size:8.5px;color:var(--red);margin-top:2px;font-family:'Sarabun',sans-serif;}
-.srcimg{font-size:8.5px;color:var(--green);margin-top:2px;font-family:'Sarabun',sans-serif;opacity:.75;}
 .up{color:var(--green);font-weight:700;}
 .down{color:var(--red);font-weight:700;}
 .hdcell{background:rgba(109,74,168,.07);}
+.srcold{font-size:8.5px;color:var(--red);margin-top:2px;font-family:'Sarabun',sans-serif;}
+.srcimg{font-size:8.5px;color:var(--green);margin-top:2px;font-family:'Sarabun',sans-serif;opacity:.75;}
 .shopmeta{background:var(--bg3);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-bottom:16px;}
 .sm-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;padding:9px 13px;border-bottom:1px solid var(--border);font-size:12.5px;align-items:center;}
 .sm-row:last-child{border-bottom:none;}
@@ -57,19 +57,19 @@ tr:hover td{background:var(--bg4);}
 </style>
 
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
-<h1>🚪 ราคาประตูฟัก / ปีกนก — เปรียบทุกร้าน</h1>
-<p class="sub">5ฟักปีกนก · 8ฟัก · ไม้สักเท่านั้น · ราคาจากช่อง SKU · อัปเดต 26 ส.ค. 2569</p>
+<h1>🚪 ราคาประตู 5ฟักปีกนก / 8ฟัก</h1>
+<p class="sub">ไม้สักเท่านั้น · ราคาจากช่องราคา SKU · อัปเดต 26 ส.ค. 2569</p>
 
 <div class="insight" id="insight"></div>
 
 <div class="warn">
 🔴 <b>อ่านตัวเลข GMV ของ Shopdera ให้ถูก</b> — GMV = จำนวนชิ้น × <b>ราคาต่ำสุดของลิสต์</b> ไม่ใช่ราคาจริงที่ขายได้<br>
-พิสูจน์: chocksomkid ฿1,106,700÷527 = ฿2,100 พอดี · full house ฿61,690÷31 = ฿1,990 พอดี · ไม้พร้อม ฿94,500÷45 = ฿2,100 พอดี — ทั้ง 3 ร้านลงตัวเป๊ะ = สูตรคำนวณ ไม่ใช่ยอดจริง<br>
-<b>ห้ามใช้ GMV เดาว่า SKU ไหนขายได้</b> ให้ดูคอลัมน์ "ยอดขาย SKU" (สะสมตั้งแต่เปิดลิสต์) แทน
+พิสูจน์: chocksomkid ฿1,106,700÷527 = ฿2,100 พอดี · full house ฿61,690÷31 = ฿1,990 พอดี · ไม้พร้อม ฿94,500÷45 = ฿2,100 พอดี — ลงตัวเป๊ะทั้ง 3 ร้าน = สูตรคำนวณ ไม่ใช่ยอดจริง<br>
+<b>ห้ามใช้ GMV เดาว่า SKU ไหนขายได้</b> ให้ดูคอลัมน์ "ยอดขาย SKU" แทน
 </div>
 
 <div class="note">
-📊 <b>ยอดขายจริงต่อเดือน</b> — ใช้ "ยอดขาย 30 วัน" ระดับ listing เท่านั้น · คอลัมน์ยอดขาย SKU ใน Shopdera เป็น<b>ยอดสะสม</b> ไม่ใช่ต่อเดือน
+📊 <b>ยอดขายต่อเดือน</b> = "ยอดขาย 30 วัน" ระดับ listing · คอลัมน์ยอดขาย SKU เป็น<b>ยอดสะสมตั้งแต่เปิดลิสต์</b> ไม่ใช่ต่อเดือน
 </div>
 
 <div class="grp">ยอดขายต่อเดือนของแต่ละ listing</div>
@@ -84,30 +84,11 @@ tr:hover td{background:var(--bg4);}
 
 <div id="out"></div>
 
-<div class="grp">🪵 ไม้เต็งของ full house wood — คนละชนิดไม้ อย่าเอามาเทียบราคา</div>
-<div class="note" style="margin-bottom:10px">
-full house wood ขาย <b>ไม้เต็ง</b> ปนอยู่ในลิสต์เดียวกับ<b>ไม้สัก</b> · ราคาไม้เต็งถูกกว่ามากโดยธรรมชาติ — ถ้าเอามาตั้งเป็นเพดานราคาประตูสักของเรา จะกดราคาตัวเองโดยไม่จำเป็น
-</div>
-<div class="tbl-wrap">
-<table style="min-width:420px">
-<thead><tr><th style="text-align:left">SKU</th><th>ราคา</th></tr></thead>
-<tbody id="tengout"></tbody>
-</table>
-</div>
-
-<div class="grp">📌 ส่วนแบ่งยอดขายสะสมรายไซซ์ (จากคอลัมน์ SKU)</div>
+<div class="grp">📌 ยอดขายสะสมรายไซซ์ — เฉพาะ 5ฟักปีกนก / 8ฟัก</div>
 <div class="tbl-wrap">
 <table style="min-width:520px">
 <thead><tr><th style="text-align:left">ร้าน / SKU</th><th>ราคา</th><th>ส่วนแบ่ง</th><th>ยอดสะสม</th></tr></thead>
 <tbody id="skuout"></tbody>
-</table>
-</div>
-
-<div class="grp">🔎 ลิสต์ 100×200 ของ chocksomkid — ราคาข้ามหมวด</div>
-<div class="tbl-wrap">
-<table style="min-width:420px">
-<thead><tr><th style="text-align:left">ลาย</th><th>ราคา 100×200</th><th>ของเรา (De)</th><th>ช่องว่าง</th></tr></thead>
-<tbody id="crossout"></tbody>
 </table>
 </div>
 
@@ -121,59 +102,35 @@ const SHOPS=[
 ];
 
 const META=[
- {shop:'chocksomkid',  listing:'ประตูไม้สักแท้ราคาส่ง (80×200 รวมลาย)',        rank:'#110',   sold30:1000, open:'—'},
- {shop:'chocksomkid',  listing:'ประตูไม้สักแท้ราคาส่งขนาด 100×200 (4978609213)', rank:'#2291',  sold30:9,    open:'ก.พ. 2021'},
- {shop:'chocksomkid',  listing:'ประตูไม้สักแท้ราคาส่ง 90×200',                  rank:'#2507',  sold30:7,    open:'—'},
- {shop:'full house wood', listing:'ปีกนก5ฟัก + ไม้เต็ง (45657686366)',           rank:'#2394',  sold30:8,    open:'25 มี.ค. 2026'},
- {shop:'ไม้พร้อม',      listing:'ลูกฟัก 5 เตา 80×200 / 80×180 (23862255702)',    rank:'#4009',  sold30:2,    open:'12 ธ.ค. 2023'},
- {shop:'LAMTONMAISAK', listing:'ประตูไม้สัก ประตูฉลุลาย + วงกบ',                rank:null,     sold30:2,    open:'ก.พ. 2026'},
+ {shop:'chocksomkid',     listing:'ประตูไม้สักแท้ราคาส่ง ขนาด 100×200 (4978609213)', rank:'#2291', sold30:9, open:'ก.พ. 2021'},
+ {shop:'chocksomkid',     listing:'ประตูไม้สักแท้ราคาส่ง 90×200',                    rank:'#2507', sold30:7, open:'—'},
+ {shop:'full house wood', listing:'ปีกนก5ฟัก + ไม้เต็ง (45657686366)',                rank:'#2394', sold30:8, open:'25 มี.ค. 2026'},
+ {shop:'ไม้พร้อม',         listing:'ลูกฟัก 5 เตา 80×200 / 80×180 (23862255702)',      rank:'#4009', sold30:2, open:'12 ธ.ค. 2023'},
 ];
 
 const D=[
- {lay:'5ฟักปีกนก / ลูกฟัก (ไม้สัก)', z:'80×180',  de:null,     tb:null,     chock:null,                       fh:null,       mp:{p:2100,src:'img'}},
- {lay:'5ฟักปีกนก / ลูกฟัก (ไม้สัก)', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'old'},         fh:{p:2700,src:'img'},  mp:{p:2100,src:'img'}},
- {lay:'5ฟักปีกนก / ลูกฟัก (ไม้สัก)', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'old'},         fh:{p:2900,src:'img'},  mp:null},
- {lay:'5ฟักปีกนก / ลูกฟัก (ไม้สัก)', z:'100×200', de:null,     tb:null,     chock:{p:3250,src:'img'},         fh:{p:3000,src:'img'},  mp:null},
+ {lay:'5ฟักปีกนก', z:'80×180',  de:null,     tb:null,     chock:null,               fh:null,                mp:{p:2100,src:'img',note:'ลูกฟัก 5 เตา'}},
+ {lay:'5ฟักปีกนก', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'old'}, fh:{p:2700,src:'img'},  mp:{p:2100,src:'img',note:'ลูกฟัก 5 เตา'}},
+ {lay:'5ฟักปีกนก', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'old'}, fh:{p:2900,src:'img'},  mp:null},
+ {lay:'5ฟักปีกนก', z:'100×200', de:null,     tb:null,     chock:{p:3250,src:'img'}, fh:{p:3000,src:'img'},  mp:null},
 
- {lay:'8ฟัก (ไม้สัก)', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'old'}, fh:null, mp:null},
- {lay:'8ฟัก (ไม้สัก)', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'old'}, fh:null, mp:null},
- {lay:'8ฟัก (ไม้สัก)', z:'100×200', de:null,     tb:null,     chock:{p:3250,src:'img'}, fh:null, mp:null},
-];
-
-/* ไม้เต็ง = คนละชนิดไม้ เทียบราคากับประตูสักไม่ได้ แยกไว้ต่างหาก */
-const TENG=[
- {sku:'ไม้เต็ง 80×200',       p:1990, shop:'full house wood'},
- {sku:'ไม้เต็ง มีขีด 80×200', p:2190, shop:'full house wood'},
- {sku:'ไม้เต็ง 90×200',       p:2150, shop:'full house wood'},
- {sku:'ไม้เต็ง มีขีด 90×200', p:2290, shop:'full house wood'},
- {sku:'ไม้เต็ง 100×200',      p:2350, shop:'full house wood'},
+ {lay:'8ฟัก', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'old'}, fh:null, mp:null},
+ {lay:'8ฟัก', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'old'}, fh:null, mp:null},
+ {lay:'8ฟัก', z:'100×200', de:null,     tb:null,     chock:{p:3250,src:'img'}, fh:null, mp:null},
 ];
 
 const SKUSHARE=[
- {shop:'chocksomkid',    sku:'5ฟักปีกนก 100×200', p:3250, sh:'49.49%', n:97},
- {shop:'chocksomkid',    sku:'โมเดิร์นขีดตรง',     p:3450, sh:'14.29%', n:28},
- {shop:'chocksomkid',    sku:'โมเดิร์นขีดบวก',     p:3450, sh:'12.76%', n:25},
- {shop:'chocksomkid',    sku:'8ฟัก',              p:3250, sh:'11.73%', n:23},
- {shop:'chocksomkid',    sku:'โมเดิร์น',           p:3250, sh:'7.65%',  n:15},
- {shop:'chocksomkid',    sku:'สายฝน',              p:2100, sh:'4.08%',  n:8},
- {shop:'full house wood',sku:'ปีกนก5ฟัก 100×200', p:3000, sh:'27.27%', n:3},
- {shop:'full house wood',sku:'ไม้เต็ง มีขีด 90×200',p:2290,sh:'18.18%', n:2},
- {shop:'full house wood',sku:'ไม้เต็ง 80×200',    p:1990, sh:'9.09%',  n:1},
- {shop:'full house wood',sku:'ปีกนก5ฟัก 80×200',  p:2700, sh:'9.09%',  n:1},
- {shop:'ไม้พร้อม',        sku:'ลูกฟัก 80×200',      p:2100, sh:'52.94%', n:9},
- {shop:'ไม้พร้อม',        sku:'ลูกฟัก 80×180',      p:2100, sh:'47.06%', n:8},
-];
-
-const CROSS=[
- {lay:'5ฟักปีกนก',      chock:3250, ours:null},
- {lay:'8ฟัก',           chock:3250, ours:null},
- {lay:'โมเดิร์นขีดตรง',  chock:3450, ours:2549},
- {lay:'โมเดิร์นขีดบวก',  chock:3450, ours:2599},
- {lay:'โมเดิร์น',        chock:3250, ours:2150},
- {lay:'สายฝน',          chock:2100, ours:null},
+ {shop:'chocksomkid',     sku:'5ฟักปีกนก 100×200', p:3250, sh:'49.49%', n:97},
+ {shop:'chocksomkid',     sku:'8ฟัก 100×200',      p:3250, sh:'11.73%', n:23},
+ {shop:'full house wood', sku:'ปีกนก5ฟัก 100×200', p:3000, sh:'27.27%', n:3},
+ {shop:'full house wood', sku:'ปีกนก5ฟัก 80×200',  p:2700, sh:'9.09%',  n:1},
+ {shop:'full house wood', sku:'ปีกนก5ฟัก 90×200',  p:2900, sh:'N/A',    n:0},
+ {shop:'ไม้พร้อม',         sku:'ลูกฟัก 5 เตา 80×200', p:2100, sh:'52.94%', n:9},
+ {shop:'ไม้พร้อม',         sku:'ลูกฟัก 5 เตา 80×180', p:2100, sh:'47.06%', n:8},
 ];
 
 function compVals(r){return SHOPS.filter(s=>!s.us).map(s=>r[s.k]).filter(x=>x&&x.p).map(x=>x.p);}
+function verifiedVals(r){return SHOPS.filter(s=>!s.us).map(s=>r[s.k]).filter(x=>x&&x.p&&x.src==='img').map(x=>x.p);}
 function ourVal(r){const a=[r.de,r.tb].filter(x=>x&&x.p).map(x=>x.p);return a.length?Math.min(...a):null;}
 function cell(x,r,us){
   if(!x||!x.p) return '<span class="na">—</span>';
@@ -189,7 +146,7 @@ function cell(x,r,us){
   return '<span class="'+cls+'">฿'+x.p.toLocaleString()+'</span>'+nt;
 }
 function headroom(r){
-  const ns=SHOPS.filter(s=>!s.us).map(s=>r[s.k]).filter(x=>x&&x.p&&x.src==='img').map(x=>x.p), our=ourVal(r);
+  const ns=verifiedVals(r), our=ourVal(r);
   if(!ns.length) return ['<span class="na">—</span>','<span class="na">—</span>'];
   const cap=Math.min(...ns);
   const capTxt='<span style="color:var(--purple);font-weight:700">฿'+cap.toLocaleString()+'</span>';
@@ -207,7 +164,7 @@ function renderMeta(){
       +'<div style="font-size:11px;color:var(--dim)">'+m.listing+'</div></span>'
       +'<span class="sm-v" style="color:var(--dim);font-size:11px">'+m.open+'</span>'
       +'<span class="sm-v" style="color:var(--dim)">'+(m.rank||'—')+'</span>'
-      +'<span class="sm-v" style="color:'+(m.sold30>=100?'var(--red)':'var(--green)')+'">'+m.sold30.toLocaleString()+'</span></div>';
+      +'<span class="sm-v" style="color:var(--green)">'+m.sold30.toLocaleString()+'</span></div>';
   });
   document.getElementById('meta').innerHTML=h;
 }
@@ -238,35 +195,19 @@ function renderSku(){
     h+='<tr><td><span style="font-size:10px;color:var(--dim)">'+s.shop+'</span><br>'+s.sku+'</td>'
       +'<td>฿'+s.p.toLocaleString()+'</td>'
       +'<td style="color:var(--blue);font-weight:700">'+s.sh+'</td>'
-      +'<td>'+s.n+'</td></tr>';
+      +'<td>'+(s.n||'<span class="na">—</span>')+'</td></tr>';
   });
   document.getElementById('skuout').innerHTML=h;
 }
-function renderCross(){
-  let h='';
-  CROSS.forEach(c=>{
-    const our = c.ours ? '฿'+c.ours.toLocaleString() : '<span class="na">ยังไม่มี</span>';
-    let gap='<span class="na">—</span>';
-    if(c.ours){const g=c.chock-c.ours; gap = g>0?'<span class="up">+฿'+g.toLocaleString()+'</span>':'<span class="down">−฿'+Math.abs(g).toLocaleString()+'</span>';}
-    h+='<tr><td>'+c.lay+'</td><td>฿'+c.chock.toLocaleString()+'</td><td class="us-col">'+our+'</td><td>'+gap+'</td></tr>';
-  });
-  document.getElementById('crossout').innerHTML=h;
-}
 document.getElementById('insight').innerHTML=
- '📷 <b>ราคาทุกช่องที่ติด ✓ มาจากช่องราคา SKU ในสกรีนช็อต 26 ส.ค.</b> · ช่องที่ติด ⚠ เป็นข้อมูลค้างจากเซสชันก่อน ยังไม่ได้ยืนยัน และ<b>ไม่ถูกนับในคอลัมน์เพดาน</b><br>'+
- '🟣 <b>80×200 มีช่องว่างขึ้นราคาจริง</b> · เรา ฿2,150–2,156 · full house (สัก) ฿2,700 · ไม้พร้อม ฿2,100 → เพดานติดที่ไม้พร้อม แต่เขาขายได้ 2 ชิ้น/เดือน<br>'+
- '🔴 <b>ยังไม่มี SKU 100×200</b> — เป็นไซซ์ส่วนแบ่งสูงสุดของทั้ง chocksomkid (49.49%) และ full house (27.27%) · ราคาตลาด ฿3,000–3,250<br>'+
- '✅ <b>90×200 ที่ ฿2,890 ตั้งถูกแล้ว</b> — full house ตั้ง ฿2,900 (ยังไม่มียอด) เราต่ำกว่า ฿10 พอดี อย่าลด<br>'+
- '🪵 <b>ไม้เต็งไม่ใช่คู่เทียบ</b> — ฿1,990/฿2,150/฿2,350 ของ full house คือไม้เต็ง คนละชนิดไม้กับประตูสักของเรา<br>'+
- '📉 <b>เซกเมนต์เงียบ</b> — 3 ลิสต์รวมกัน 19 ชิ้น/เดือน · 👀 full house เปิด 25 มี.ค. 2026 ได้ 31 ชิ้นใน 154 วัน ramp เร็วสุด';
+ '📷 ช่องที่ติด <b>✓</b> = ราคาจากช่องราคา SKU ในสกรีนช็อต 26 ส.ค. · ช่องที่ติด <b>⚠</b> = ข้อมูลค้างจากเซสชันก่อน ยังไม่ยืนยัน และ<b>ไม่ถูกนับในคอลัมน์เพดาน</b><br>'+
+ '🟣 <b>80×200 มีที่ขยับมาก</b> — เรา ฿2,150–2,156 · full house ฿2,700 (ห่าง ฿550) · แต่เพดานติดที่ ไม้พร้อม ฿2,100 ซึ่งขายได้แค่ 2 ชิ้น/เดือน<br>'+
+ '🔴 <b>ยังไม่มี SKU 100×200</b> — ไซซ์ที่กินส่วนแบ่งสะสมสูงสุดทั้ง chocksomkid (49.49%) และ full house (27.27%) · ราคาตลาด ฿3,000–3,250<br>'+
+ '✅ <b>90×200 ที่ ฿2,890 ตั้งถูกแล้ว</b> — full house ฿2,900 (ยังไม่มียอด) เราต่ำกว่า ฿10 พอดี อย่าลด<br>'+
+ '📉 <b>เซกเมนต์เงียบ</b> — 4 ลิสต์รวมกัน 26 ชิ้น/เดือน · 👀 full house เปิด 25 มี.ค. 2026 ได้ 31 ชิ้นใน 154 วัน ramp เร็วสุด';
 function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
 document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
-function renderTeng(){
-  let h='';
-  TENG.forEach(t=>{h+='<tr><td>'+t.sku+'</td><td>฿'+t.p.toLocaleString()+'</td></tr>';});
-  document.getElementById('tengout').innerHTML=h;
-}
-renderMeta();render();renderTeng();renderSku();renderCross();
+renderMeta();render();renderSku();
 </script>
 </body>
 </html>
