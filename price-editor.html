@@ -176,7 +176,7 @@ function render(){
   let h='';
   Object.entries(groups).forEach(([cat,rows])=>{
     h+='<div class="grp">'+cat+'</div><div class="tbl">'
-      +'<div class="hrow"><span>SKU</span><span>De</span><span>แก้เมื่อ</span><span>Tb</span><span>แก้เมื่อ</span></div>';
+      +'<div class="hrow"><span>SKU</span><span>De</span><span>ปรับเมื่อ</span><span>Tb</span><span>ปรับเมื่อ</span></div>';
     rows.forEach(({r,i})=>{
       const dDe=r.de!==ORIG[i].de?' dirty':'', dTb=r.tb!==ORIG[i].tb?' dirty':'';
       h+='<div class="row"><span class="skuname">'+r.sku+'</span>'
