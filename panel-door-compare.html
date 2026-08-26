@@ -43,6 +43,8 @@ tr:hover td{background:var(--bg4);}
 .mid{color:var(--text);}
 .us-col{color:var(--orange);font-weight:700;}
 .na{color:var(--dim);opacity:.32;}
+.srcold{font-size:8.5px;color:var(--red);margin-top:2px;font-family:'Sarabun',sans-serif;}
+.srcimg{font-size:8.5px;color:var(--green);margin-top:2px;font-family:'Sarabun',sans-serif;opacity:.75;}
 .up{color:var(--green);font-weight:700;}
 .down{color:var(--red);font-weight:700;}
 .hdcell{background:rgba(109,74,168,.07);}
@@ -56,7 +58,7 @@ tr:hover td{background:var(--bg4);}
 
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
 <h1>🚪 ราคาประตูฟัก / ปีกนก — เปรียบทุกร้าน</h1>
-<p class="sub">5ฟักปีกนก · 8ฟัก · 6 ร้าน · อัปเดต 26 ส.ค. 2569</p>
+<p class="sub">5ฟักปีกนก · 8ฟัก · ไม้สักเท่านั้น · ราคาจากช่อง SKU · อัปเดต 26 ส.ค. 2569</p>
 
 <div class="insight" id="insight"></div>
 
@@ -77,10 +79,21 @@ tr:hover td{background:var(--bg4);}
   <div class="leg"><div class="dot" style="background:var(--green)"></div><span style="color:var(--green)">ถูกที่สุดในแถว</span></div>
   <div class="leg"><div class="dot" style="background:var(--red)"></div><span style="color:var(--red)">แพงที่สุดในแถว</span></div>
   <div class="leg"><div class="dot" style="background:var(--orange)"></div><span style="color:var(--orange)">ร้านเรา</span></div>
-  <div class="leg"><div class="dot" style="background:var(--purple)"></div><span style="color:var(--purple)">เพดาน = ราคาต่ำสุดของคู่แข่งในแถวนั้น</span></div>
+  <div class="leg"><div class="dot" style="background:var(--purple)"></div><span style="color:var(--purple)">เพดาน = ราคาต่ำสุดของคู่แข่ง (นับเฉพาะที่ยืนยันแล้ว)</span></div>
 </div>
 
 <div id="out"></div>
+
+<div class="grp">🪵 ไม้เต็งของ full house wood — คนละชนิดไม้ อย่าเอามาเทียบราคา</div>
+<div class="note" style="margin-bottom:10px">
+full house wood ขาย <b>ไม้เต็ง</b> ปนอยู่ในลิสต์เดียวกับ<b>ไม้สัก</b> · ราคาไม้เต็งถูกกว่ามากโดยธรรมชาติ — ถ้าเอามาตั้งเป็นเพดานราคาประตูสักของเรา จะกดราคาตัวเองโดยไม่จำเป็น
+</div>
+<div class="tbl-wrap">
+<table style="min-width:420px">
+<thead><tr><th style="text-align:left">SKU</th><th>ราคา</th></tr></thead>
+<tbody id="tengout"></tbody>
+</table>
+</div>
 
 <div class="grp">📌 ส่วนแบ่งยอดขายสะสมรายไซซ์ (จากคอลัมน์ SKU)</div>
 <div class="tbl-wrap">
@@ -105,7 +118,6 @@ const SHOPS=[
  {k:'chock',name:'chocksomkid'},
  {k:'fh',   name:'full house wood'},
  {k:'mp',   name:'ไม้พร้อม'},
- {k:'lam',  name:'LAMTONMAISAK'},
 ];
 
 const META=[
@@ -118,15 +130,23 @@ const META=[
 ];
 
 const D=[
- {lay:'5ฟักปีกนก', z:'70×200',  de:null,     tb:null,     chock:null,      fh:null,       mp:null,                              lam:{p:2400,note:'ไม่ระบุลาย'}},
- {lay:'5ฟักปีกนก', z:'80×180',  de:null,     tb:null,     chock:null,      fh:null,       mp:{p:2100,note:'ลูกฟัก 5 เตา'},      lam:null},
- {lay:'5ฟักปีกนก', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350},  fh:{p:2700},   mp:{p:2100,note:'ลูกฟัก 5 เตา'},      lam:{p:2500,note:'ไม่ระบุลาย'}},
- {lay:'5ฟักปีกนก', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850},  fh:{p:2900,note:'ยังไม่มียอด'},  mp:null,           lam:{p:2600,note:'ไม่ระบุลาย'}},
- {lay:'5ฟักปีกนก', z:'100×200', de:null,     tb:null,     chock:{p:3250},  fh:{p:3000},   mp:null,                              lam:null},
+ {lay:'5ฟักปีกนก / ลูกฟัก (ไม้สัก)', z:'80×180',  de:null,     tb:null,     chock:null,                       fh:null,       mp:{p:2100,src:'img'}},
+ {lay:'5ฟักปีกนก / ลูกฟัก (ไม้สัก)', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'old'},         fh:{p:2700,src:'img'},  mp:{p:2100,src:'img'}},
+ {lay:'5ฟักปีกนก / ลูกฟัก (ไม้สัก)', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'old'},         fh:{p:2900,src:'img'},  mp:null},
+ {lay:'5ฟักปีกนก / ลูกฟัก (ไม้สัก)', z:'100×200', de:null,     tb:null,     chock:{p:3250,src:'img'},         fh:{p:3000,src:'img'},  mp:null},
 
- {lay:'8ฟัก', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350}, fh:null, mp:null, lam:null},
- {lay:'8ฟัก', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850}, fh:null, mp:null, lam:null},
- {lay:'8ฟัก', z:'100×200', de:null,     tb:null,     chock:{p:3250}, fh:null, mp:null, lam:null},
+ {lay:'8ฟัก (ไม้สัก)', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'old'}, fh:null, mp:null},
+ {lay:'8ฟัก (ไม้สัก)', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'old'}, fh:null, mp:null},
+ {lay:'8ฟัก (ไม้สัก)', z:'100×200', de:null,     tb:null,     chock:{p:3250,src:'img'}, fh:null, mp:null},
+];
+
+/* ไม้เต็ง = คนละชนิดไม้ เทียบราคากับประตูสักไม่ได้ แยกไว้ต่างหาก */
+const TENG=[
+ {sku:'ไม้เต็ง 80×200',       p:1990, shop:'full house wood'},
+ {sku:'ไม้เต็ง มีขีด 80×200', p:2190, shop:'full house wood'},
+ {sku:'ไม้เต็ง 90×200',       p:2150, shop:'full house wood'},
+ {sku:'ไม้เต็ง มีขีด 90×200', p:2290, shop:'full house wood'},
+ {sku:'ไม้เต็ง 100×200',      p:2350, shop:'full house wood'},
 ];
 
 const SKUSHARE=[
@@ -163,11 +183,13 @@ function cell(x,r,us){
     if(x.p===Math.min(...ns)) cls='win';
     else if(x.p===Math.max(...ns)) cls='lose';
   }
-  const nt = x.note ? '<div style="font-size:9px;color:var(--dim);margin-top:2px">'+x.note+'</div>' : '';
+  let nt = x.note ? '<div style="font-size:9px;color:var(--dim);margin-top:2px">'+x.note+'</div>' : '';
+  if(x.src==='old') nt += '<div class="srcold">⚠ ข้อมูลเก่า ยังไม่ยืนยัน</div>';
+  if(x.src==='img') nt += '<div class="srcimg">✓ SKU 26 ส.ค.</div>';
   return '<span class="'+cls+'">฿'+x.p.toLocaleString()+'</span>'+nt;
 }
 function headroom(r){
-  const ns=compVals(r), our=ourVal(r);
+  const ns=SHOPS.filter(s=>!s.us).map(s=>r[s.k]).filter(x=>x&&x.p&&x.src==='img').map(x=>x.p), our=ourVal(r);
   if(!ns.length) return ['<span class="na">—</span>','<span class="na">—</span>'];
   const cap=Math.min(...ns);
   const capTxt='<span style="color:var(--purple);font-weight:700">฿'+cap.toLocaleString()+'</span>';
@@ -231,14 +253,20 @@ function renderCross(){
   document.getElementById('crossout').innerHTML=h;
 }
 document.getElementById('insight').innerHTML=
- '🟣 <b>ช่องว่างขึ้นราคาที่ชัดที่สุด — 80×200</b> · เราขาย ฿2,150–2,156 · chocksomkid ฿2,350 · full house ฿2,700 → มีเพดานเหลือ แต่ติดที่ <b>ไม้พร้อม ฿2,100</b> (ขายได้แค่ 2 ชิ้น/เดือน จึงไม่ใช่หมุดที่ควรยึด)<br>'+
- '🔴 <b>ยังไม่มี SKU 100×200 ทั้งฟักและ 8ฟัก</b> — เป็นไซซ์ที่กินส่วนแบ่งสะสมสูงสุดของทั้ง chocksomkid (49.49%) และ full house (27.27%) · ราคาตลาด ฿3,000–3,250<br>'+
- '✅ <b>90×200 ที่ ฿2,890 ตั้งถูกแล้ว</b> — full house ตั้ง ฿2,900 แต่ยังไม่มียอด · chocksomkid ฿2,850 ขายได้ 7 ชิ้น/เดือน · อย่าลดลงไปสู้<br>'+
- '📉 <b>ทั้งเซกเมนต์เงียบ</b> — 3 ลิสต์ใหญ่รวมกันได้ 19 ชิ้น/เดือน (9 + 8 + 2) ปัญหาไม่ได้อยู่ที่ราคา<br>'+
- '👀 <b>full house wood มาแรงสุด</b> — เปิดลิสต์ 25 มี.ค. 2026 (154 วัน) ได้ 31 ชิ้น · ramp เร็วกว่าทุกร้าน ควรเฝ้า';
+ '📷 <b>ราคาทุกช่องที่ติด ✓ มาจากช่องราคา SKU ในสกรีนช็อต 26 ส.ค.</b> · ช่องที่ติด ⚠ เป็นข้อมูลค้างจากเซสชันก่อน ยังไม่ได้ยืนยัน และ<b>ไม่ถูกนับในคอลัมน์เพดาน</b><br>'+
+ '🟣 <b>80×200 มีช่องว่างขึ้นราคาจริง</b> · เรา ฿2,150–2,156 · full house (สัก) ฿2,700 · ไม้พร้อม ฿2,100 → เพดานติดที่ไม้พร้อม แต่เขาขายได้ 2 ชิ้น/เดือน<br>'+
+ '🔴 <b>ยังไม่มี SKU 100×200</b> — เป็นไซซ์ส่วนแบ่งสูงสุดของทั้ง chocksomkid (49.49%) และ full house (27.27%) · ราคาตลาด ฿3,000–3,250<br>'+
+ '✅ <b>90×200 ที่ ฿2,890 ตั้งถูกแล้ว</b> — full house ตั้ง ฿2,900 (ยังไม่มียอด) เราต่ำกว่า ฿10 พอดี อย่าลด<br>'+
+ '🪵 <b>ไม้เต็งไม่ใช่คู่เทียบ</b> — ฿1,990/฿2,150/฿2,350 ของ full house คือไม้เต็ง คนละชนิดไม้กับประตูสักของเรา<br>'+
+ '📉 <b>เซกเมนต์เงียบ</b> — 3 ลิสต์รวมกัน 19 ชิ้น/เดือน · 👀 full house เปิด 25 มี.ค. 2026 ได้ 31 ชิ้นใน 154 วัน ramp เร็วสุด';
 function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
 document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
-renderMeta();render();renderSku();renderCross();
+function renderTeng(){
+  let h='';
+  TENG.forEach(t=>{h+='<tr><td>'+t.sku+'</td><td>฿'+t.p.toLocaleString()+'</td></tr>';});
+  document.getElementById('tengout').innerHTML=h;
+}
+renderMeta();render();renderTeng();renderSku();renderCross();
 </script>
 </body>
 </html>
