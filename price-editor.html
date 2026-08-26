@@ -27,11 +27,15 @@ h1{font-size:19px;font-weight:800;margin-bottom:4px;}
 .search:focus{outline:none;border-color:var(--orange);}
 .grp{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin:18px 0 8px;}
 .tbl{background:var(--bg3);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-bottom:10px;}
-.hrow,.row{display:grid;grid-template-columns:1fr 110px 110px;gap:9px;align-items:center;padding:8px 13px;}
+.hrow,.row{display:grid;grid-template-columns:minmax(120px,1fr) 96px 78px 96px 78px;gap:8px;align-items:center;padding:8px 13px;}
+@media(max-width:620px){.hrow,.row{grid-template-columns:minmax(90px,1fr) 74px 62px 74px 62px;gap:5px;padding:8px 9px;font-size:12px;}.row input{padding:5px 6px;font-size:12px;}}
 .hrow{background:var(--bg4);font-size:10px;font-family:'Space Mono',monospace;color:var(--dim);}
 .hrow span:not(:first-child),.row input{text-align:right;}
 .row{border-bottom:1px solid var(--border);font-size:13px;}
 .row:last-child{border-bottom:none;}
+.dt{font-size:10px;color:var(--dim);font-family:'Space Mono',monospace;text-align:right;white-space:nowrap;}
+.dt.recent{color:var(--orange);font-weight:700;}
+.dt.none{opacity:.3;}
 .row input{width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:7px;padding:6px 9px;color:var(--text);font-family:'Space Mono',monospace;font-size:13px;}
 .row input:focus{outline:none;border-color:var(--orange);background:var(--bg3);}
 .row input.dirty{border-color:var(--orange);background:rgba(192,74,26,.08);font-weight:700;}
@@ -114,6 +118,13 @@ h1{font-size:19px;font-weight:800;margin-bottom:4px;}
 <script>
 let DB=null, ORIG=null, CF='all';
 
+
+function dtTxt(d){ return d ? d.replace(/-/g,'/') : '—'; }
+function dtCls(d){
+  if(!d) return 'none';
+  const today=fmtDate();
+  return d===today ? 'recent' : '';
+}
 function fmtDate(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function dirtyList(){
   if(!DB) return [];
@@ -135,9 +146,17 @@ function updateBar(){
 function setVal(i,shop,val){
   const v=val.trim();
   DB.ours[i][shop] = v==='' ? null : (parseInt(v,10)||null);
+  const key=shop+'_at';
+  const changed = DB.ours[i][shop]!==ORIG[i][shop];
+  // ราคาเปลี่ยน → ประทับวันที่วันนี้ · กลับเป็นค่าเดิม → คืนวันที่เดิม
+  DB.ours[i][key] = changed
+      ? (DB.ours[i][shop]===null ? null : fmtDate())
+      : ORIG[i][key];
   updateBar();
   const inp=document.querySelector('[data-i="'+i+'"][data-s="'+shop+'"]');
-  if(inp) inp.classList.toggle('dirty', DB.ours[i][shop]!==ORIG[i][shop]);
+  if(inp) inp.classList.toggle('dirty', changed);
+  const dt=document.querySelector('[data-d="'+i+'-'+shop+'"]');
+  if(dt){ dt.textContent=dtTxt(DB.ours[i][key]); dt.className='dt '+dtCls(DB.ours[i][key]); }
 }
 function renderCats(){
   const cats=DB.cats();
@@ -157,12 +176,14 @@ function render(){
   let h='';
   Object.entries(groups).forEach(([cat,rows])=>{
     h+='<div class="grp">'+cat+'</div><div class="tbl">'
-      +'<div class="hrow"><span>SKU</span><span>De</span><span>Tb</span></div>';
+      +'<div class="hrow"><span>SKU</span><span>De</span><span>แก้เมื่อ</span><span>Tb</span><span>แก้เมื่อ</span></div>';
     rows.forEach(({r,i})=>{
       const dDe=r.de!==ORIG[i].de?' dirty':'', dTb=r.tb!==ORIG[i].tb?' dirty':'';
       h+='<div class="row"><span class="skuname">'+r.sku+'</span>'
         +'<input type="number" class="'+dDe.trim()+'" data-i="'+i+'" data-s="de" value="'+(r.de??'')+'" placeholder="—" oninput="setVal('+i+',\'de\',this.value)">'
+        +'<span class="dt '+dtCls(r.de_at)+'" data-d="'+i+'-de">'+dtTxt(r.de_at)+'</span>'
         +'<input type="number" class="'+dTb.trim()+'" data-i="'+i+'" data-s="tb" value="'+(r.tb??'')+'" placeholder="—" oninput="setVal('+i+',\'tb\',this.value)">'
+        +'<span class="dt '+dtCls(r.tb_at)+'" data-d="'+i+'-tb">'+dtTxt(r.tb_at)+'</span>'
         +'</div>';
     });
     h+='</div>';

@@ -56,6 +56,13 @@
       var v = r[shop || 'de'];
       return (v === null || v === undefined) ? null : v;
     };
+    /** วันที่ปรับราคาล่าสุดของ SKU นั้น · คืน 'YYYY-MM-DD' หรือ null */
+    out.priceDate = function (sku, shop) {
+      var r = index[sku];
+      if (!r) return null;
+      var v = r[(shop || 'de') + '_at'];
+      return v || null;
+    };
     /** รายการทั้งหมดในหมวด */
     out.byCat = function (cat) {
       return (out.ours || []).filter(function (r) { return r.cat === cat; });

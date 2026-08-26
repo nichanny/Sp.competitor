@@ -87,6 +87,7 @@ SPPrices.load({ fallback: FALLBACK })
 <table>
 <thead><tr><th>คำสั่ง</th><th>คืนค่า</th></tr></thead>
 <tbody>
+<tr><td><code>db.priceDate(sku, shop)</code></td><td>วันที่ปรับราคาล่าสุดของ SKU นั้น เช่น <code>2026-08-25</code></td></tr>
 <tr><td><code>db.price(sku, shop)</code></td><td>ราคาของ SKU · shop = <code>'de'</code> หรือ <code>'tb'</code> · ไม่มีคืน <code>null</code></td></tr>
 <tr><td><code>db.byCat(cat)</code></td><td>รายการทั้งหมดในหมวดนั้น</td></tr>
 <tr><td><code>db.cats()</code></td><td>รายชื่อหมวดทั้งหมด</td></tr>
