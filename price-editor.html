@@ -192,7 +192,12 @@ function render(){
 }
 function setCF(v,b){CF=v;document.querySelectorAll('#catbtns .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
 function payload(){
-  return {schema:DB.schema, updated:fmtDate(), note:DB.note, shipping:DB.shipping, ours:DB.ours};
+  const ours=DB.ours.map(function(r){
+    return {cat:r.cat, sku:r.sku, de:r.de, tb:r.tb,
+            de_at:(r.de==null?null:(r.de_at||'2026-07-01')),
+            tb_at:(r.tb==null?null:(r.tb_at||'2026-07-01'))};
+  });
+  return {schema:DB.schema, updated:fmtDate(), note:DB.note, shipping:DB.shipping, ours:ours};
 }
 function download(){
   const blob=new Blob([JSON.stringify(payload(),null,1)],{type:'application/json'});
@@ -262,6 +267,25 @@ async function publish(){
   const api='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
   const hdr={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'};
   try{
+    // --- กันเขียนทับ: เทียบกับไฟล์ล่าสุดบนเซิร์ฟเวอร์ก่อน ---
+    const liveRes=await fetch(SPPrices.URL+'?v='+Date.now(),{cache:'no-store'});
+    if(liveRes.ok){
+      const live=await liveRes.json();
+      const liveSkus=new Set((live.ours||[]).map(r=>r.sku));
+      const mySkus=new Set(DB.ours.map(r=>r.sku));
+      const missing=[...liveSkus].filter(s=>!mySkus.has(s));
+      const extra=[...mySkus].filter(s=>!liveSkus.has(s));
+      if(missing.length||extra.length){
+        const msg='⚠️ ข้อมูลบนเซิร์ฟเวอร์เปลี่ยนไปหลังจากคุณเปิดหน้านี้\n\n'
+          +(missing.length?'จะหายไป '+missing.length+' รายการ: '+missing.slice(0,5).join(', ')+(missing.length>5?' ...':'')+'\n':'')
+          +(extra.length?'จะเพิ่ม '+extra.length+' รายการ: '+extra.slice(0,5).join(', ')+(extra.length>5?' ...':'')+'\n':'')
+          +'\nแนะนำ: กด Cancel แล้ว refresh หน้า (F5) เพื่อโหลดข้อมูลล่าสุดก่อนแก้\n\nยืนยันเขียนทับ?';
+        if(!confirm(msg)){
+          toast('ยกเลิกแล้ว — กด F5 เพื่อโหลดข้อมูลล่าสุด','err',4000);
+          btn.disabled=false; return;
+        }
+      }
+    }
     const g=await fetch(api+'?ref='+GH_BRANCH+'&t='+Date.now(),{headers:hdr,cache:'no-store'});
     if(!g.ok) throw new Error(g.status===401?'Token ไม่ถูกต้องหรือหมดอายุ':g.status===404?'ไม่พบไฟล์/repo — เช็คสิทธิ์ Token':'อ่านไฟล์ไม่ได้ ('+g.status+')');
     const meta=await g.json();
