@@ -54,15 +54,18 @@ h1{font-size:19px;font-weight:800;margin-bottom:4px;}
 </style>
 
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
-<h1>📊 ยอดขายรายเดือน — ทุกร้าน ทุก SKU</h1>
-<p class="sub">ข้อมูล ณ 25 ส.ค. 2569 · เรียงจากขายดีที่สุด</p>
+<h1>📊 สัดส่วนความนิยม SKU — ทุกร้าน</h1>
+<p class="sub">ข้อมูล ณ 26 ส.ค. 2569 · เรียงตามสัดส่วนความนิยมภายใน listing</p>
 
 <div class="note">
-⚠️ <b>หมายเหตุเรื่องตัวเลข</b> — ตัวเลขนี้คือ "ยอดขาย SKU" ที่ Shopdera ประเมิน ซึ่งบางครั้งไม่ตรงกับยอดขาย 30 วันระดับ listing เป๊ะๆ · ใช้ดู <b>สัดส่วนและลำดับความนิยม</b> ได้แม่นยำ แต่ตัวเลขสัมบูรณ์ให้ถือเป็นค่าประมาณ<br>
-📌 De และ Tb ไม่มีข้อมูลนี้ เพราะเป็นร้านเราเอง (ดูยอดจริงได้ใน Seller Centre)
+🚨 <b>ตัวเลขนี้ไม่ใช่ยอดขายต่อเดือน</b> — เป็นคอลัมน์ "ยอดขาย SKU" ของ Shopdera ซึ่ง<b>ไม่ตรงกับยอดขาย 30 วัน</b> ของ listing<br>
+ตัวอย่าง: chocksomkid listing 90×200 ขายจริง <b>7 ชิ้น/เดือน</b> แต่คอลัมน์ SKU แสดง 105<br>
+✅ <b>ใช้ได้</b> — ดูว่า SKU ไหนได้รับความนิยมมากกว่ากันภายใน listing เดียวกัน (สัดส่วน)<br>
+❌ <b>ใช้ไม่ได้</b> — เอาไปเทียบยอดขายข้าม listing หรือข้ามร้าน<br>
+📌 ยอดขายจริงต่อเดือนดูได้ที่หน้ารายร้าน (ตัวเลข "ขาย/เดือน" ระดับ listing)
 </div>
 
-<div class="section-h">ยอดขายรวมต่อเดือน — แยกตามร้าน</div>
+<div class="section-h">คะแนนรวม SKU — แยกตามร้าน (ไม่ใช่ยอดขายจริง)</div>
 <div class="shops" id="shops"></div>
 
 <div class="section-h">รายการ SKU ทั้งหมด</div>
@@ -230,7 +233,7 @@ function renderShops(){
     h+='<div class="shopcard">'
       +'<div class="sc-name"><span>'+s.name+'</span></div>'
       +'<div class="sc-n" style="color:'+s.color+'">'+v.toLocaleString()+'</div>'
-      +'<div class="sc-l">ชิ้น/เดือน · '+D.filter(d=>d[0]===k).length+' SKU</div>'
+      +'<div class="sc-l">คะแนน SKU · '+D.filter(d=>d[0]===k).length+' SKU</div>'
       +'<div class="sc-bar"><div class="sc-fill" style="width:'+(v/max*100)+'%;background:'+s.color+'"></div></div>'
       +'</div>';
   });
