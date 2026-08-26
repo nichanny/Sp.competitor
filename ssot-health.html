@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตรวจสุขภาพ SSOT</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:880px;margin:0 auto;line-height:1.7;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:14px;}
+h1{font-size:20px;font-weight:800;margin-bottom:4px;}
+.sub{font-size:12.5px;color:var(--dim);margin-bottom:18px;}
+h2{font-size:15px;font-weight:700;margin:26px 0 10px;display:flex;align-items:center;gap:9px;}
+h2::after{content:'';flex:1;height:1px;background:var(--border);}
+.big{background:var(--bg3);border:2px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px;text-align:center;}
+.big.ok{border-color:var(--green);background:rgba(26,122,94,.07);}
+.big.bad{border-color:var(--red);background:rgba(192,57,43,.07);}
+.big.wait{border-color:var(--blue);background:rgba(26,95,170,.07);}
+.big-icon{font-size:34px;line-height:1;margin-bottom:8px;}
+.big-t{font-size:17px;font-weight:800;margin-bottom:5px;}
+.big-s{font-size:12.5px;color:var(--dim);}
+.check{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:start;padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;}
+.check:last-child{border-bottom:none;}
+.cwrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+.ci{font-size:15px;line-height:1.3;}
+.ct{font-weight:600;}
+.cd{font-size:11.5px;color:var(--dim);margin-top:2px;}
+.cv{font-family:'Space Mono',monospace;font-size:11.5px;white-space:nowrap;color:var(--dim);}
+.btn{font-size:13px;font-weight:600;padding:9px 18px;border-radius:9px;border:1px solid var(--border);background:var(--bg3);color:var(--text);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.primary{background:var(--orange);color:#fff;border-color:var(--orange);}
+pre{background:var(--bg4);border:1px solid var(--border);border-radius:10px;padding:13px 15px;overflow-x:auto;font-family:'Space Mono',monospace;font-size:11.5px;line-height:1.7;margin-bottom:12px;position:relative;}
+.copy{position:absolute;top:8px;right:8px;font-size:11px;padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.box{border-radius:11px;padding:13px 16px;font-size:13px;margin-bottom:14px;line-height:1.85;}
+.box.warn{background:rgba(139,105,20,.08);border:1px solid rgba(139,105,20,.28);}
+.box.warn b{color:var(--yellow);}
+.box.tip{background:rgba(26,122,94,.08);border:1px solid rgba(26,122,94,.28);}
+.box.tip b{color:var(--green);}
+.samples{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:9px;}
+.sc{background:var(--bg4);border-radius:10px;padding:11px 13px;border:1px solid var(--border);}
+.sc-n{font-size:11.5px;color:var(--dim);}
+.sc-p{font-size:17px;font-weight:800;font-family:'Space Mono',monospace;}
+.sc-d{font-size:10.5px;color:var(--dim);font-family:'Space Mono',monospace;}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:14px;}
+th{background:var(--bg4);padding:8px 11px;text-align:left;font-size:10px;font-family:'Space Mono',monospace;color:var(--dim);font-weight:400;border-bottom:1px solid var(--border);}
+td{padding:9px 11px;border-bottom:1px solid var(--border);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+code{font-family:'Space Mono',monospace;font-size:12px;background:var(--bg4);padding:1px 6px;border-radius:4px;border:1px solid var(--border);}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🩺 ตรวจสุขภาพ SSOT</h1>
+<p class="sub">เช็คว่าราคากลางทำงานปกติ และโปรแกรมอื่นจะได้รับข้อมูลจริง</p>
+
+<div class="big wait" id="verdict">
+  <div class="big-icon">⏳</div>
+  <div class="big-t">กำลังตรวจ...</div>
+  <div class="big-s">รอสักครู่</div>
+</div>
+
+<div style="text-align:center;margin-bottom:20px">
+  <button class="btn primary" onclick="runAll()">🔄 ตรวจอีกครั้ง</button>
+</div>
+
+<h2>ผลตรวจแต่ละข้อ</h2>
+<div class="cwrap" id="checks"></div>
+
+<h2>ราคาตัวอย่างที่โปรแกรมอื่นจะได้รับ</h2>
+<div class="samples" id="samples"></div>
+
+<h2>ทดสอบจากโปรแกรม door cal โดยตรง</h2>
+<div class="box warn">
+<b>สำคัญที่สุด</b> — การตรวจในหน้านี้บอกได้แค่ว่า "ฝั่งเซิร์ฟเวอร์ปกติ" แต่ยืนยันไม่ได้ว่า door cal <b>ดึงจริง</b><br>
+door cal อาจดึงล้มเหลวแล้วใช้ fallback เงียบๆ โดยไม่แจ้ง ต้องทดสอบจากฝั่งนั้นด้วย
+</div>
+
+<p>เปิด <b>dcdoorproduction.netlify.app</b> → กด <code>F12</code> → แท็บ <b>Console</b> → วางคำสั่งนี้:</p>
+<pre><button class="copy" onclick="cp(this,'t1')">คัดลอก</button><code id="t1">fetch('https://nny-spcompetitors.netlify.app/prices.json?v='+Date.now())
+  .then(r =&gt; r.json())
+  .then(d =&gt; console.log('✅ ดึงได้ | updated:', d.updated, '| SKU:', d.ours.length))
+  .catch(e =&gt; console.error('❌ ดึงไม่ได้:', e.message));</code></pre>
+
+<table>
+<thead><tr><th>ผลที่เห็น</th><th>แปลว่า</th></tr></thead>
+<tbody>
+<tr><td><code>✅ ดึงได้ | updated: ...</code></td><td>เชื่อมสำเร็จ door cal จะได้ราคาใหม่แน่นอน</td></tr>
+<tr><td><code>❌ ... CORS ...</code></td><td>ติด CORS — บอกผม ผมแก้ <code>_headers</code> ให้</td></tr>
+<tr><td><code>❌ Failed to fetch</code></td><td>เน็ตมีปัญหา หรือ URL ผิด</td></tr>
+</tbody>
+</table>
+
+<h2>ทดสอบแบบครบวงจร (แนะนำทำครั้งเดียว)</h2>
+<div class="box tip">
+<b>วิธียืนยัน 100% ว่าราคาไหลถึง door cal จริง</b><br>
+① เปิด <a href="price-editor.html" style="color:var(--orange)">หน้าแก้ราคากลาง</a> เปลี่ยนราคา SKU ใดก็ได้ชั่วคราว เช่น ใส่ <code>9999</code><br>
+② กด <b>💾 บันทึกขึ้นเซิร์ฟเวอร์</b> รอ 1-2 นาที<br>
+③ กลับมาหน้านี้กด <b>ตรวจอีกครั้ง</b> — ถ้าเห็น 9999 แปลว่า SSOT อัปเดตแล้ว<br>
+④ เปิด door cal <b>กด Ctrl+Shift+R</b> (hard refresh) — ถ้าเห็น 9999 แปลว่าเชื่อมสำเร็จสมบูรณ์<br>
+⑤ แก้ราคากลับเป็นค่าเดิม แล้วบันทึกอีกครั้ง
+</div>
+
+<h2>สิ่งที่อาจทำให้ door cal ไม่อัปเดต</h2>
+<table>
+<thead><tr><th>สาเหตุ</th><th>วิธีเช็ค / แก้</th></tr></thead>
+<tbody>
+<tr><td><b>ใช้ fallback อยู่</b> โดยไม่รู้ตัว</td><td>ให้ Claude Code เพิ่มป้ายบอกสถานะบนหน้าจอ ว่าราคามาจากเน็ตหรือสำรอง</td></tr>
+<tr><td><b>cache ในเบราว์เซอร์</b></td><td>กด <code>Ctrl+Shift+R</code> · โค้ดต้องมี <code>?v=Date.now()</code> ต่อท้าย URL</td></tr>
+<tr><td><b>cache ใน localStorage 5 นาที</b></td><td>ปกติ · รอ 5 นาที หรือใช้ <code>load({force:true})</code></td></tr>
+<tr><td><b>Netlify ยัง deploy ไม่เสร็จ</b></td><td>รอ 1-2 นาทีหลังบันทึก</td></tr>
+<tr><td><b>ชื่อ SKU ไม่ตรงกัน</b></td><td>ชื่อมีตัว <code>×</code> ไม่ใช่ <code>x</code> · ให้ Claude Code แสดงรายการที่ map ไม่เจอ</td></tr>
+</tbody>
+</table>
+
+<script>
+const URL_SSOT='https://nny-spcompetitors.netlify.app/prices.json';
+function cp(b,id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{const o=b.textContent;b.textContent='✓ คัดลอกแล้ว';setTimeout(()=>b.textContent=o,1600);});}
+
+function row(icon,title,desc,val){
+  return '<div class="check"><span class="ci">'+icon+'</span><span><span class="ct">'+title+'</span>'
+    +(desc?'<div class="cd">'+desc+'</div>':'')+'</span><span class="cv">'+(val||'')+'</span></div>';
+}
+function setVerdict(kind,icon,t,s){
+  const v=document.getElementById('verdict');
+  v.className='big '+kind;
+  v.innerHTML='<div class="big-icon">'+icon+'</div><div class="big-t">'+t+'</div><div class="big-s">'+s+'</div>';
+}
+
+async function runAll(){
+  setVerdict('wait','⏳','กำลังตรวจ...','รอสักครู่');
+  document.getElementById('checks').innerHTML='';
+  document.getElementById('samples').innerHTML='';
+  let html='', pass=0, total=0, data=null, ms=0;
+
+  // 1) endpoint ตอบไหม
+  total++;
+  const t0=performance.now();
+  try{
+    const res=await fetch(URL_SSOT+'?v='+Date.now(),{cache:'no-store'});
+    ms=Math.round(performance.now()-t0);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    data=await res.json();
+    pass++;
+    html+=row('✅','ดึงไฟล์ราคาได้','เซิร์ฟเวอร์ตอบปกติ', ms+' ms');
+  }catch(e){
+    html+=row('❌','ดึงไฟล์ราคาไม่ได้', e.message, '—');
+    document.getElementById('checks').innerHTML=html;
+    setVerdict('bad','🚨','SSOT มีปัญหา','โปรแกรมอื่นจะดึงราคาไม่ได้ — แจ้ง Claude ทันที');
+    return;
+  }
+
+  // 2) โครงสร้างถูกต้อง
+  total++;
+  const okShape = data && Array.isArray(data.ours) && data.ours.length>0 && data.shipping;
+  if(okShape){pass++;html+=row('✅','โครงสร้างข้อมูลถูกต้อง','มี ours[] และ shipping ครบ', data.ours.length+' SKU');}
+  else html+=row('❌','โครงสร้างข้อมูลผิดปกติ','ขาด ours[] หรือ shipping','—');
+
+  // 3) มีวันที่อัปเดต
+  total++;
+  if(data.updated){pass++;html+=row('✅','มีวันที่อัปเดต','',data.updated);}
+  else html+=row('⚠️','ไม่มีวันที่อัปเดต','','—');
+
+  // 4) ทุก SKU มีวันที่ปรับราคา
+  total++;
+  const noDate=data.ours.filter(r=>(r.de!=null&&!r.de_at)||(r.tb!=null&&!r.tb_at));
+  if(noDate.length===0){pass++;html+=row('✅','ทุก SKU มีวันที่ปรับราคา','',data.ours.length+'/'+data.ours.length);}
+  else html+=row('⚠️','บาง SKU ไม่มีวันที่', noDate.slice(0,3).map(r=>r.sku).join(', '), noDate.length+' รายการ');
+
+  // 5) ไม่มี SKU ซ้ำ
+  total++;
+  const seen={},dup=[];
+  data.ours.forEach(r=>{if(seen[r.sku])dup.push(r.sku);seen[r.sku]=1;});
+  if(dup.length===0){pass++;html+=row('✅','ไม่มี SKU ซ้ำ','','0');}
+  else html+=row('❌','พบ SKU ซ้ำ', dup.join(', '), dup.length);
+
+  // 6) CORS ใช้ได้ (ถ้าดึงได้จากหน้านี้ = same-origin, ต้องเช็คแยก)
+  total++;
+  const sameOrigin = location.hostname==='nny-spcompetitors.netlify.app';
+  if(sameOrigin){
+    html+=row('ℹ️','CORS ต้องเช็คจาก door cal','หน้านี้อยู่โดเมนเดียวกับไฟล์ จึงยืนยัน CORS แทนไม่ได้','ดูวิธีด้านล่าง');
+  }else{
+    pass++;
+    html+=row('✅','CORS ใช้ได้ข้ามโดเมน','ดึงจาก '+location.hostname+' สำเร็จ','OK');
+  }
+
+  // 7) ความสดของข้อมูล
+  total++;
+  const d=new Date(data.updated+'T00:00:00');
+  const days=Math.floor((Date.now()-d.getTime())/86400000);
+  if(!isNaN(days)){
+    pass++;
+    html+=row(days<=7?'✅':'ℹ️','อัปเดตล่าสุด', days===0?'วันนี้':days+' วันที่แล้ว', data.updated);
+  }else html+=row('⚠️','อ่านวันที่ไม่ได้','','—');
+
+  document.getElementById('checks').innerHTML=html;
+
+  // ตัวอย่างราคา
+  const picks=['สายฝน 80×200','โมเดิร์น 80×200','วงกบประตู 80×200','บานเฟี้ยม 50×100'];
+  let s='';
+  picks.forEach(sku=>{
+    const r=data.ours.find(x=>x.sku===sku);
+    if(!r) return;
+    s+='<div class="sc"><div class="sc-n">'+sku+'</div>'
+      +'<div class="sc-p" style="color:var(--orange)">De ฿'+(r.de??'—')+'</div>'
+      +'<div class="sc-d">ปรับเมื่อ '+(r.de_at||'—')+'</div>'
+      +'<div class="sc-p" style="color:var(--purple);font-size:15px">Tb ฿'+(r.tb??'—')+'</div>'
+      +'<div class="sc-d">ปรับเมื่อ '+(r.tb_at||'—')+'</div></div>';
+  });
+  document.getElementById('samples').innerHTML=s||'<div style="color:var(--dim)">ไม่พบตัวอย่าง</div>';
+
+  // สรุป
+  if(pass===total) setVerdict('ok','✅','SSOT ทำงานปกติ','ผ่าน '+pass+'/'+total+' ข้อ · ตอบใน '+ms+' ms · โปรแกรมอื่นดึงได้แน่นอน');
+  else if(pass>=total-2) setVerdict('ok','✅','SSOT ใช้งานได้','ผ่าน '+pass+'/'+total+' ข้อ · มีข้อควรดูด้านล่าง');
+  else setVerdict('bad','⚠️','พบปัญหา','ผ่านแค่ '+pass+'/'+total+' ข้อ — ดูรายละเอียดด้านล่าง');
+}
+
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+runAll();
+</script>
+</body>
+</html>
