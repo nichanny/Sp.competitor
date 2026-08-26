@@ -119,13 +119,24 @@ h1{font-size:19px;font-weight:800;margin-bottom:4px;}
 let DB=null, ORIG=null, CF='all';
 
 
-function dtTxt(d){ return d ? d.replace(/-/g,'/') : '—'; }
+function dtTxt(d){
+  if(!d) return '—';
+  const day=d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(0,4);
+  return d.length>10 ? day+' '+d.slice(11,16)+' น.' : day;
+}
 function dtCls(d){
   if(!d) return 'none';
-  const today=fmtDate();
-  return d===today ? 'recent' : '';
+  return d.slice(0,10)===fmtDate() ? 'recent' : '';
 }
 function fmtDate(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+/* แสตมป์เต็ม วัน+เวลา เขตเวลาไทย เช่น 2026-08-26T23:23+07:00 */
+function fmtStamp(){
+  const now=new Date();
+  const th=new Date(now.getTime()+(now.getTimezoneOffset()*60000)+(7*3600000));
+  const p=n=>String(n).padStart(2,'0');
+  return th.getFullYear()+'-'+p(th.getMonth()+1)+'-'+p(th.getDate())
+       +'T'+p(th.getHours())+':'+p(th.getMinutes())+'+07:00';
+}
 function dirtyList(){
   if(!DB) return [];
   const out=[];
@@ -150,7 +161,7 @@ function setVal(i,shop,val){
   const changed = DB.ours[i][shop]!==ORIG[i][shop];
   // ราคาเปลี่ยน → ประทับวันที่วันนี้ · กลับเป็นค่าเดิม → คืนวันที่เดิม
   DB.ours[i][key] = changed
-      ? (DB.ours[i][shop]===null ? null : fmtDate())
+      ? (DB.ours[i][shop]===null ? null : fmtStamp())
       : ORIG[i][key];
   updateBar();
   const inp=document.querySelector('[data-i="'+i+'"][data-s="'+shop+'"]');
@@ -197,7 +208,7 @@ function payload(){
             de_at:(r.de==null?null:(r.de_at||'2026-07-01')),
             tb_at:(r.tb==null?null:(r.tb_at||'2026-07-01'))};
   });
-  return {schema:DB.schema, updated:fmtDate(), note:DB.note, shipping:DB.shipping, ours:ours};
+  return {schema:DB.schema, updated:fmtStamp(), note:DB.note, shipping:DB.shipping, ours:ours};
 }
 function download(){
   const blob=new Blob([JSON.stringify(payload(),null,1)],{type:'application/json'});

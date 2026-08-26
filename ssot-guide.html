@@ -87,13 +87,18 @@ SPPrices.load({ fallback: FALLBACK })
 <table>
 <thead><tr><th>คำสั่ง</th><th>คืนค่า</th></tr></thead>
 <tbody>
-<tr><td><code>db.priceDate(sku, shop)</code></td><td>วันที่ปรับราคาล่าสุดของ SKU นั้น เช่น <code>2026-08-25</code></td></tr>
+<tr><td><code>db.priceDate(sku, shop)</code></td><td>วันที่ปรับราคาล่าสุด เช่น <code>2026-08-26</code> (เหมือนเดิม)</td></tr>
+<tr><td><code>db.priceStamp(sku, shop)</code></td><td>🆕 แสตมป์เต็ม วัน+เวลา เช่น <code>2026-08-26T23:23+07:00</code></td></tr>
+<tr><td><code>db.priceStampText(sku, shop)</code></td><td>🆕 ข้อความอ่านง่าย เช่น <code>26/08/2026 23:23 น.</code></td></tr>
+<tr><td><code>db.priceAt(sku, shop)</code></td><td>🆕 คืนเป็น <code>Date</code> object เอาไปเทียบเวลาได้เลย</td></tr>
+<tr><td><code>db.hasTime(sku, shop)</code></td><td>🆕 <code>true</code> = มีเวลาด้วย · <code>false</code> = ข้อมูลเก่ามีแค่วันที่</td></tr>
 <tr><td><code>db.price(sku, shop)</code></td><td>ราคาของ SKU · shop = <code>'de'</code> หรือ <code>'tb'</code> · ไม่มีคืน <code>null</code></td></tr>
 <tr><td><code>db.byCat(cat)</code></td><td>รายการทั้งหมดในหมวดนั้น</td></tr>
 <tr><td><code>db.cats()</code></td><td>รายชื่อหมวดทั้งหมด</td></tr>
 <tr><td><code>db.shippingOf(shop, kind)</code></td><td>ค่าส่ง · kind = <code>door</code> / <code>frame</code> / <code>round_frame</code></td></tr>
 <tr><td><code>db.ours</code></td><td>ข้อมูลดิบทั้งหมด (array)</td></tr>
-<tr><td><code>db.updated</code></td><td>วันที่อัปเดตล่าสุด</td></tr>
+<tr><td><code>db.updated</code></td><td>แสตมป์อัปเดตล่าสุดของทั้งไฟล์ เช่น <code>2026-08-26T23:23+07:00</code></td></tr>
+<tr><td><code>db.updatedText()</code></td><td>🆕 แบบอ่านง่าย เช่น <code>26/08/2026 23:23 น.</code></td></tr>
 <tr><td><code>db.stale</code></td><td><code>true</code> = ใช้สำเนาเก่า · <code>false</code> = สดจากเน็ต</td></tr>
 </tbody>
 </table>

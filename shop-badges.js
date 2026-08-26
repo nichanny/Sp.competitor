@@ -23,7 +23,7 @@
     fh:    { name: 'full house wood', g: null,  y: null,            asOf: null },
     tt:    { name: 'TTwood',          g: null,  y: null,            asOf: null },
     pg:    { name: 'PG Wood',         g: null,  y: null,            asOf: null },
-    donut: { name: 'Donut_Furniture', g: null,  y: null,            asOf: null },
+    donut: { name: 'Donut_Furniture', g: false, y: false,           asOf: 'ส.ค. 2569' },
     kkb:   { name: 'KKB Wood',        g: null,  y: null,            asOf: null }
   };
 

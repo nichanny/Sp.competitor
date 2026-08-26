@@ -56,12 +56,42 @@
       var v = r[shop || 'de'];
       return (v === null || v === undefined) ? null : v;
     };
-    /** วันที่ปรับราคาล่าสุดของ SKU นั้น · คืน 'YYYY-MM-DD' หรือ null */
+    /** วันที่ปรับราคาล่าสุด · คืน 'YYYY-MM-DD' หรือ null (ตัดเวลาออก — ใช้ได้เหมือนเดิม) */
     out.priceDate = function (sku, shop) {
+      var v = out.priceStamp(sku, shop);
+      return v ? v.slice(0, 10) : null;
+    };
+    /** แสตมป์เต็มที่ปรับราคาล่าสุด · เช่น '2026-08-26T23:23+07:00' หรือ '2026-07-01' (ของเก่า) */
+    out.priceStamp = function (sku, shop) {
       var r = index[sku];
       if (!r) return null;
-      var v = r[(shop || 'de') + '_at'];
-      return v || null;
+      return r[(shop || 'de') + '_at'] || null;
+    };
+    /** มีเวลาด้วยไหม (ของเก่าจะมีแค่วันที่) */
+    out.hasTime = function (sku, shop) {
+      var v = out.priceStamp(sku, shop);
+      return !!(v && v.length > 10);
+    };
+    /** Date object ของแสตมป์ · null ถ้าไม่มี */
+    out.priceAt = function (sku, shop) {
+      var v = out.priceStamp(sku, shop);
+      if (!v) return null;
+      var d = new Date(v.length > 10 ? v : v + 'T00:00:00+07:00');
+      return isNaN(d.getTime()) ? null : d;
+    };
+    /** ข้อความอ่านง่ายแบบไทย · เช่น '26/08/2026 23:23 น.' */
+    out.priceStampText = function (sku, shop) {
+      var v = out.priceStamp(sku, shop);
+      if (!v) return '—';
+      var day = v.slice(8, 10) + '/' + v.slice(5, 7) + '/' + v.slice(0, 4);
+      return v.length > 10 ? day + ' ' + v.slice(11, 16) + ' น.' : day;
+    };
+    /** แสตมป์ล่าสุดของทั้งไฟล์ */
+    out.updatedText = function () {
+      var v = out.updated;
+      if (!v) return '—';
+      var day = v.slice(8, 10) + '/' + v.slice(5, 7) + '/' + v.slice(0, 4);
+      return v.length > 10 ? day + ' ' + v.slice(11, 16) + ' น.' : day;
     };
     /** รายการทั้งหมดในหมวด */
     out.byCat = function (cat) {
@@ -141,7 +171,7 @@
       el.textContent = '⚠️ ราคาจากสำเนาสำรอง (' + new Date(db.fetchedAt).toLocaleString('th-TH') + ')';
     } else {
       el.style.background = '#EAF7F0'; el.style.color = '#1A7A5E'; el.style.borderColor = '#8FCBB0';
-      el.textContent = '✓ ราคาล่าสุด · อัปเดต ' + (db.updated || '-');
+      el.textContent = '✓ ราคาล่าสุด · อัปเดต ' + db.updatedText();
     }
     global.document.body.appendChild(el);
     setTimeout(function () { el.style.transition = 'opacity .6s'; el.style.opacity = '0'; }, 4000);
