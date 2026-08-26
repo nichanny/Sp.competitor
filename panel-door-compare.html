@@ -110,12 +110,12 @@ const META=[
 
 const D=[
  {lay:'5ฟักปีกนก', z:'80×180',  de:null,     tb:null,     chock:null,               fh:null,                mp:{p:2100,src:'img',note:'ลูกฟัก 5 เตา'}},
- {lay:'5ฟักปีกนก', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'old'}, fh:{p:2700,src:'img'},  mp:{p:2100,src:'img',note:'ลูกฟัก 5 เตา'}},
- {lay:'5ฟักปีกนก', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'old'}, fh:{p:2900,src:'img'},  mp:null},
+ {lay:'5ฟักปีกนก', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'usr'}, fh:{p:2700,src:'img'},  mp:{p:2100,src:'img',note:'ลูกฟัก 5 เตา'}},
+ {lay:'5ฟักปีกนก', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'usr'}, fh:{p:2900,src:'img'},  mp:null},
  {lay:'5ฟักปีกนก', z:'100×200', de:null,     tb:null,     chock:{p:3250,src:'img'}, fh:{p:3000,src:'img'},  mp:null},
 
- {lay:'8ฟัก', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'old'}, fh:null, mp:null},
- {lay:'8ฟัก', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'old'}, fh:null, mp:null},
+ {lay:'8ฟัก', z:'80×200',  de:{p:2156}, tb:{p:2150}, chock:{p:2350,src:'usr'}, fh:null, mp:null},
+ {lay:'8ฟัก', z:'90×200',  de:{p:2890}, tb:null,     chock:{p:2850,src:'usr'}, fh:null, mp:null},
  {lay:'8ฟัก', z:'100×200', de:null,     tb:null,     chock:{p:3250,src:'img'}, fh:null, mp:null},
 ];
 
@@ -130,7 +130,7 @@ const SKUSHARE=[
 ];
 
 function compVals(r){return SHOPS.filter(s=>!s.us).map(s=>r[s.k]).filter(x=>x&&x.p).map(x=>x.p);}
-function verifiedVals(r){return SHOPS.filter(s=>!s.us).map(s=>r[s.k]).filter(x=>x&&x.p&&x.src==='img').map(x=>x.p);}
+function verifiedVals(r){return SHOPS.filter(s=>!s.us).map(s=>r[s.k]).filter(x=>x&&x.p&&(x.src==='img'||x.src==='usr')).map(x=>x.p);}
 function ourVal(r){const a=[r.de,r.tb].filter(x=>x&&x.p).map(x=>x.p);return a.length?Math.min(...a):null;}
 function cell(x,r,us){
   if(!x||!x.p) return '<span class="na">—</span>';
@@ -142,6 +142,7 @@ function cell(x,r,us){
   }
   let nt = x.note ? '<div style="font-size:9px;color:var(--dim);margin-top:2px">'+x.note+'</div>' : '';
   if(x.src==='old') nt += '<div class="srcold">⚠ ข้อมูลเก่า ยังไม่ยืนยัน</div>';
+  if(x.src==='usr') nt += '<div class="srcimg">✓ N. ยืนยัน 26 ส.ค.</div>';
   if(x.src==='img') nt += '<div class="srcimg">✓ SKU 26 ส.ค.</div>';
   return '<span class="'+cls+'">฿'+x.p.toLocaleString()+'</span>'+nt;
 }
@@ -200,8 +201,9 @@ function renderSku(){
   document.getElementById('skuout').innerHTML=h;
 }
 document.getElementById('insight').innerHTML=
- '📷 ช่องที่ติด <b>✓</b> = ราคาจากช่องราคา SKU ในสกรีนช็อต 26 ส.ค. · ช่องที่ติด <b>⚠</b> = ข้อมูลค้างจากเซสชันก่อน ยังไม่ยืนยัน และ<b>ไม่ถูกนับในคอลัมน์เพดาน</b><br>'+
- '🟣 <b>80×200 มีที่ขยับมาก</b> — เรา ฿2,150–2,156 · full house ฿2,700 (ห่าง ฿550) · แต่เพดานติดที่ ไม้พร้อม ฿2,100 ซึ่งขายได้แค่ 2 ชิ้น/เดือน<br>'+
+ '📷 ช่องที่ติด <b>✓</b> = ราคาจากช่องราคา SKU ในสกรีนช็อต 26 ส.ค. · ช่องที่ติด <b>✓ N. ยืนยัน</b> = N. เช็กกับหน้าร้านจริงแล้ว · <b>ทุกช่องในหน้านี้ยืนยันครบแล้ว</b> เพดานคำนวณจากข้อมูลจริงทั้งหมด<br>'+
+ '🟢 <b>8ฟัก 80×200 = ช่องว่างที่ชัดที่สุด +฿200</b> — เรา ฿2,150 · chocksomkid ฿2,350 · ไม่มีคู่แข่งเจ้าอื่นในไซซ์นี้เลย ขึ้นได้ทันที<br>'+
+ '🟣 <b>5ฟักปีกนก 80×200</b> — เพดานติดที่ ไม้พร้อม ฿2,100 (ขาย 2 ชิ้น/เดือน) แต่ถ้ายึด chocksomkid ฿2,350 หรือ full house ฿2,700 ยังมีที่ขยับ ฿200–550<br>'+
  '🔴 <b>ยังไม่มี SKU 100×200</b> — ไซซ์ที่กินส่วนแบ่งสะสมสูงสุดทั้ง chocksomkid (49.49%) และ full house (27.27%) · ราคาตลาด ฿3,000–3,250<br>'+
  '✅ <b>90×200 ที่ ฿2,890 ตั้งถูกแล้ว</b> — full house ฿2,900 (ยังไม่มียอด) เราต่ำกว่า ฿10 พอดี อย่าลด<br>'+
  '📉 <b>เซกเมนต์เงียบ</b> — 4 ลิสต์รวมกัน 26 ชิ้น/เดือน · 👀 full house เปิด 25 มี.ค. 2026 ได้ 31 ชิ้นใน 154 วัน ramp เร็วสุด';
