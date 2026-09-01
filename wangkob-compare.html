@@ -50,6 +50,7 @@ tr:hover td{background:var(--bg4);}
 .sm-row:last-child{border-bottom:none;}
 .sm-row.h{background:var(--bg4);font-size:10px;font-family:'Space Mono',monospace;color:var(--dim);}
 .sm-v{font-family:'Space Mono',monospace;font-weight:700;}
+.oldline{font-size:8.5px;color:var(--red);margin-top:2px;font-family:'Sarabun',sans-serif;}
 .scline{font-size:9px;color:var(--dim);margin-top:2px;font-family:'Sarabun',sans-serif;opacity:.8;}
 .sline{font-size:9px;color:var(--dim);font-family:'Space Mono',monospace;margin-top:2px;}
 .sline b{color:var(--text);}
@@ -114,27 +115,29 @@ const D=[
  {t:'วงกบประตู', z:'200×200', de:{p:1329}, tb:{p:1325}, chock:{p:1290,s:13}, lam:null, ojas:{p:1950,s:10}, donut:null},
 
  // ── วงกบกลม (ธรรมดา) ──
- {t:'วงกบกลม', z:'40',  de:{p:1017}, tb:{p:1050}, chock:{p:950,s:12},  lam:null, ojas:null, donut:{p:1000,sc:2}},
- {t:'วงกบกลม', z:'50',  de:{p:1220}, tb:{p:1249}, chock:null,          lam:null, ojas:null, donut:{p:1050,alt:1150,sc:2}},
- {t:'วงกบกลม', z:'60',  de:{p:1790}, tb:{p:1799}, chock:{p:1142,s:47}, lam:null, ojas:null, donut:{p:1200,sc:20}},
- {t:'วงกบกลม', z:'80',  de:{p:1627}, tb:{p:1699}, chock:{p:1550,s:113},lam:null, ojas:null, donut:{p:1600,sc:14}},
- {t:'วงกบกลม', z:'100', de:{p:2039}, tb:{p:2219}, chock:null,          lam:null, ojas:null, donut:{p:2000,sc:8}},
- {t:'วงกบกลม', z:'120', de:{p:2135}, tb:{p:2399}, chock:null,          lam:null, ojas:null, donut:{p:2100,alt:2200,sc:13}},
- {t:'วงกบกลม', z:'150', de:{p:2600}, tb:{p:2690}, chock:null,          lam:null, ojas:null, donut:{p:2400,sc:4}},
+ {t:'วงกบกลม', z:'40',  de:{p:1017}, tb:{p:1050}, chock:{p:950,sc:12},   lam:null, ojas:null, donut:{p:1000,sc:2}},
+ {t:'วงกบกลม', z:'50',  de:{p:1220}, tb:{p:1249}, chock:null,            lam:null, ojas:null, donut:{p:1050,alt:1150,sc:2}},
+ {t:'วงกบกลม', z:'60',  de:{p:1790}, tb:{p:1799}, chock:{p:1142,sc:47},  lam:null, ojas:null, donut:{p:1200,sc:20}},
+ {t:'วงกบกลม', z:'80',  de:{p:1627}, tb:{p:1699}, chock:{p:1550,sc:227}, lam:null, ojas:null, donut:{p:1600,sc:14}},
+ {t:'วงกบกลม', z:'100', de:{p:2039}, tb:{p:2219}, chock:{p:1900,sc:52},  lam:null, ojas:null, donut:{p:2000,sc:8}},
+ {t:'วงกบกลม', z:'120', de:{p:2135}, tb:{p:2399}, chock:{p:2100,sc:42},  lam:null, ojas:null, donut:{p:2100,alt:2200,sc:13}},
+ {t:'วงกบกลม', z:'150', de:{p:2600}, tb:{p:2690}, chock:{p:2600,sc:6},   lam:null, ojas:null, donut:{p:2400,sc:4}},
 
  // ── วงกบกลม 3 ช่องกระจก ──
  {t:'วงกบกลม 3 ช่อง', z:'40',  de:{p:1520}, tb:{p:1550}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:2}},
  {t:'วงกบกลม 3 ช่อง', z:'50',  de:{p:1650}, tb:{p:1650}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:5}},
  {t:'วงกบกลม 3 ช่อง', z:'60',  de:{p:1790}, tb:{p:1799}, chock:null,          lam:null, ojas:null, donut:{p:1550,sc:25}},
  {t:'วงกบกลม 3 ช่อง', z:'80',  de:{p:1950}, tb:{p:1950}, chock:null,          lam:null, ojas:null, donut:{p:1900,sc:74}},
- {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,s:53}, lam:null, ojas:null, donut:{p:2200,sc:67}},
- {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,s:27}, lam:null, ojas:null, donut:{p:2500,sc:63}},
- {t:'วงกบกลม 3 ช่อง', z:'150', de:{p:3990}, tb:{p:3900}, chock:{p:2650,s:9},  lam:null, ojas:null, donut:{p:2800,sc:8}},
+ {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,old:1}, lam:null, ojas:null, donut:{p:2200,sc:67}},
+ {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,old:1}, lam:null, ojas:null, donut:{p:2500,sc:63}},
+ {t:'วงกบกลม 3 ช่อง', z:'150', de:{p:3990}, tb:{p:3900}, chock:{p:2650,old:1}, lam:null, ojas:null, donut:{p:2800,sc:8}},
 ];
 
 const LISTINGS=[
  {shop:'Donut_Furniture', listing:'วงกบกลม สไตล์มินิมอล ไม้สักแท้ หนา 2 นิ้ว (28803417540)', rank:'#2997', sold30:8, open:'21 มิ.ย. 2024', total:137, rv:'4.9 · 30 รีวิว'},
  {shop:'Donut_Furniture', listing:'วงกบกลม 3 ช่องกระจก ราคาโรงงาน ไม้หนา 2 นิ้ว (25966677629)', rank:'#1945', sold30:8, open:'4 มี.ค. 2024', total:1000, rv:'4.9 · 273 รีวิว'},
+ {shop:'chocksomkid', listing:'วงกบวงกลมไม้สัก ราคาส่ง (20515090656) · หมวดชั้นวางของ', rank:'#6639', sold30:'1,000 ⚠', open:'24 มิ.ย. 2022', total:'1k+', rv:'4.8 · 280 รีวิว'},
+ {shop:'chocksomkid', listing:'วงกบกลมไม้สักแท้ราคาส่ง (19918045180) · หมวดอื่นๆ', rank:'#5562', sold30:'232 ⚠', open:'1 ก.ค. 2022', total:490, rv:'4.8 · 100 รีวิว'},
 ];
 function renderMeta(){
   let h='<div class="sm-row h"><span>Listing</span><span>เปิดเมื่อ</span><span>Ranking</span><span>ขาย/เดือน</span></div>';
@@ -144,7 +147,7 @@ function renderMeta(){
       +'<div style="font-size:10px;color:var(--dim);opacity:.8">'+m.rv+' · ขายรวม '+m.total+' ชิ้น</div></span>'
       +'<span class="sm-v" style="color:var(--dim);font-size:11px">'+m.open+'</span>'
       +'<span class="sm-v" style="color:var(--dim)">'+m.rank+'</span>'
-      +'<span class="sm-v" style="color:var(--green)">'+m.sold30+'</span></div>';
+      +'<span class="sm-v" style="color:'+(String(m.sold30).indexOf('⚠')>=0?'var(--red)':'var(--green)')+'">'+m.sold30+'</span></div>';
   });
   document.getElementById('meta').innerHTML=h;
 }
@@ -162,6 +165,7 @@ function cell(x,r,us){
   }
   let sl = x.s!=null ? '<div class="sline"><b>'+x.s+'</b> ชิ้น/ด.</div>' : '';
   if(x.alt!=null) sl += '<div class="scline">อีกลิสต์ ฿'+x.alt.toLocaleString()+'</div>';
+  if(x.old) sl += '<div class="oldline">⚠ ยังไม่ยืนยัน</div>';
   if(x.sc!=null) sl += '<div class="scline">สะสม '+x.sc+' ชิ้น</div>';
   return '<span class="'+cls+'">฿'+x.p.toLocaleString()+'</span>'+sl;
 }
