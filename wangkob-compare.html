@@ -50,6 +50,7 @@ tr:hover td{background:var(--bg4);}
 .sm-row:last-child{border-bottom:none;}
 .sm-row.h{background:var(--bg4);font-size:10px;font-family:'Space Mono',monospace;color:var(--dim);}
 .sm-v{font-family:'Space Mono',monospace;font-weight:700;}
+.shipline{font-size:8.5px;color:var(--blue);font-family:'Sarabun',sans-serif;margin-top:1px;}
 .po{font-size:8.5px;color:var(--orange);font-family:'Sarabun',sans-serif;font-weight:700;margin-top:1px;}
 .oldline{font-size:8.5px;color:var(--red);margin-top:2px;font-family:'Sarabun',sans-serif;}
 .scline{font-size:9px;color:var(--dim);margin-top:2px;font-family:'Sarabun',sans-serif;opacity:.8;}
@@ -183,22 +184,39 @@ function renderMeta(){
   document.getElementById('meta').innerHTML=h;
 }
 
+/* ค่าส่งวงกบกลม (บาท) · null = ยังไม่ทราบ */
+const SHIP={de:150, tb:150, chock:220, donut:null, san:null, lam:null, ojas:null};
+let LANDED=false;
+function setLanded(on,el){
+  LANDED=on;
+  document.querySelectorAll('#landedF .btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
 let TF='all';
 
-function vals(r){return SHOPS.map(s=>r[s.k]).filter(x=>x&&x.p).map(x=>x.p);}
-function cell(x,r,us){
+function eff(k,x){
+  if(!x||!x.p) return null;
+  if(!LANDED) return x.p;
+  return SHIP[k]==null ? null : x.p+SHIP[k];
+}
+function vals(r){return SHOPS.map(s=>eff(s.k,r[s.k])).filter(v=>v!=null);}
+function cell(x,r,us,k){
   if(!x||!x.p) return '<span class="na">—</span>';
+  const v=eff(k,x);
+  if(v==null) return '<span class="na">฿'+x.p.toLocaleString()+'</span><div class="scline">ไม่ทราบค่าส่ง</div>';
   const ns=vals(r);
   let cls = us ? 'us-col' : 'mid';
   if(!us && ns.length>1){
-    if(x.p===Math.min(...ns)) cls='win';
-    else if(x.p===Math.max(...ns)) cls='lose';
+    if(v===Math.min(...ns)) cls='win';
+    else if(v===Math.max(...ns)) cls='lose';
   }
   let sl = x.s!=null ? '<div class="sline"><b>'+x.s+'</b> ชิ้น/ด.</div>' : '';
   if(x.alt!=null) sl += '<div class="scline">อีกลิสต์ ฿'+x.alt.toLocaleString()+'</div>';
   if(x.old) sl += '<div class="oldline">⚠ ยังไม่ยืนยัน</div>';
   if(x.sc!=null) sl += '<div class="scline">สะสม '+x.sc+' ชิ้น</div>';
-  return '<span class="'+cls+'">฿'+x.p.toLocaleString()+'</span>'+sl;
+  return '<span class="'+cls+'">฿'+v.toLocaleString()+'</span>'+sl;
 }
 function renderCtrl(){
   const ts=[...new Set(D.map(d=>d.t))];
@@ -214,11 +232,287 @@ function render(){
   Object.entries(groups).forEach(([t,rs])=>{
     html+='<div class="grp">'+t+'</div><div class="tbl-wrap"><table><thead><tr>';
     html+='<th style="text-align:left">ขนาด</th>';
-    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+(s.po?'<div class="po">พรีออเดอร์ 10 วัน</div>':'')+SPBadges.dots(s.k)+'</th>';});
+    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+(s.po?'<div class="po">พรีออเดอร์ 10 วัน</div>':'')+(SHIP[s.k]!=null?'<div class="shipline">ค่าส่ง ฿'+SHIP[s.k]+'</div>':'<div class="shipline" style="opacity:.45">ค่าส่ง ?</div>')+SPBadges.dots(s.k)+'</th>';});
     html+='</tr></thead><tbody>';
     rs.forEach(r=>{
       html+='<tr><td>'+r.z+'</td>';
-      SHOPS.forEach(s=>{html+='<td>'+cell(r[s.k],r,!!s.us)+'</td>';});
+      SHOPS.forEach(s=>{html+='<td>'+cell(r[s.k],r,!!s.us,s.k)+'</td>';});
+      html+='</tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  document.getElementById('out').innerHTML=html||'<div style="text-align:center;padding:40px;color:var(--dim)">ไม่พบข้อมูล</div>';
+}
+document.getElementById('insight').innerHTML=
+ '✅ <b>วงกบประตูมาตรฐาน — De/Tb ถูกที่สุดทุกขนาด</b> · 80×200 เรา ฿899 vs chocksomkid ฿1,100 (ถูกกว่า ฿201) และ Ojas ฿1,250 (ถูกกว่า ฿351)<br>'+
+ '🔥 <b>แต่ chocksomkid ขายได้ 150 ชิ้น/เดือน · Ojas 106 ชิ้น</b> ทั้งที่แพงกว่าเรามาก → ราคาไม่ใช่ปัญหา แต่เป็น <b>visibility และ ranking</b><br>'+
+ '💰 <b>กลยุทธ์ค่าส่ง — เรา ฿150 vs chocksomkid ฿220 = ได้เปรียบ ฿70/ชิ้น</b> · กดปุ่ม "รวมค่าส่ง" ด้านบนเพื่อดูราคาที่ลูกค้าจ่ายจริง<br>'+
+ '⚖️ <b>แต่ De เกือบเต็มเพดานแล้ว</b> — ราคาที่เท่ากันเมื่อรวมค่าส่ง = ราคา chocksomkid + ฿70 · 40cm เหลือ +฿3 · 120cm +฿35 · 150cm +฿70 · ส่วน 80cm และ 100cm <b>เกินไปแล้ว</b><br>'+
+ '👁️ <b>ข้อควรระวังใหญ่</b> — หน้าค้นหา Shopee โชว์<b>ราคาสินค้า ไม่ใช่ราคารวมค่าส่ง</b> · ตั้งแพงกว่าจึงเสียเปรียบตอนลูกค้ากวาดตาเทียบ ส่วนข้อได้เปรียบค่าส่งเห็นทีหลังตอนกดเข้าไปแล้ว<br>'+
+ '🟢 <b>และทั้งเรากับ chocksomkid มีป้ายเขียว (ส่งฟรี) เหมือนกัน</b> — ลูกค้าที่ยิงคูปองส่งฟรีจะไม่เห็นส่วนต่าง ฿70 เลย<br>'+
+ '⚠️ <b>วงกบกลม — chocksomkid ถูกกว่าเราแทบทุกไซซ์</b> · 60cm ฿1,142 vs เรา ฿1,790 · 80cm ฿1,550 vs ฿1,627 · 100cm ฿1,900 vs ฿2,039 · 120cm ฿2,100 vs ฿2,135<br>'+
+ '📌 <b>80cm คือไซซ์ที่ขายดีที่สุดของ chocksomkid</b> — สะสม 227 ชิ้น = 79.37% ของทั้งลิสต์ · นี่คือสมรภูมิจริงของหมวดวงกบกลม<br>'+
+ '🤝 <b>150cm เราเสมอ chocksomkid พอดี ฿2,600</b> — แต่ Donut ฿2,400 ถูกกว่าทั้งคู่<br>'+
+ '🏭 <b>santirak28 ถูกที่สุดในไซซ์เล็ก-กลาง แต่เป็นพรีออเดอร์ 10 วัน</b> — 40cm ฿800 · 60cm ฿1,000 · 80cm ฿1,300 · <b>ของพร้อมส่งของเราคือพรีเมียมที่ชอบธรรม ไม่ต้องลดสู้</b><br>'+
+ '📈 <b>แต่ santirak28 กลับแพงที่สุดในไซซ์ใหญ่</b> — 100cm ฿2,200 · 120cm ฿3,000 vs เรา ฿2,039 / ฿2,135 → <b>ไซซ์ 100–120 เราได้เปรียบทั้งราคาและความเร็ว</b><br>'+
+ '🕳️ <b>ช่องว่างไซซ์ที่เรายังไม่มี — 70 · 90 · 110 ซม.</b> · santirak28 มีครบทั้ง 2 หมวด<br>'+
+ '🔄 <b>3 ช่อง: santirak28 กลับด้านชัดกว่าเดิม</b> — 60cm ฿1,200 ถูกกว่าเรา ฿590 แต่ <b>120cm ฿4,500 แพงกว่าเรา ฿1,810</b> · 100cm ฿2,800 แพงกว่าเรา ฿515<br>'+
+ '✅ <b>ทบทวนเรื่อง 3 ช่อง 150 ซม. ฿3,990</b> — เมื่อเทียบกับ santirak28 ที่ตั้ง 120cm ไว้ ฿4,500 ราคานี้<b>ไม่ได้หลุดตลาด</b>อย่างที่สรุปไว้ก่อนหน้า · ไซซ์ใหญ่ราคากระโดดแรงเป็นเรื่องปกติของหมวดนี้<br>'+
+ '⚠️ <b>วงกบกลม 3 ช่อง 120-150</b> — chocksomkid ฿2,350/฿2,650 ถูกกว่าเรามาก (De ฿2,690-3,990 / Tb ฿2,699-3,900)<br>'+
+ '🍩 <b>Donut ถูกกว่าเราทุกไซซ์ ทั้ง 2 หมวด</b> — วงกบกลม 60cm ฿1,200 vs เรา ฿1,790 · 3 ช่อง 150cm ฿2,800 vs De ฿3,990<br>'+
+ '🚨 <b>3 ช่อง 150 ซม. ของเราแพงผิดปกติ</b> — De ฿3,990 / Tb ฿3,900 · Donut ฿2,800 · chocksomkid ฿2,650 → เราแพงกว่าตลาด ฿1,100–1,340 ควรทบทวน<br>'+
+ '📌 <b>3 ช่องคือตัวทำเงินของ Donut</b> — 80/100/120cm กินส่วนแบ่งสะสม 73.9% รวมกัน · ไซซ์ 80cm ขายสะสม 74 ชิ้น มากที่สุด<br>'+
+ '💡 <b>แต่ Donut ได้แค่ 8 ชิ้น/เดือน ต่อลิสต์ (รวม 16)</b> ทั้งที่ถูกที่สุด รีวิว 4.9 · 273 รีวิว · เปิดมา 912 วัน · <b>ไม่มีป้ายเขียวป้ายเหลืองเลย</b> → ยืนยันอีกครั้งว่าตัวแปรคือ<b>ป้ายและ visibility ไม่ใช่ราคา</b> ไม่ต้องลดราคาสู้';
+function setT(v,b){TF=v;document.querySelectorAll('#typeF .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+document.getElementById('sb-legend').innerHTML=SPBadges.legend();
+renderMeta();renderCtrl();render();
+</script>
+</body>
+</html>
+<div id="landedF" style="margin-bottom:14px">
+  <button class="btn active" onclick="setLanded(false,this)">ราคาสินค้า</button>
+  <button class="btn" onclick="setLanded(true,this)">💰 รวมค่าส่ง (ราคาที่ลูกค้าจ่ายจริง)</button>
+</div>TYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ราคาวงกบประตู — เปรียบทุกร้าน</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:1000px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:16px;}
+h1{font-size:19px;font-weight:800;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:14px;}
+.insight{background:rgba(26,122,94,.08);border:1px solid rgba(26,122,94,.28);border-radius:11px;padding:12px 15px;font-size:12.5px;line-height:1.85;margin-bottom:15px;}
+.insight b{color:var(--green);}
+.legend{display:flex;flex-wrap:wrap;gap:13px;margin-bottom:14px;font-size:12px;}
+.leg{display:flex;align-items:center;gap:5px;}
+.dot{width:8px;height:8px;border-radius:2px;}
+.ctrl{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.btn{font-size:12px;padding:5px 13px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--dim);cursor:pointer;font-family:'Sarabun',sans-serif;}
+.btn.active{background:rgba(192,74,26,.13);color:var(--orange);border-color:rgba(192,74,26,.4);}
+.grp{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin:22px 0 9px;}
+.tbl-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow-x:auto;margin-bottom:10px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:700px;}
+th{background:var(--bg4);padding:8px 10px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;white-space:nowrap;}
+th:first-child{text-align:left;}
+th.us{color:var(--orange);font-weight:700;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap;font-family:'Space Mono',monospace;}
+td:first-child{text-align:left;font-family:'Sarabun',sans-serif;font-weight:700;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg4);}
+.win{color:var(--green);font-weight:700;}
+.lose{color:var(--red);}
+.mid{color:var(--text);}
+.us-col{color:var(--orange);font-weight:700;}
+.na{color:var(--dim);opacity:.32;}
+.warn{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);border-radius:11px;padding:12px 15px;font-size:12.5px;line-height:1.85;margin-bottom:14px;}
+.warn b{color:var(--red);}
+.note{background:rgba(139,105,20,.08);border:1px solid rgba(139,105,20,.28);border-radius:11px;padding:12px 15px;font-size:12.5px;line-height:1.85;margin-bottom:14px;}
+.note b{color:var(--yellow);}
+.shopmeta{background:var(--bg3);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-bottom:16px;}
+.sm-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;padding:9px 13px;border-bottom:1px solid var(--border);font-size:12.5px;align-items:center;}
+.sm-row:last-child{border-bottom:none;}
+.sm-row.h{background:var(--bg4);font-size:10px;font-family:'Space Mono',monospace;color:var(--dim);}
+.sm-v{font-family:'Space Mono',monospace;font-weight:700;}
+.shipline{font-size:8.5px;color:var(--blue);font-family:'Sarabun',sans-serif;margin-top:1px;}
+.po{font-size:8.5px;color:var(--orange);font-family:'Sarabun',sans-serif;font-weight:700;margin-top:1px;}
+.oldline{font-size:8.5px;color:var(--red);margin-top:2px;font-family:'Sarabun',sans-serif;}
+.scline{font-size:9px;color:var(--dim);margin-top:2px;font-family:'Sarabun',sans-serif;opacity:.8;}
+.sline{font-size:9px;color:var(--dim);font-family:'Space Mono',monospace;margin-top:2px;}
+.sline b{color:var(--text);}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🪟 ราคาวงกบประตู — เปรียบทุกร้าน</h1>
+<p class="sub">De · Tb · chocksomkid · LAMTONMAISAK · Ojas · อัปเดต 25 ส.ค. 2569</p>
+
+<div class="insight" id="insight"></div>
+
+<div class="legend">
+  <div class="leg"><div class="dot" style="background:var(--green)"></div><span style="color:var(--green)">ถูกที่สุดในแถว</span></div>
+  <div class="leg"><div class="dot" style="background:var(--red)"></div><span style="color:var(--red)">แพงที่สุดในแถว</span></div>
+  <div class="leg"><div class="dot" style="background:var(--orange)"></div><span style="color:var(--orange)">ร้านเรา</span></div>
+  <div class="leg"><span style="color:var(--dim)">ตัวเลขเล็ก = ยอดขาย/เดือน</span></div>
+</div>
+
+<div class="ctrl" id="typeF"></div>
+<div class="warn">
+🚩 <b>ยอดขาย/เดือน ของ chocksomkid 2 ลิสต์นี้ เชื่อไม่ได้ — อย่านำไปใช้</b><br>
+<b>ลิสต์ชั้นวางของ (20515090656):</b> Shopdera แสดง "30 วัน = 1,000" ซึ่ง<b>เท่ากับยอดขายรวมเป๊ะ</b> และ GMV 30 วัน ฿950,000 ก็<b>เท่ากับ GMV รวมเป๊ะ</b> → คือเลข "1พัน+" ที่ Shopee ตัดยอดไว้ ถูกนำมาใส่ช่อง 30 วัน · ยอดสะสมจริงจากช่อง SKU = <b>286 ชิ้น ใน 1,531 วัน ≈ 5.6 ชิ้น/เดือน</b><br>
+<b>ลิสต์อื่นๆ (19918045180):</b> อ้าง 232 ชิ้น/เดือน แต่ขายรวมทั้งหมด 490 ชิ้นใน 1,524 วัน (≈ 9.6 ชิ้น/เดือน) — ถ้า 232 จริง แปลว่าเดือนเดียวขายเกือบครึ่งของทั้งชีวิตลิสต์ · ยอดสะสมจากช่อง SKU = <b>100 ชิ้น</b><br>
+👉 <b>เหมือนเคส "ไม้พร้อม 9,000 ชิ้น" ที่เคยแก้ไปแล้ว</b> — ใช้เฉพาะ<b>ราคา</b>จาก 2 ลิสต์นี้ ส่วนยอดขายยึดช่อง SKU สะสม<br><b>santirak28</b> ก็เข้าข่ายเดียวกัน — การ์ด Shopee โชว์ "2พัน+ ชิ้น/เดือน" แต่ Shopdera ระบุยอด 30 วัน = <b>ไม่มีข้อมูล</b> และ GMV 30 วัน = <b>฿0</b> · ยอดสะสมจากช่อง SKU = <b>300 ชิ้น ใน 1,628 วัน ≈ 5.5 ชิ้น/เดือน</b>
+</div>
+
+<div class="note">
+📐 <b>วิธีตรวจว่าเลข "ขายได้ X ชิ้น/เดือน" เชื่อได้ไหม</b> (แก้จากกฎเดิมที่เขียนไว้ — กฎ "พัน+" ใช้ไม่พอ)<br>
+สูตร: <b>เทียบ X กับ (ยอดขายรวม ÷ อายุลิสต์เป็นเดือน)</b> · ถ้า X สูงกว่าค่าเฉลี่ยหลายสิบเท่า หรือ X กินสัดส่วนใหญ่ของยอดรวมทั้งชีวิตลิสต์ → <b>เชื่อไม่ได้</b><br>
+<table style="min-width:0;font-size:11.5px;margin-top:6px">
+<tr><th style="text-align:left">ลิสต์</th><th>การ์ดบอก</th><th>ขายรวม</th><th>อายุ</th><th>เฉลี่ยจริง</th><th>ตัดสิน</th></tr>
+<tr><td>Donut วงกบกลม</td><td>8</td><td>137</td><td>803 ว.</td><td>5.1/ด.</td><td style="color:var(--green)">✓ เชื่อได้</td></tr>
+<tr><td>chocksomkid อื่นๆ</td><td>232</td><td>490</td><td>1,524 ว.</td><td>9.6/ด.</td><td style="color:var(--red)">✗ ขัดกัน</td></tr>
+<tr><td>santirak28 3 ช่อง</td><td>309</td><td>571</td><td>1,594 ว.</td><td>10.7/ด.</td><td style="color:var(--red)">✗ ขัดกัน</td></tr>
+<tr><td>santirak28 ธรรมดา</td><td>2พัน+</td><td>2,000</td><td>1,628 ว.</td><td>—</td><td style="color:var(--red)">✗ = ยอดรวม</td></tr>
+</table>
+<span style="opacity:.85">ทางออก: ยึด<b>ยอดสะสมช่อง SKU</b> หารด้วยอายุลิสต์ เป็นตัวประมาณที่ปลอดภัยที่สุด</span>
+</div>
+
+<div class="warn">
+🔴 <b>อย่าใช้ GMV ของ Shopdera เดายอดขายราย SKU</b> — GMV = จำนวนชิ้น × <b>ราคาต่ำสุดของลิสต์</b><br>
+พิสูจน์กับ Donut: GMV รวม ฿143,850 ÷ 137 ชิ้น = ฿1,050 พอดี (= ราคา 50cm ซึ่งเป็นตัวถูกสุด) · GMV 30 วัน ฿8,400 ÷ 8 = ฿1,050 พอดีเช่นกัน
+</div>
+
+<div class="note">
+🍩 <b>Donut มี 2 ลิสต์ที่ขายวงกบกลมทับกัน</b> — ลิสต์ "วงกบกลม" (28803417540) และลิสต์ "3 ช่องกระจก" (25966677629) ซึ่งมีทั้ง 3 ช่อง <b>และ</b> แบบธรรมดาปนอยู่ · ราคาแบบธรรมดาไม่ตรงกัน 2 ไซซ์: <b>50cm ฿1,050 vs ฿1,150</b> · <b>120cm ฿2,100 vs ฿2,200</b> — ตารางแสดงราคาถูกกว่า และบอกราคาอีกลิสต์ไว้ใต้ช่อง
+</div>
+
+<div class="note">
+📊 <b>ตัวเลข 2 แบบในตาราง</b> — <b>"N ชิ้น/ด."</b> = ยอดขายต่อเดือน · <b>"สะสม N ชิ้น"</b> = ยอดสะสมตั้งแต่เปิดลิสต์ (คอลัมน์ยอดขาย SKU ของ Shopdera) <b>ไม่ใช่ต่อเดือน</b><br>
+✅ <b>แก้ข้อมูลเก่าแล้ว</b> — เลข chocksomkid ที่เคยแสดงเป็น "12 / 47 / 113 ชิ้น/เดือน" แท้จริงคือ<b>ยอดสะสม</b> · ตรวจกับสกรีนช็อตแล้วตรงกับช่อง SKU (40cm=12 · 60cm=47) ส่วน 80cm ที่เคยเป็น 113 ค่าจริงคือ <b>227</b>
+</div>
+
+<div class="grp">ยอดขายต่อเดือน ระดับ listing</div>
+<div class="shopmeta" id="meta"></div>
+<div id="sb-legend"></div>
+<div id="out"></div>
+
+<script src="shop-badges.js"></script>
+<script>
+const SHOPS=[
+ {k:'de',   name:'De',          us:true},
+ {k:'tb',   name:'Tb',          us:true},
+ {k:'chock',name:'chocksomkid'},
+ {k:'lam',  name:'LAMTONMAISAK'},
+ {k:'ojas', name:'Ojas'},
+ {k:'donut',name:'Donut_Furniture'},
+ {k:'san',  name:'santirak28', po:true},
+];
+
+// p = ราคา · s = ยอดขาย/เดือน
+const D=[
+ // ── วงกบประตูมาตรฐาน ──
+ {t:'วงกบประตู', z:'50×50',   de:null, tb:{p:645}, chock:null, lam:null, ojas:null, donut:null, san:null},
+ {t:'วงกบประตู', z:'70×200',  de:{p:1080}, tb:{p:1079}, chock:{p:1100,s:15}, lam:{p:990,s:5},  ojas:{p:1250,s:8}, donut:null, san:null},
+ {t:'วงกบประตู', z:'80×180',  de:{p:1079}, tb:{p:1080}, chock:{p:1100,s:13}, lam:null,          ojas:null, donut:null, san:null},
+ {t:'วงกบประตู', z:'80×200',  de:{p:1080}, tb:{p:1079}, chock:{p:1100,s:150},lam:{p:1130,s:7}, ojas:{p:1250,s:106}, donut:null, san:null},
+ {t:'วงกบประตู', z:'90×200',  de:{p:1090}, tb:{p:1089}, chock:{p:1100,s:46}, lam:{p:1330},      ojas:{p:1350,s:34}, donut:null, san:null},
+ {t:'วงกบประตู', z:'100×120', de:null, tb:null, chock:{p:500,s:2}, lam:null, ojas:null, donut:null, san:null},
+ {t:'วงกบประตู', z:'100×200', de:{p:1090}, tb:{p:1089}, chock:{p:1100,s:46}, lam:{p:1470,s:1}, ojas:{p:1450,s:28}, donut:null, san:null},
+ {t:'วงกบประตู', z:'140×200', de:null, tb:null, chock:null, lam:null, ojas:{p:1650,s:2}, donut:null, san:null},
+ {t:'วงกบประตู', z:'160×200', de:{p:1299}, tb:{p:1299}, chock:{p:1290,s:32}, lam:null, ojas:{p:1750,s:6}, donut:null, san:null},
+ {t:'วงกบประตู', z:'180×200', de:{p:1299}, tb:{p:1299}, chock:{p:1290,s:8},  lam:null, ojas:{p:1850,s:1}, donut:null, san:null},
+ {t:'วงกบประตู', z:'200×200', de:{p:1329}, tb:{p:1325}, chock:{p:1290,s:13}, lam:null, ojas:{p:1950,s:10}, donut:null, san:null},
+
+ // ── วงกบกลม (ธรรมดา) ──
+ {t:'วงกบกลม', z:'40',  de:{p:1017}, tb:{p:1050}, chock:{p:950,sc:12},   lam:null, ojas:null, donut:{p:1000,sc:2},         san:{p:800,sc:4}},
+ {t:'วงกบกลม', z:'50',  de:{p:1220}, tb:{p:1249}, chock:null,            lam:null, ojas:null, donut:{p:1050,alt:1150,sc:2}, san:{p:1000,sc:10}},
+ {t:'วงกบกลม', z:'60',  de:{p:1790}, tb:{p:1799}, chock:{p:1142,sc:47},  lam:null, ojas:null, donut:{p:1200,sc:20},        san:{p:1000,sc:37}},
+ {t:'วงกบกลม', z:'70',  de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,                  san:{p:1200,sc:27}},
+ {t:'วงกบกลม', z:'80',  de:{p:1627}, tb:{p:1699}, chock:{p:1550,sc:227}, lam:null, ojas:null, donut:{p:1600,sc:14},        san:{p:1300,sc:188}},
+ {t:'วงกบกลม', z:'90',  de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,                  san:{p:1470,sc:9}},
+ {t:'วงกบกลม', z:'100', de:{p:2039}, tb:{p:2219}, chock:{p:1900,sc:52},  lam:null, ojas:null, donut:{p:2000,sc:8},         san:{p:2200,sc:22}},
+ {t:'วงกบกลม', z:'110', de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,                  san:{p:3000}},
+ {t:'วงกบกลม', z:'120', de:{p:2135}, tb:{p:2399}, chock:{p:2100,sc:42},  lam:null, ojas:null, donut:{p:2100,alt:2200,sc:13},san:{p:3000,sc:3}},
+ {t:'วงกบกลม', z:'150', de:{p:2600}, tb:{p:2690}, chock:{p:2600,sc:6},   lam:null, ojas:null, donut:{p:2400,sc:4},         san:null},
+
+ // ── วงกบกลม 3 ช่องกระจก ──
+ {t:'วงกบกลม 3 ช่อง', z:'40',  de:{p:1520}, tb:{p:1550}, chock:null,            lam:null, ojas:null, donut:{p:1400,sc:2},  san:null},
+ {t:'วงกบกลม 3 ช่อง', z:'50',  de:{p:1650}, tb:{p:1650}, chock:null,            lam:null, ojas:null, donut:{p:1400,sc:5},  san:{p:1000,sc:6}},
+ {t:'วงกบกลม 3 ช่อง', z:'60',  de:{p:1790}, tb:{p:1799}, chock:null,            lam:null, ojas:null, donut:{p:1550,sc:25}, san:{p:1200,sc:50}},
+ {t:'วงกบกลม 3 ช่อง', z:'70',  de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,           san:{p:1500,sc:9}},
+ {t:'วงกบกลม 3 ช่อง', z:'80',  de:{p:1950}, tb:{p:1950}, chock:null,            lam:null, ojas:null, donut:{p:1900,sc:74}, san:{p:1700,sc:29}},
+ {t:'วงกบกลม 3 ช่อง', z:'90',  de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,           san:{p:2200,sc:8}},
+ {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,old:1},  lam:null, ojas:null, donut:{p:2200,sc:67}, san:{p:2800,sc:4}},
+ {t:'วงกบกลม 3 ช่อง', z:'110', de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,           san:{p:4500}},
+ {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,old:1},  lam:null, ojas:null, donut:{p:2500,sc:63}, san:{p:4500,sc:6}},
+ {t:'วงกบกลม 3 ช่อง', z:'150', de:{p:3990}, tb:{p:3900}, chock:{p:2650,old:1},  lam:null, ojas:null, donut:{p:2800,sc:8},  san:null},
+];
+
+const LISTINGS=[
+ {shop:'Donut_Furniture', listing:'วงกบกลม สไตล์มินิมอล ไม้สักแท้ หนา 2 นิ้ว (28803417540)', rank:'#2997', sold30:8, open:'21 มิ.ย. 2024', total:137, rv:'4.9 · 30 รีวิว'},
+ {shop:'Donut_Furniture', listing:'วงกบกลม 3 ช่องกระจก ราคาโรงงาน ไม้หนา 2 นิ้ว (25966677629)', rank:'#1945', sold30:8, open:'4 มี.ค. 2024', total:1000, rv:'4.9 · 273 รีวิว'},
+ {shop:'chocksomkid', listing:'วงกบวงกลมไม้สัก ราคาส่ง (20515090656) · หมวดชั้นวางของ', rank:'#6639', sold30:'1,000 ⚠', open:'24 มิ.ย. 2022', total:'1k+', rv:'4.8 · 280 รีวิว'},
+ {shop:'chocksomkid', listing:'วงกบกลมไม้สักแท้ราคาส่ง (19918045180) · หมวดอื่นๆ', rank:'#5562', sold30:'232 ⚠', open:'1 ก.ค. 2022', total:490, rv:'4.8 · 100 รีวิว'},
+ {shop:'santirak28', listing:'วงกบวงกลม ช่องแสงไม้ ขายจากโรงงาน (16627558458) · พรีออเดอร์ 10 วัน', rank:'—', sold30:'ไม่มีข้อมูล', open:'19 มี.ค. 2022', total:'2k+', rv:'4.9 · 375 รีวิว'},
+ {shop:'santirak28', listing:'วงกบวงกลม 3 ช่องกระจก ขายตรงจากโรงงาน (15678678551) · พรีออเดอร์ 10 วัน', rank:'#2201', sold30:'309 ⚠', open:'22 เม.ย. 2022', total:571, rv:'4.9 · 112 รีวิว'},
+];
+function renderMeta(){
+  let h='<div class="sm-row h"><span>Listing</span><span>เปิดเมื่อ</span><span>Ranking</span><span>ขาย/เดือน</span></div>';
+  LISTINGS.forEach(m=>{
+    h+='<div class="sm-row"><span><span style="font-weight:600">'+m.shop+'</span>'
+      +'<div style="font-size:11px;color:var(--dim)">'+m.listing+'</div>'
+      +'<div style="font-size:10px;color:var(--dim);opacity:.8">'+m.rv+' · ขายรวม '+m.total+' ชิ้น</div></span>'
+      +'<span class="sm-v" style="color:var(--dim);font-size:11px">'+m.open+'</span>'
+      +'<span class="sm-v" style="color:var(--dim)">'+m.rank+'</span>'
+      +'<span class="sm-v" style="color:'+(String(m.sold30).indexOf('⚠')>=0?'var(--red)':'var(--green)')+'">'+m.sold30+'</span></div>';
+  });
+  document.getElementById('meta').innerHTML=h;
+}
+
+/* ค่าส่งวงกบกลม (บาท) · null = ยังไม่ทราบ */
+const SHIP={de:150, tb:150, chock:220, donut:null, san:null, lam:null, ojas:null};
+let LANDED=false;
+function setLanded(on,el){
+  LANDED=on;
+  document.querySelectorAll('#landedF .btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+let TF='all';
+
+function eff(k,x){
+  if(!x||!x.p) return null;
+  if(!LANDED) return x.p;
+  return SHIP[k]==null ? null : x.p+SHIP[k];
+}
+function vals(r){return SHOPS.map(s=>eff(s.k,r[s.k])).filter(v=>v!=null);}
+function cell(x,r,us,k){
+  if(!x||!x.p) return '<span class="na">—</span>';
+  const v=eff(k,x);
+  if(v==null) return '<span class="na">฿'+x.p.toLocaleString()+'</span><div class="scline">ไม่ทราบค่าส่ง</div>';
+  const ns=vals(r);
+  let cls = us ? 'us-col' : 'mid';
+  if(!us && ns.length>1){
+    if(v===Math.min(...ns)) cls='win';
+    else if(v===Math.max(...ns)) cls='lose';
+  }
+  let sl = x.s!=null ? '<div class="sline"><b>'+x.s+'</b> ชิ้น/ด.</div>' : '';
+  if(x.alt!=null) sl += '<div class="scline">อีกลิสต์ ฿'+x.alt.toLocaleString()+'</div>';
+  if(x.old) sl += '<div class="oldline">⚠ ยังไม่ยืนยัน</div>';
+  if(x.sc!=null) sl += '<div class="scline">สะสม '+x.sc+' ชิ้น</div>';
+  return '<span class="'+cls+'">฿'+v.toLocaleString()+'</span>'+sl;
+}
+function renderCtrl(){
+  const ts=[...new Set(D.map(d=>d.t))];
+  let h='<button class="btn active" onclick="setT(\'all\',this)">ทั้งหมด</button>';
+  ts.forEach(t=>{h+='<button class="btn" onclick="setT(\''+t+'\',this)">'+t+'</button>';});
+  document.getElementById('typeF').innerHTML=h;
+}
+function render(){
+  const rows=D.filter(d=>TF==='all'||d.t===TF);
+  const groups={};
+  rows.forEach(r=>{(groups[r.t]=groups[r.t]||[]).push(r);});
+  let html='';
+  Object.entries(groups).forEach(([t,rs])=>{
+    html+='<div class="grp">'+t+'</div><div class="tbl-wrap"><table><thead><tr>';
+    html+='<th style="text-align:left">ขนาด</th>';
+    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+(s.po?'<div class="po">พรีออเดอร์ 10 วัน</div>':'')+(SHIP[s.k]!=null?'<div class="shipline">ค่าส่ง ฿'+SHIP[s.k]+'</div>':'<div class="shipline" style="opacity:.45">ค่าส่ง ?</div>')+SPBadges.dots(s.k)+'</th>';});
+    html+='</tr></thead><tbody>';
+    rs.forEach(r=>{
+      html+='<tr><td>'+r.z+'</td>';
+      SHOPS.forEach(s=>{html+='<td>'+cell(r[s.k],r,!!s.us,s.k)+'</td>';});
       html+='</tr>';
     });
     html+='</tbody></table></div>';
