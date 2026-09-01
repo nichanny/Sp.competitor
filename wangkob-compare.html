@@ -50,6 +50,7 @@ tr:hover td{background:var(--bg4);}
 .sm-row:last-child{border-bottom:none;}
 .sm-row.h{background:var(--bg4);font-size:10px;font-family:'Space Mono',monospace;color:var(--dim);}
 .sm-v{font-family:'Space Mono',monospace;font-weight:700;}
+.po{font-size:8.5px;color:var(--orange);font-family:'Sarabun',sans-serif;font-weight:700;margin-top:1px;}
 .oldline{font-size:8.5px;color:var(--red);margin-top:2px;font-family:'Sarabun',sans-serif;}
 .scline{font-size:9px;color:var(--dim);margin-top:2px;font-family:'Sarabun',sans-serif;opacity:.8;}
 .sline{font-size:9px;color:var(--dim);font-family:'Space Mono',monospace;margin-top:2px;}
@@ -74,7 +75,11 @@ tr:hover td{background:var(--bg4);}
 🚩 <b>ยอดขาย/เดือน ของ chocksomkid 2 ลิสต์นี้ เชื่อไม่ได้ — อย่านำไปใช้</b><br>
 <b>ลิสต์ชั้นวางของ (20515090656):</b> Shopdera แสดง "30 วัน = 1,000" ซึ่ง<b>เท่ากับยอดขายรวมเป๊ะ</b> และ GMV 30 วัน ฿950,000 ก็<b>เท่ากับ GMV รวมเป๊ะ</b> → คือเลข "1พัน+" ที่ Shopee ตัดยอดไว้ ถูกนำมาใส่ช่อง 30 วัน · ยอดสะสมจริงจากช่อง SKU = <b>286 ชิ้น ใน 1,531 วัน ≈ 5.6 ชิ้น/เดือน</b><br>
 <b>ลิสต์อื่นๆ (19918045180):</b> อ้าง 232 ชิ้น/เดือน แต่ขายรวมทั้งหมด 490 ชิ้นใน 1,524 วัน (≈ 9.6 ชิ้น/เดือน) — ถ้า 232 จริง แปลว่าเดือนเดียวขายเกือบครึ่งของทั้งชีวิตลิสต์ · ยอดสะสมจากช่อง SKU = <b>100 ชิ้น</b><br>
-👉 <b>เหมือนเคส "ไม้พร้อม 9,000 ชิ้น" ที่เคยแก้ไปแล้ว</b> — ใช้เฉพาะ<b>ราคา</b>จาก 2 ลิสต์นี้ ส่วนยอดขายยึดช่อง SKU สะสม
+👉 <b>เหมือนเคส "ไม้พร้อม 9,000 ชิ้น" ที่เคยแก้ไปแล้ว</b> — ใช้เฉพาะ<b>ราคา</b>จาก 2 ลิสต์นี้ ส่วนยอดขายยึดช่อง SKU สะสม<br><b>santirak28</b> ก็เข้าข่ายเดียวกัน — การ์ด Shopee โชว์ "2พัน+ ชิ้น/เดือน" แต่ Shopdera ระบุยอด 30 วัน = <b>ไม่มีข้อมูล</b> และ GMV 30 วัน = <b>฿0</b> · ยอดสะสมจากช่อง SKU = <b>300 ชิ้น ใน 1,628 วัน ≈ 5.5 ชิ้น/เดือน</b>
+</div>
+
+<div class="note">
+📐 <b>กฎอ่านการ์ด Shopee ที่สรุปได้จาก 4 ลิสต์</b> — ถ้าเลขบนการ์ดเป็น <b>"พัน+"</b> (1พัน+ / 2พัน+) ให้ถือว่าเป็น<b>ยอดสะสมทั้งชีวิตลิสต์</b> ไม่ใช่ต่อเดือน · ถ้าเป็น<b>ตัวเลขเต็ม</b> (เช่น 8 · 232) จึงเป็นยอดต่อเดือนจริง (ตรวจกับ Donut แล้วตรงกับ Shopdera 30 วันพอดี)
 </div>
 
 <div class="warn">
@@ -105,40 +110,44 @@ const SHOPS=[
  {k:'lam',  name:'LAMTONMAISAK'},
  {k:'ojas', name:'Ojas'},
  {k:'donut',name:'Donut_Furniture'},
+ {k:'san',  name:'santirak28', po:true},
 ];
 
 // p = ราคา · s = ยอดขาย/เดือน
 const D=[
  // ── วงกบประตูมาตรฐาน ──
- {t:'วงกบประตู', z:'50×50',   de:null, tb:{p:645}, chock:null, lam:null, ojas:null, donut:null},
- {t:'วงกบประตู', z:'70×200',  de:{p:1080}, tb:{p:1079}, chock:{p:1100,s:15}, lam:{p:990,s:5},  ojas:{p:1250,s:8}, donut:null},
- {t:'วงกบประตู', z:'80×180',  de:{p:1079}, tb:{p:1080}, chock:{p:1100,s:13}, lam:null,          ojas:null, donut:null},
- {t:'วงกบประตู', z:'80×200',  de:{p:1080}, tb:{p:1079}, chock:{p:1100,s:150},lam:{p:1130,s:7}, ojas:{p:1250,s:106}, donut:null},
- {t:'วงกบประตู', z:'90×200',  de:{p:1090}, tb:{p:1089}, chock:{p:1100,s:46}, lam:{p:1330},      ojas:{p:1350,s:34}, donut:null},
- {t:'วงกบประตู', z:'100×120', de:null, tb:null, chock:{p:500,s:2}, lam:null, ojas:null, donut:null},
- {t:'วงกบประตู', z:'100×200', de:{p:1090}, tb:{p:1089}, chock:{p:1100,s:46}, lam:{p:1470,s:1}, ojas:{p:1450,s:28}, donut:null},
- {t:'วงกบประตู', z:'140×200', de:null, tb:null, chock:null, lam:null, ojas:{p:1650,s:2}, donut:null},
- {t:'วงกบประตู', z:'160×200', de:{p:1299}, tb:{p:1299}, chock:{p:1290,s:32}, lam:null, ojas:{p:1750,s:6}, donut:null},
- {t:'วงกบประตู', z:'180×200', de:{p:1299}, tb:{p:1299}, chock:{p:1290,s:8},  lam:null, ojas:{p:1850,s:1}, donut:null},
- {t:'วงกบประตู', z:'200×200', de:{p:1329}, tb:{p:1325}, chock:{p:1290,s:13}, lam:null, ojas:{p:1950,s:10}, donut:null},
+ {t:'วงกบประตู', z:'50×50',   de:null, tb:{p:645}, chock:null, lam:null, ojas:null, donut:null, san:null},
+ {t:'วงกบประตู', z:'70×200',  de:{p:1080}, tb:{p:1079}, chock:{p:1100,s:15}, lam:{p:990,s:5},  ojas:{p:1250,s:8}, donut:null, san:null},
+ {t:'วงกบประตู', z:'80×180',  de:{p:1079}, tb:{p:1080}, chock:{p:1100,s:13}, lam:null,          ojas:null, donut:null, san:null},
+ {t:'วงกบประตู', z:'80×200',  de:{p:1080}, tb:{p:1079}, chock:{p:1100,s:150},lam:{p:1130,s:7}, ojas:{p:1250,s:106}, donut:null, san:null},
+ {t:'วงกบประตู', z:'90×200',  de:{p:1090}, tb:{p:1089}, chock:{p:1100,s:46}, lam:{p:1330},      ojas:{p:1350,s:34}, donut:null, san:null},
+ {t:'วงกบประตู', z:'100×120', de:null, tb:null, chock:{p:500,s:2}, lam:null, ojas:null, donut:null, san:null},
+ {t:'วงกบประตู', z:'100×200', de:{p:1090}, tb:{p:1089}, chock:{p:1100,s:46}, lam:{p:1470,s:1}, ojas:{p:1450,s:28}, donut:null, san:null},
+ {t:'วงกบประตู', z:'140×200', de:null, tb:null, chock:null, lam:null, ojas:{p:1650,s:2}, donut:null, san:null},
+ {t:'วงกบประตู', z:'160×200', de:{p:1299}, tb:{p:1299}, chock:{p:1290,s:32}, lam:null, ojas:{p:1750,s:6}, donut:null, san:null},
+ {t:'วงกบประตู', z:'180×200', de:{p:1299}, tb:{p:1299}, chock:{p:1290,s:8},  lam:null, ojas:{p:1850,s:1}, donut:null, san:null},
+ {t:'วงกบประตู', z:'200×200', de:{p:1329}, tb:{p:1325}, chock:{p:1290,s:13}, lam:null, ojas:{p:1950,s:10}, donut:null, san:null},
 
  // ── วงกบกลม (ธรรมดา) ──
- {t:'วงกบกลม', z:'40',  de:{p:1017}, tb:{p:1050}, chock:{p:950,sc:12},   lam:null, ojas:null, donut:{p:1000,sc:2}},
- {t:'วงกบกลม', z:'50',  de:{p:1220}, tb:{p:1249}, chock:null,            lam:null, ojas:null, donut:{p:1050,alt:1150,sc:2}},
- {t:'วงกบกลม', z:'60',  de:{p:1790}, tb:{p:1799}, chock:{p:1142,sc:47},  lam:null, ojas:null, donut:{p:1200,sc:20}},
- {t:'วงกบกลม', z:'80',  de:{p:1627}, tb:{p:1699}, chock:{p:1550,sc:227}, lam:null, ojas:null, donut:{p:1600,sc:14}},
- {t:'วงกบกลม', z:'100', de:{p:2039}, tb:{p:2219}, chock:{p:1900,sc:52},  lam:null, ojas:null, donut:{p:2000,sc:8}},
- {t:'วงกบกลม', z:'120', de:{p:2135}, tb:{p:2399}, chock:{p:2100,sc:42},  lam:null, ojas:null, donut:{p:2100,alt:2200,sc:13}},
- {t:'วงกบกลม', z:'150', de:{p:2600}, tb:{p:2690}, chock:{p:2600,sc:6},   lam:null, ojas:null, donut:{p:2400,sc:4}},
+ {t:'วงกบกลม', z:'40',  de:{p:1017}, tb:{p:1050}, chock:{p:950,sc:12},   lam:null, ojas:null, donut:{p:1000,sc:2},         san:{p:800,sc:4}},
+ {t:'วงกบกลม', z:'50',  de:{p:1220}, tb:{p:1249}, chock:null,            lam:null, ojas:null, donut:{p:1050,alt:1150,sc:2}, san:{p:1000,sc:10}},
+ {t:'วงกบกลม', z:'60',  de:{p:1790}, tb:{p:1799}, chock:{p:1142,sc:47},  lam:null, ojas:null, donut:{p:1200,sc:20},        san:{p:1000,sc:37}},
+ {t:'วงกบกลม', z:'70',  de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,                  san:{p:1200,sc:27}},
+ {t:'วงกบกลม', z:'80',  de:{p:1627}, tb:{p:1699}, chock:{p:1550,sc:227}, lam:null, ojas:null, donut:{p:1600,sc:14},        san:{p:1300,sc:188}},
+ {t:'วงกบกลม', z:'90',  de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,                  san:{p:1470,sc:9}},
+ {t:'วงกบกลม', z:'100', de:{p:2039}, tb:{p:2219}, chock:{p:1900,sc:52},  lam:null, ojas:null, donut:{p:2000,sc:8},         san:{p:2200,sc:22}},
+ {t:'วงกบกลม', z:'110', de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,                  san:{p:3000}},
+ {t:'วงกบกลม', z:'120', de:{p:2135}, tb:{p:2399}, chock:{p:2100,sc:42},  lam:null, ojas:null, donut:{p:2100,alt:2200,sc:13},san:{p:3000,sc:3}},
+ {t:'วงกบกลม', z:'150', de:{p:2600}, tb:{p:2690}, chock:{p:2600,sc:6},   lam:null, ojas:null, donut:{p:2400,sc:4},         san:null},
 
  // ── วงกบกลม 3 ช่องกระจก ──
- {t:'วงกบกลม 3 ช่อง', z:'40',  de:{p:1520}, tb:{p:1550}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:2}},
- {t:'วงกบกลม 3 ช่อง', z:'50',  de:{p:1650}, tb:{p:1650}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:5}},
- {t:'วงกบกลม 3 ช่อง', z:'60',  de:{p:1790}, tb:{p:1799}, chock:null,          lam:null, ojas:null, donut:{p:1550,sc:25}},
- {t:'วงกบกลม 3 ช่อง', z:'80',  de:{p:1950}, tb:{p:1950}, chock:null,          lam:null, ojas:null, donut:{p:1900,sc:74}},
- {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,old:1}, lam:null, ojas:null, donut:{p:2200,sc:67}},
- {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,old:1}, lam:null, ojas:null, donut:{p:2500,sc:63}},
- {t:'วงกบกลม 3 ช่อง', z:'150', de:{p:3990}, tb:{p:3900}, chock:{p:2650,old:1}, lam:null, ojas:null, donut:{p:2800,sc:8}},
+ {t:'วงกบกลม 3 ช่อง', z:'40',  de:{p:1520}, tb:{p:1550}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:2}, san:null},
+ {t:'วงกบกลม 3 ช่อง', z:'50',  de:{p:1650}, tb:{p:1650}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:5}, san:null},
+ {t:'วงกบกลม 3 ช่อง', z:'60',  de:{p:1790}, tb:{p:1799}, chock:null,          lam:null, ojas:null, donut:{p:1550,sc:25}, san:null},
+ {t:'วงกบกลม 3 ช่อง', z:'80',  de:{p:1950}, tb:{p:1950}, chock:null,          lam:null, ojas:null, donut:{p:1900,sc:74}, san:null},
+ {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,old:1}, lam:null, ojas:null, donut:{p:2200,sc:67}, san:null},
+ {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,old:1}, lam:null, ojas:null, donut:{p:2500,sc:63}, san:null},
+ {t:'วงกบกลม 3 ช่อง', z:'150', de:{p:3990}, tb:{p:3900}, chock:{p:2650,old:1}, lam:null, ojas:null, donut:{p:2800,sc:8}, san:null},
 ];
 
 const LISTINGS=[
@@ -146,6 +155,7 @@ const LISTINGS=[
  {shop:'Donut_Furniture', listing:'วงกบกลม 3 ช่องกระจก ราคาโรงงาน ไม้หนา 2 นิ้ว (25966677629)', rank:'#1945', sold30:8, open:'4 มี.ค. 2024', total:1000, rv:'4.9 · 273 รีวิว'},
  {shop:'chocksomkid', listing:'วงกบวงกลมไม้สัก ราคาส่ง (20515090656) · หมวดชั้นวางของ', rank:'#6639', sold30:'1,000 ⚠', open:'24 มิ.ย. 2022', total:'1k+', rv:'4.8 · 280 รีวิว'},
  {shop:'chocksomkid', listing:'วงกบกลมไม้สักแท้ราคาส่ง (19918045180) · หมวดอื่นๆ', rank:'#5562', sold30:'232 ⚠', open:'1 ก.ค. 2022', total:490, rv:'4.8 · 100 รีวิว'},
+ {shop:'santirak28', listing:'วงกบวงกลม ช่องแสงไม้ ขายจากโรงงาน (16627558458) · พรีออเดอร์ 10 วัน', rank:'—', sold30:'ไม่มีข้อมูล', open:'19 มี.ค. 2022', total:'2k+', rv:'4.9 · 375 รีวิว'},
 ];
 function renderMeta(){
   let h='<div class="sm-row h"><span>Listing</span><span>เปิดเมื่อ</span><span>Ranking</span><span>ขาย/เดือน</span></div>';
@@ -191,7 +201,7 @@ function render(){
   Object.entries(groups).forEach(([t,rs])=>{
     html+='<div class="grp">'+t+'</div><div class="tbl-wrap"><table><thead><tr>';
     html+='<th style="text-align:left">ขนาด</th>';
-    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+SPBadges.dots(s.k)+'</th>';});
+    SHOPS.forEach(s=>{html+='<th'+(s.us?' class="us"':'')+'>'+s.name+(s.po?'<div class="po">พรีออเดอร์ 10 วัน</div>':'')+SPBadges.dots(s.k)+'</th>';});
     html+='</tr></thead><tbody>';
     rs.forEach(r=>{
       html+='<tr><td>'+r.z+'</td>';
@@ -208,6 +218,9 @@ document.getElementById('insight').innerHTML=
  '⚠️ <b>วงกบกลม — chocksomkid ถูกกว่าเราแทบทุกไซซ์</b> · 60cm ฿1,142 vs เรา ฿1,790 · 80cm ฿1,550 vs ฿1,627 · 100cm ฿1,900 vs ฿2,039 · 120cm ฿2,100 vs ฿2,135<br>'+
  '📌 <b>80cm คือไซซ์ที่ขายดีที่สุดของ chocksomkid</b> — สะสม 227 ชิ้น = 79.37% ของทั้งลิสต์ · นี่คือสมรภูมิจริงของหมวดวงกบกลม<br>'+
  '🤝 <b>150cm เราเสมอ chocksomkid พอดี ฿2,600</b> — แต่ Donut ฿2,400 ถูกกว่าทั้งคู่<br>'+
+ '🏭 <b>santirak28 ถูกที่สุดในไซซ์เล็ก-กลาง แต่เป็นพรีออเดอร์ 10 วัน</b> — 40cm ฿800 · 60cm ฿1,000 · 80cm ฿1,300 · <b>ของพร้อมส่งของเราคือพรีเมียมที่ชอบธรรม ไม่ต้องลดสู้</b><br>'+
+ '📈 <b>แต่ santirak28 กลับแพงที่สุดในไซซ์ใหญ่</b> — 100cm ฿2,200 · 120cm ฿3,000 vs เรา ฿2,039 / ฿2,135 → <b>ไซซ์ 100–120 เราได้เปรียบทั้งราคาและความเร็ว</b><br>'+
+ '🕳️ <b>ช่องว่างไซซ์ที่เรายังไม่มี — 70 · 90 · 110 ซม.</b> · santirak28 มีครบและ 70cm สะสม 27 ชิ้น · 90cm 9 ชิ้น<br>'+
  '⚠️ <b>วงกบกลม 3 ช่อง 120-150</b> — chocksomkid ฿2,350/฿2,650 ถูกกว่าเรามาก (De ฿2,690-3,990 / Tb ฿2,699-3,900)<br>'+
  '🍩 <b>Donut ถูกกว่าเราทุกไซซ์ ทั้ง 2 หมวด</b> — วงกบกลม 60cm ฿1,200 vs เรา ฿1,790 · 3 ช่อง 150cm ฿2,800 vs De ฿3,990<br>'+
  '🚨 <b>3 ช่อง 150 ซม. ของเราแพงผิดปกติ</b> — De ฿3,990 / Tb ฿3,900 · Donut ฿2,800 · chocksomkid ฿2,650 → เราแพงกว่าตลาด ฿1,100–1,340 ควรทบทวน<br>'+

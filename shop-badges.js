@@ -24,7 +24,8 @@
     tt:    { name: 'TTwood',          g: null,  y: null,            asOf: null },
     pg:    { name: 'PG Wood',         g: null,  y: null,            asOf: null },
     donut: { name: 'Donut_Furniture', g: false, y: false,           asOf: 'ส.ค. 2569' },
-    kkb:   { name: 'KKB Wood',        g: null,  y: null,            asOf: null }
+    kkb:   { name: 'KKB Wood',        g: null,  y: null,            asOf: null },
+    san:   { name: 'santirak28',      g: false, y: true,            asOf: 'ก.ย. 2569' }
   };
 
   var CSS =
