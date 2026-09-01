@@ -79,7 +79,16 @@ tr:hover td{background:var(--bg4);}
 </div>
 
 <div class="note">
-📐 <b>กฎอ่านการ์ด Shopee ที่สรุปได้จาก 4 ลิสต์</b> — ถ้าเลขบนการ์ดเป็น <b>"พัน+"</b> (1พัน+ / 2พัน+) ให้ถือว่าเป็น<b>ยอดสะสมทั้งชีวิตลิสต์</b> ไม่ใช่ต่อเดือน · ถ้าเป็น<b>ตัวเลขเต็ม</b> (เช่น 8 · 232) จึงเป็นยอดต่อเดือนจริง (ตรวจกับ Donut แล้วตรงกับ Shopdera 30 วันพอดี)
+📐 <b>วิธีตรวจว่าเลข "ขายได้ X ชิ้น/เดือน" เชื่อได้ไหม</b> (แก้จากกฎเดิมที่เขียนไว้ — กฎ "พัน+" ใช้ไม่พอ)<br>
+สูตร: <b>เทียบ X กับ (ยอดขายรวม ÷ อายุลิสต์เป็นเดือน)</b> · ถ้า X สูงกว่าค่าเฉลี่ยหลายสิบเท่า หรือ X กินสัดส่วนใหญ่ของยอดรวมทั้งชีวิตลิสต์ → <b>เชื่อไม่ได้</b><br>
+<table style="min-width:0;font-size:11.5px;margin-top:6px">
+<tr><th style="text-align:left">ลิสต์</th><th>การ์ดบอก</th><th>ขายรวม</th><th>อายุ</th><th>เฉลี่ยจริง</th><th>ตัดสิน</th></tr>
+<tr><td>Donut วงกบกลม</td><td>8</td><td>137</td><td>803 ว.</td><td>5.1/ด.</td><td style="color:var(--green)">✓ เชื่อได้</td></tr>
+<tr><td>chocksomkid อื่นๆ</td><td>232</td><td>490</td><td>1,524 ว.</td><td>9.6/ด.</td><td style="color:var(--red)">✗ ขัดกัน</td></tr>
+<tr><td>santirak28 3 ช่อง</td><td>309</td><td>571</td><td>1,594 ว.</td><td>10.7/ด.</td><td style="color:var(--red)">✗ ขัดกัน</td></tr>
+<tr><td>santirak28 ธรรมดา</td><td>2พัน+</td><td>2,000</td><td>1,628 ว.</td><td>—</td><td style="color:var(--red)">✗ = ยอดรวม</td></tr>
+</table>
+<span style="opacity:.85">ทางออก: ยึด<b>ยอดสะสมช่อง SKU</b> หารด้วยอายุลิสต์ เป็นตัวประมาณที่ปลอดภัยที่สุด</span>
 </div>
 
 <div class="warn">
@@ -141,13 +150,16 @@ const D=[
  {t:'วงกบกลม', z:'150', de:{p:2600}, tb:{p:2690}, chock:{p:2600,sc:6},   lam:null, ojas:null, donut:{p:2400,sc:4},         san:null},
 
  // ── วงกบกลม 3 ช่องกระจก ──
- {t:'วงกบกลม 3 ช่อง', z:'40',  de:{p:1520}, tb:{p:1550}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:2}, san:null},
- {t:'วงกบกลม 3 ช่อง', z:'50',  de:{p:1650}, tb:{p:1650}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:5}, san:null},
- {t:'วงกบกลม 3 ช่อง', z:'60',  de:{p:1790}, tb:{p:1799}, chock:null,          lam:null, ojas:null, donut:{p:1550,sc:25}, san:null},
- {t:'วงกบกลม 3 ช่อง', z:'80',  de:{p:1950}, tb:{p:1950}, chock:null,          lam:null, ojas:null, donut:{p:1900,sc:74}, san:null},
- {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,old:1}, lam:null, ojas:null, donut:{p:2200,sc:67}, san:null},
- {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,old:1}, lam:null, ojas:null, donut:{p:2500,sc:63}, san:null},
- {t:'วงกบกลม 3 ช่อง', z:'150', de:{p:3990}, tb:{p:3900}, chock:{p:2650,old:1}, lam:null, ojas:null, donut:{p:2800,sc:8}, san:null},
+ {t:'วงกบกลม 3 ช่อง', z:'40',  de:{p:1520}, tb:{p:1550}, chock:null,            lam:null, ojas:null, donut:{p:1400,sc:2},  san:null},
+ {t:'วงกบกลม 3 ช่อง', z:'50',  de:{p:1650}, tb:{p:1650}, chock:null,            lam:null, ojas:null, donut:{p:1400,sc:5},  san:{p:1000,sc:6}},
+ {t:'วงกบกลม 3 ช่อง', z:'60',  de:{p:1790}, tb:{p:1799}, chock:null,            lam:null, ojas:null, donut:{p:1550,sc:25}, san:{p:1200,sc:50}},
+ {t:'วงกบกลม 3 ช่อง', z:'70',  de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,           san:{p:1500,sc:9}},
+ {t:'วงกบกลม 3 ช่อง', z:'80',  de:{p:1950}, tb:{p:1950}, chock:null,            lam:null, ojas:null, donut:{p:1900,sc:74}, san:{p:1700,sc:29}},
+ {t:'วงกบกลม 3 ช่อง', z:'90',  de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,           san:{p:2200,sc:8}},
+ {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,old:1},  lam:null, ojas:null, donut:{p:2200,sc:67}, san:{p:2800,sc:4}},
+ {t:'วงกบกลม 3 ช่อง', z:'110', de:null,     tb:null,     chock:null,            lam:null, ojas:null, donut:null,           san:{p:4500}},
+ {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,old:1},  lam:null, ojas:null, donut:{p:2500,sc:63}, san:{p:4500,sc:6}},
+ {t:'วงกบกลม 3 ช่อง', z:'150', de:{p:3990}, tb:{p:3900}, chock:{p:2650,old:1},  lam:null, ojas:null, donut:{p:2800,sc:8},  san:null},
 ];
 
 const LISTINGS=[
@@ -156,6 +168,7 @@ const LISTINGS=[
  {shop:'chocksomkid', listing:'วงกบวงกลมไม้สัก ราคาส่ง (20515090656) · หมวดชั้นวางของ', rank:'#6639', sold30:'1,000 ⚠', open:'24 มิ.ย. 2022', total:'1k+', rv:'4.8 · 280 รีวิว'},
  {shop:'chocksomkid', listing:'วงกบกลมไม้สักแท้ราคาส่ง (19918045180) · หมวดอื่นๆ', rank:'#5562', sold30:'232 ⚠', open:'1 ก.ค. 2022', total:490, rv:'4.8 · 100 รีวิว'},
  {shop:'santirak28', listing:'วงกบวงกลม ช่องแสงไม้ ขายจากโรงงาน (16627558458) · พรีออเดอร์ 10 วัน', rank:'—', sold30:'ไม่มีข้อมูล', open:'19 มี.ค. 2022', total:'2k+', rv:'4.9 · 375 รีวิว'},
+ {shop:'santirak28', listing:'วงกบวงกลม 3 ช่องกระจก ขายตรงจากโรงงาน (15678678551) · พรีออเดอร์ 10 วัน', rank:'#2201', sold30:'309 ⚠', open:'22 เม.ย. 2022', total:571, rv:'4.9 · 112 รีวิว'},
 ];
 function renderMeta(){
   let h='<div class="sm-row h"><span>Listing</span><span>เปิดเมื่อ</span><span>Ranking</span><span>ขาย/เดือน</span></div>';
@@ -220,7 +233,9 @@ document.getElementById('insight').innerHTML=
  '🤝 <b>150cm เราเสมอ chocksomkid พอดี ฿2,600</b> — แต่ Donut ฿2,400 ถูกกว่าทั้งคู่<br>'+
  '🏭 <b>santirak28 ถูกที่สุดในไซซ์เล็ก-กลาง แต่เป็นพรีออเดอร์ 10 วัน</b> — 40cm ฿800 · 60cm ฿1,000 · 80cm ฿1,300 · <b>ของพร้อมส่งของเราคือพรีเมียมที่ชอบธรรม ไม่ต้องลดสู้</b><br>'+
  '📈 <b>แต่ santirak28 กลับแพงที่สุดในไซซ์ใหญ่</b> — 100cm ฿2,200 · 120cm ฿3,000 vs เรา ฿2,039 / ฿2,135 → <b>ไซซ์ 100–120 เราได้เปรียบทั้งราคาและความเร็ว</b><br>'+
- '🕳️ <b>ช่องว่างไซซ์ที่เรายังไม่มี — 70 · 90 · 110 ซม.</b> · santirak28 มีครบและ 70cm สะสม 27 ชิ้น · 90cm 9 ชิ้น<br>'+
+ '🕳️ <b>ช่องว่างไซซ์ที่เรายังไม่มี — 70 · 90 · 110 ซม.</b> · santirak28 มีครบทั้ง 2 หมวด<br>'+
+ '🔄 <b>3 ช่อง: santirak28 กลับด้านชัดกว่าเดิม</b> — 60cm ฿1,200 ถูกกว่าเรา ฿590 แต่ <b>120cm ฿4,500 แพงกว่าเรา ฿1,810</b> · 100cm ฿2,800 แพงกว่าเรา ฿515<br>'+
+ '✅ <b>ทบทวนเรื่อง 3 ช่อง 150 ซม. ฿3,990</b> — เมื่อเทียบกับ santirak28 ที่ตั้ง 120cm ไว้ ฿4,500 ราคานี้<b>ไม่ได้หลุดตลาด</b>อย่างที่สรุปไว้ก่อนหน้า · ไซซ์ใหญ่ราคากระโดดแรงเป็นเรื่องปกติของหมวดนี้<br>'+
  '⚠️ <b>วงกบกลม 3 ช่อง 120-150</b> — chocksomkid ฿2,350/฿2,650 ถูกกว่าเรามาก (De ฿2,690-3,990 / Tb ฿2,699-3,900)<br>'+
  '🍩 <b>Donut ถูกกว่าเราทุกไซซ์ ทั้ง 2 หมวด</b> — วงกบกลม 60cm ฿1,200 vs เรา ฿1,790 · 3 ช่อง 150cm ฿2,800 vs De ฿3,990<br>'+
  '🚨 <b>3 ช่อง 150 ซม. ของเราแพงผิดปกติ</b> — De ฿3,990 / Tb ฿3,900 · Donut ฿2,800 · chocksomkid ฿2,650 → เราแพงกว่าตลาด ฿1,100–1,340 ควรทบทวน<br>'+
