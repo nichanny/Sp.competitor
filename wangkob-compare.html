@@ -75,6 +75,10 @@ tr:hover td{background:var(--bg4);}
 </div>
 
 <div class="note">
+🍩 <b>Donut มี 2 ลิสต์ที่ขายวงกบกลมทับกัน</b> — ลิสต์ "วงกบกลม" (28803417540) และลิสต์ "3 ช่องกระจก" (25966677629) ซึ่งมีทั้ง 3 ช่อง <b>และ</b> แบบธรรมดาปนอยู่ · ราคาแบบธรรมดาไม่ตรงกัน 2 ไซซ์: <b>50cm ฿1,050 vs ฿1,150</b> · <b>120cm ฿2,100 vs ฿2,200</b> — ตารางแสดงราคาถูกกว่า และบอกราคาอีกลิสต์ไว้ใต้ช่อง
+</div>
+
+<div class="note">
 📊 <b>ตัวเลข 2 แบบในตาราง</b> — <b>"N ชิ้น/ด."</b> = ยอดขายต่อเดือน · <b>"สะสม N ชิ้น"</b> = ยอดสะสมตั้งแต่เปิดลิสต์ (คอลัมน์ยอดขาย SKU ของ Shopdera) <b>ไม่ใช่ต่อเดือน</b>
 </div>
 
@@ -110,26 +114,27 @@ const D=[
  {t:'วงกบประตู', z:'200×200', de:{p:1329}, tb:{p:1325}, chock:{p:1290,s:13}, lam:null, ojas:{p:1950,s:10}, donut:null},
 
  // ── วงกบกลม (ธรรมดา) ──
- {t:'วงกบกลม', z:'40',  de:{p:1017}, tb:{p:1050}, chock:{p:950,s:12},  lam:null, ojas:null, donut:null},
- {t:'วงกบกลม', z:'50',  de:{p:1220}, tb:{p:1249}, chock:null,          lam:null, ojas:null, donut:{p:1050,sc:1}},
- {t:'วงกบกลม', z:'60',  de:{p:1790}, tb:{p:1799}, chock:{p:1142,s:47}, lam:null, ojas:null, donut:{p:1200,sc:10}},
- {t:'วงกบกลม', z:'80',  de:{p:1627}, tb:{p:1699}, chock:{p:1550,s:113},lam:null, ojas:null, donut:{p:1600,sc:6}},
- {t:'วงกบกลม', z:'100', de:{p:2039}, tb:{p:2219}, chock:null,          lam:null, ojas:null, donut:{p:2000,sc:5}},
- {t:'วงกบกลม', z:'120', de:{p:2135}, tb:{p:2399}, chock:null,          lam:null, ojas:null, donut:{p:2100,sc:6}},
- {t:'วงกบกลม', z:'150', de:{p:2600}, tb:{p:2690}, chock:null,          lam:null, ojas:null, donut:{p:2400,sc:3}},
+ {t:'วงกบกลม', z:'40',  de:{p:1017}, tb:{p:1050}, chock:{p:950,s:12},  lam:null, ojas:null, donut:{p:1000,sc:2}},
+ {t:'วงกบกลม', z:'50',  de:{p:1220}, tb:{p:1249}, chock:null,          lam:null, ojas:null, donut:{p:1050,alt:1150,sc:2}},
+ {t:'วงกบกลม', z:'60',  de:{p:1790}, tb:{p:1799}, chock:{p:1142,s:47}, lam:null, ojas:null, donut:{p:1200,sc:20}},
+ {t:'วงกบกลม', z:'80',  de:{p:1627}, tb:{p:1699}, chock:{p:1550,s:113},lam:null, ojas:null, donut:{p:1600,sc:14}},
+ {t:'วงกบกลม', z:'100', de:{p:2039}, tb:{p:2219}, chock:null,          lam:null, ojas:null, donut:{p:2000,sc:8}},
+ {t:'วงกบกลม', z:'120', de:{p:2135}, tb:{p:2399}, chock:null,          lam:null, ojas:null, donut:{p:2100,alt:2200,sc:13}},
+ {t:'วงกบกลม', z:'150', de:{p:2600}, tb:{p:2690}, chock:null,          lam:null, ojas:null, donut:{p:2400,sc:4}},
 
  // ── วงกบกลม 3 ช่องกระจก ──
- {t:'วงกบกลม 3 ช่อง', z:'40',  de:{p:1520}, tb:{p:1550}, chock:null,          lam:null, ojas:null, donut:null},
- {t:'วงกบกลม 3 ช่อง', z:'50',  de:{p:1650}, tb:{p:1650}, chock:null,          lam:null, ojas:null, donut:null},
- {t:'วงกบกลม 3 ช่อง', z:'60',  de:{p:1790}, tb:{p:1799}, chock:null,          lam:null, ojas:null, donut:null},
- {t:'วงกบกลม 3 ช่อง', z:'80',  de:{p:1950}, tb:{p:1950}, chock:null,          lam:null, ojas:null, donut:null},
- {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,s:53}, lam:null, ojas:null, donut:null},
- {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,s:27}, lam:null, ojas:null, donut:null},
- {t:'วงกบกลม 3 ช่อง', z:'150', de:{p:3990}, tb:{p:3900}, chock:{p:2650,s:9},  lam:null, ojas:null, donut:null},
+ {t:'วงกบกลม 3 ช่อง', z:'40',  de:{p:1520}, tb:{p:1550}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:2}},
+ {t:'วงกบกลม 3 ช่อง', z:'50',  de:{p:1650}, tb:{p:1650}, chock:null,          lam:null, ojas:null, donut:{p:1400,sc:5}},
+ {t:'วงกบกลม 3 ช่อง', z:'60',  de:{p:1790}, tb:{p:1799}, chock:null,          lam:null, ojas:null, donut:{p:1550,sc:25}},
+ {t:'วงกบกลม 3 ช่อง', z:'80',  de:{p:1950}, tb:{p:1950}, chock:null,          lam:null, ojas:null, donut:{p:1900,sc:74}},
+ {t:'วงกบกลม 3 ช่อง', z:'100', de:{p:2285}, tb:{p:2295}, chock:{p:2280,s:53}, lam:null, ojas:null, donut:{p:2200,sc:67}},
+ {t:'วงกบกลม 3 ช่อง', z:'120', de:{p:2690}, tb:{p:2699}, chock:{p:2350,s:27}, lam:null, ojas:null, donut:{p:2500,sc:63}},
+ {t:'วงกบกลม 3 ช่อง', z:'150', de:{p:3990}, tb:{p:3900}, chock:{p:2650,s:9},  lam:null, ojas:null, donut:{p:2800,sc:8}},
 ];
 
 const LISTINGS=[
  {shop:'Donut_Furniture', listing:'วงกบกลม สไตล์มินิมอล ไม้สักแท้ หนา 2 นิ้ว (28803417540)', rank:'#2997', sold30:8, open:'21 มิ.ย. 2024', total:137, rv:'4.9 · 30 รีวิว'},
+ {shop:'Donut_Furniture', listing:'วงกบกลม 3 ช่องกระจก ราคาโรงงาน ไม้หนา 2 นิ้ว (25966677629)', rank:'#1945', sold30:8, open:'4 มี.ค. 2024', total:1000, rv:'4.9 · 273 รีวิว'},
 ];
 function renderMeta(){
   let h='<div class="sm-row h"><span>Listing</span><span>เปิดเมื่อ</span><span>Ranking</span><span>ขาย/เดือน</span></div>';
@@ -156,6 +161,7 @@ function cell(x,r,us){
     else if(x.p===Math.max(...ns)) cls='lose';
   }
   let sl = x.s!=null ? '<div class="sline"><b>'+x.s+'</b> ชิ้น/ด.</div>' : '';
+  if(x.alt!=null) sl += '<div class="scline">อีกลิสต์ ฿'+x.alt.toLocaleString()+'</div>';
   if(x.sc!=null) sl += '<div class="scline">สะสม '+x.sc+' ชิ้น</div>';
   return '<span class="'+cls+'">฿'+x.p.toLocaleString()+'</span>'+sl;
 }
@@ -189,8 +195,10 @@ document.getElementById('insight').innerHTML=
  '🔥 <b>แต่ chocksomkid ขายได้ 150 ชิ้น/เดือน · Ojas 106 ชิ้น</b> ทั้งที่แพงกว่าเรามาก → ราคาไม่ใช่ปัญหา แต่เป็น <b>visibility และ ranking</b><br>'+
  '⚠️ <b>วงกบกลม — chocksomkid ถูกกว่าเรา</b> · ขนาด 80 เขา ฿1,550 vs De ฿1,627 / Tb ฿1,699<br>'+
  '⚠️ <b>วงกบกลม 3 ช่อง 120-150</b> — chocksomkid ฿2,350/฿2,650 ถูกกว่าเรามาก (De ฿2,690-3,990 / Tb ฿2,699-3,900)<br>'+
- '🍩 <b>Donut_Furniture ถูกกว่าเราทุกไซซ์วงกบกลม</b> — 60cm ฿1,200 vs เรา ฿1,790 · 80cm ฿1,600 vs ฿1,627 · 150cm ฿2,400 vs ฿2,600 · <b>แต่ขายได้แค่ 8 ชิ้น/เดือน</b> และ<b>ไม่มีป้ายเขียวป้ายเหลืองเลย</b><br>'+
- '💡 <b>Donut คือหลักฐานยืนยันบทเรียนเดิม</b> — ราคาถูกสุด + รีวิว 4.9 + เปิดมา 803 วัน แต่ยังได้แค่ 8 ชิ้น/เดือน · ตัวแปรที่ขาดคือ<b>ป้ายและ visibility</b> ไม่ใช่ราคา → ไม่ต้องลดราคาสู้';
+ '🍩 <b>Donut ถูกกว่าเราทุกไซซ์ ทั้ง 2 หมวด</b> — วงกบกลม 60cm ฿1,200 vs เรา ฿1,790 · 3 ช่อง 150cm ฿2,800 vs De ฿3,990<br>'+
+ '🚨 <b>3 ช่อง 150 ซม. ของเราแพงผิดปกติ</b> — De ฿3,990 / Tb ฿3,900 · Donut ฿2,800 · chocksomkid ฿2,650 → เราแพงกว่าตลาด ฿1,100–1,340 ควรทบทวน<br>'+
+ '📌 <b>3 ช่องคือตัวทำเงินของ Donut</b> — 80/100/120cm กินส่วนแบ่งสะสม 73.9% รวมกัน · ไซซ์ 80cm ขายสะสม 74 ชิ้น มากที่สุด<br>'+
+ '💡 <b>แต่ Donut ได้แค่ 8 ชิ้น/เดือน ต่อลิสต์ (รวม 16)</b> ทั้งที่ถูกที่สุด รีวิว 4.9 · 273 รีวิว · เปิดมา 912 วัน · <b>ไม่มีป้ายเขียวป้ายเหลืองเลย</b> → ยืนยันอีกครั้งว่าตัวแปรคือ<b>ป้ายและ visibility ไม่ใช่ราคา</b> ไม่ต้องลดราคาสู้';
 function setT(v,b){TF=v;document.querySelectorAll('#typeF .btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
 function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
 document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
