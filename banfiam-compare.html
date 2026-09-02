@@ -51,7 +51,7 @@ tr:hover td{background:var(--bg4);}
 
 <a class="back" href="index.html">← กลับหน้าหลัก</a>
 <h1>🪟 ราคาบานเฟี้ยม — เปรียบทุกร้าน</h1>
-<p class="sub">5 ไซซ์ที่ De ขายจริง · Tb ยังไม่ลงขายหมวดนี้ · 3 คู่แข่ง · อัปเดต 2 ก.ย. 2569</p>
+<p class="sub">5 ไซซ์ที่ De ขายจริง · Tb ยังไม่ลงขายหมวดนี้ · 3 คู่แข่ง · ราคาใหม่ 2 ก.ย. 2569 23:13 น.</p>
 
 <div class="insight" id="insight"></div>
 
@@ -105,11 +105,11 @@ const LISTINGS=[
 
 /* เฉพาะ 5 ไซซ์ที่ De ขายจริง */
 const D=[
- {z:'40×150', de:{p:699}, saha:null,            toy:null,           dh:null},
- {z:'40×200', de:{p:999}, saha:null,            toy:{p:1699,sc:1},  dh:null},
- {z:'50×100', de:{p:550}, saha:{p:480,sc:9},    toy:null,           dh:null},
- {z:'50×150', de:{p:699}, saha:{p:920,sc:15},   toy:null,           dh:null},
- {z:'50×200', de:{p:999}, saha:null,            toy:{p:1899},       dh:{p:1690,sc:3}},
+ {z:'40×150', de:{p:799},  saha:null,            toy:null,           dh:null},
+ {z:'40×200', de:{p:1190}, saha:null,            toy:{p:1699,sc:1},  dh:null},
+ {z:'50×100', de:{p:550},  saha:{p:480,sc:9},    toy:null,           dh:null},
+ {z:'50×150', de:{p:799},  saha:{p:920,sc:15},   toy:null,           dh:null},
+ {z:'50×200', de:{p:999,pending:1}, saha:null,   toy:{p:1899},       dh:{p:1690,sc:3}},
 ];
 
 const ALLSKU=[
@@ -147,7 +147,8 @@ const ALLSKU=[
 function comp(r){return SHOPS.filter(s=>!s.us).map(s=>r[s.k]).filter(x=>x&&x.p).map(x=>x.p);}
 function cell(x,us){
   if(!x||!x.p) return '<span class="na">—</span>';
-  const nt = x.sc!=null ? '<div class="scline">สะสม '+x.sc+' ชิ้น</div>' : '';
+  let nt = x.sc!=null ? '<div class="scline">สะสม '+x.sc+' ชิ้น</div>' : '';
+  if(x.pending) nt += '<div class="scline" style="color:var(--red);opacity:1">⚠ รอยืนยันราคาใหม่</div>';
   return '<span class="'+(us?'us-col':'mid')+'">฿'+x.p.toLocaleString()+'</span>'+nt;
 }
 function gap(r){
