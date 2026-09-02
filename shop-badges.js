@@ -26,7 +26,7 @@
     donut: { name: 'Donut_Furniture', g: false, y: false,           asOf: 'ส.ค. 2569' },
     kkb:   { name: 'KKB Wood',        g: null,  y: null,            asOf: null },
     san:   { name: 'santirak28',      g: false, y: true,            asOf: 'ก.ย. 2569' },
-    saha:  { name: 'สหโชคค้าไม้',      g: null,  y: null,            asOf: null },
+    saha:  { name: 'สหโชคค้าไม้',      g: true,  y: true,            asOf: 'ก.ย. 2569' },
     toy:   { name: 'TOYFURNITURE',    g: true,  y: true,            asOf: 'ก.ย. 2569' },
     dh:    { name: 'Door House',      g: true,  y: true,            asOf: 'ก.ย. 2569' }
   };
