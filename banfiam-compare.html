@@ -70,6 +70,15 @@ tr:hover td{background:var(--bg4);}
 
 <div id="out"></div>
 
+<div class="grp">💎 ส่วนต่างราคา "ติดกระจก" vs "ไม่ติดกระจก"</div>
+<div class="tbl-wrap">
+<table style="min-width:660px">
+<thead><tr><th style="text-align:left">ร้าน / ไซซ์</th><th>ไม่ติดกระจก</th><th>ติดกระจก</th><th>ส่วนต่าง</th><th>%</th><th>สะสม เปล่า</th><th>สะสม กระจก</th></tr></thead>
+<tbody id="glassout"></tbody>
+</table>
+</div>
+<div class="note" id="glassnote"></div>
+
 <div class="grp">📋 SKU ทั้งหมดของสหโชคค้าไม้ (อ้างอิง)</div>
 <div class="tbl-wrap">
 <table style="min-width:560px">
@@ -161,6 +170,35 @@ function render(){
   h+='</tbody></table></div>';
   document.getElementById('out').innerHTML=h;
 }
+const GLASS=[
+ {shop:'สหโชคค้าไม้', z:'ไม้สัก 60×100',        plain:520,  glass:1060, np:8,  ng:11},
+ {shop:'สหโชคค้าไม้', z:'ไม้เนื้อแข็ง 60×100',   plain:null, glass:980,  np:null, ng:6},
+ {shop:'สหโชคค้าไม้', z:'ไม้เนื้อแข็ง 60×110',   plain:null, glass:1060, np:null, ng:6},
+ {shop:'TOYFURNITURE', z:'50×200',              plain:1899, glass:2499, np:null, ng:2},
+];
+function renderGlass(){
+  let h='';
+  GLASS.forEach(g=>{
+    let d='<span class="na">—</span>', pc='<span class="na">—</span>';
+    if(g.plain){
+      const diff=g.glass-g.plain;
+      d='<span class="up">+฿'+diff.toLocaleString()+'</span>';
+      pc='<span class="up">+'+Math.round(diff/g.plain*100)+'%</span>';
+    }
+    h+='<tr><td><span style="font-size:10px;color:var(--dim)">'+g.shop+'</span><br>'+g.z+'</td>'
+      +'<td>'+(g.plain?'฿'+g.plain.toLocaleString():'<span class="na">ไม่มีรุ่นเปล่า</span>')+'</td>'
+      +'<td style="color:var(--purple);font-weight:700">฿'+g.glass.toLocaleString()+'</td>'
+      +'<td>'+d+'</td><td>'+pc+'</td>'
+      +'<td>'+(g.np!=null?g.np:'<span class="na">—</span>')+'</td>'
+      +'<td style="font-weight:700">'+g.ng+'</td></tr>';
+  });
+  document.getElementById('glassout').innerHTML=h;
+  document.getElementById('glassnote').innerHTML=
+   '📊 <b>สัดส่วนยอดสะสมของสหโชค ลิสต์ 50-60×100</b> — รุ่นติดกระจกรวม <b>23 ชิ้น</b> · รุ่นเปล่ารวม <b>16 ชิ้น</b> → กระจกกิน <b>59%</b> ของยอดที่มองเห็นได้<br>'+
+   '⚠️ <b>ของ TOY กลุ่มตัวอย่างเล็กมาก</b> — 40% ที่เห็นคือ 2 ชิ้นจาก 5 ชิ้น ใช้ยืนยันดีมานด์ไม่ได้ · หลักฐานดีมานด์ที่หนักกว่าคือฝั่งสหโชค<br>'+
+   '💡 <b>ส่วนต่างราคาที่ตลาดยอมจ่าย = ฿540–600 ต่อบาน</b> ไม่ว่าจะบานเล็ก (60×100) หรือบานใหญ่ (50×200) — เป็นเลขค่อนข้างคงที่ ไม่ใช่ % คงที่';
+}
+
 function renderAll(){
   let h='';
   ALLSKU.forEach(s=>{
@@ -182,7 +220,7 @@ document.getElementById('insight').innerHTML=
 function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
 document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
 document.getElementById('sb-legend').innerHTML=SPBadges.legend();
-renderMeta();render();renderAll();
+renderMeta();render();renderGlass();renderAll();
 </script>
 </body>
 </html>
