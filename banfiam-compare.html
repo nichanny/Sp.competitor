@@ -110,6 +110,7 @@ const D=[
  {z:'50×100', de:{p:550},  saha:{p:480,sc:9},    toy:null,           dh:null},
  {z:'50×150', de:{p:799},  saha:{p:920,sc:15},   toy:null,           dh:null},
  {z:'50×200', de:{p:999,pending:1}, saha:null,   toy:{p:1899},       dh:{p:1690,sc:3}},
+ {z:'50×200 ติดกระจก 🆕', de:{p:2440}, saha:null, toy:{p:2499,sc:3}, dh:null},
 ];
 
 const ALLSKU=[
@@ -195,6 +196,7 @@ const GLASS=[
  {shop:'สหโชค · ไม้เนื้อแข็ง', z:'50×100', plain:410,  glass:880,  np:4,  ng:4},
  {shop:'สหโชค · ไม้เนื้อแข็ง', z:'50×150', plain:610,  glass:1260, np:14, ng:25},
  {shop:'สหโชค · ไม้เนื้อแข็ง', z:'60×150', plain:670,  glass:1410, np:5,  ng:6},
+ {shop:'De (ร้านเรา)',    z:'50×200 🆕',  plain:999,  glass:2440, np:null, ng:null, us:1},
  {shop:'TOYFURNITURE',    z:'40×200',    plain:1699, glass:2290, np:1,  ng:1},
  {shop:'TOYFURNITURE',    z:'50×200 ⭐',  plain:1899, glass:2499, np:null, ng:3},
  {shop:'TOYFURNITURE',    z:'60×200',    plain:2199, glass:2950, np:null, ng:null},
@@ -208,7 +210,7 @@ function renderGlass(){
       d='<span class="up">+฿'+diff.toLocaleString()+'</span>';
       pc='<span class="up">+'+Math.round(diff/g.plain*100)+'%</span>';
     }
-    h+='<tr><td><span style="font-size:10px;color:var(--dim)">'+g.shop+'</span><br>'+g.z+'</td>'
+    h+='<tr'+(g.us?' style="background:rgba(192,74,26,.06)"':'')+'><td><span style="font-size:10px;color:var(--dim)">'+g.shop+'</span><br>'+g.z+'</td>'
       +'<td>'+(g.plain?'฿'+g.plain.toLocaleString():'<span class="na">ไม่มีรุ่นเปล่า</span>')+'</td>'
       +'<td style="color:var(--purple);font-weight:700">฿'+g.glass.toLocaleString()+'</td>'
       +'<td>'+d+'</td><td>'+pc+'</td>'
@@ -234,14 +236,13 @@ function renderAll(){
   document.getElementById('allsku').innerHTML=h;
 }
 document.getElementById('insight').innerHTML=
- '🚨 <b>ไซซ์สูง 200 คือช่องขึ้นราคาที่ใหญ่ที่สุดในทุกหมวดของโปรเจกต์</b> — 50×200 De ฿999 · Door House ฿1,690 · TOY ฿1,899 → <b>ถูกกว่าตลาด ฿691–900</b> ยืนยันจาก 2 ร้านอิสระ<br>'+
- '🚨 <b>40×200 ก็เช่นกัน</b> — De ฿999 vs TOY ฿1,699 = ถูกกว่า ฿700 (มีคู่แข่งเจ้าเดียว)<br>'+
- '🟢 <b>50×150 ถูกกว่าสหโชค ฿221</b> — De ฿699 vs ฿920 · และเป็นไซซ์ที่<b>ขายดีที่สุดของสหโชค</b> (สะสม 15 ชิ้น)<br>'+
- '🔴 <b>50×100 เราแพงกว่า ฿70</b> — De ฿550 vs สหโชค ฿480 · เป็นไซซ์เดียวที่เราแพงกว่าคู่แข่ง<br>'+
- '📐 <b>เราไม่แยกราคาตามความกว้าง คู่แข่งแยกทั้งคู่</b> — De: 40×200 = 50×200 = ฿999 · TOY: ฿1,699 vs ฿1,899 (+฿200) · สหโชค: 50×150 ฿920 vs 60×150 ฿950 (+฿30)<br>'+
- '💎 <b>กระจกคือตัวทำเงินของทั้งสองร้าน</b> — TOY 50×200 กระจกใส ฿2,499 กินส่วนแบ่ง 40% สูงสุดในลิสต์ · สหโชค ไม้สัก+กระจก 60×100 ฿1,060 vs เปล่า ฿520 = <b>เพิ่มเท่าตัว</b><br>'+
- '📈 <b>หมวดนี้คึกกว่าวงกบกลมมาก</b> — สหโชค 62 ชิ้น/เดือน + TOY 4 · ทั้งสองผ่านสูตรตรวจสอบเทียบอายุลิสต์<br>'+
- '⚠️ <b>Door House เชื่อยอดไม่ได้ และแทบไม่ขาย</b> — Shopdera โชว์ 30 วัน = 3 ซึ่ง<b>เท่ากับยอดรวมเป๊ะ</b> (GMV ก็เท่ากันเป๊ะ) · ความจริงคือขายได้ 3 ชิ้นใน 790 วัน ≈ <b>0.1 ชิ้น/เดือน</b> · มี 1 รีวิว → ใช้ได้แค่<b>ราคา</b> ไม่ใช่หลักฐานว่าราคานั้นขายออก';
+ '🆕 <b>2 ก.ย. — De เปิดขาย 50×200 ติดกระจก ที่ ฿2,440</b> · ต่ำกว่า TOYFURNITURE ฿2,499 อยู่ ฿59 → ถูกที่สุดในตลาดสำหรับบานเฟี้ยมกระจกไซซ์นี้<br>'+
+ '⚠️ <b>แต่บานเปล่า 50×200 ยังค้างที่ ฿999</b> — ทำให้ส่วนต่างกระจกของเราเป็น <b>+฿1,441</b> ขณะที่ตลาดคิดแค่ <b>+฿600</b> · ลูกค้าที่เห็นสองรุ่นข้างกันจะรู้สึกว่ากระจกแพงเกินเหตุ และเลือกรุ่นเปล่าแทน<br>'+
+ '👉 <b>ขึ้นราคาบานเปล่าให้เข้าที่ก่อน</b> — ที่ ฿1,790 ส่วนต่างจะเป็น ฿650 ตรงกับที่ตลาดใช้ และยังถูกกว่า TOY (฿1,899) กับ Door House (฿1,690 เท่ากันพอดี)<br>'+
+ '🟢 <b>50×150 ถูกกว่าสหโชค ฿121</b> — ไซซ์ที่ครองตลาดจริง (สหโชคขายรวมทุกเกรด 56 ชิ้น)<br>'+
+ '🔴 <b>50×100 เราแพงกว่าสหโชค ฿70</b> — ไซซ์เดียวที่เราสูงกว่าคู่แข่ง และไซซ์เดียวที่ยังไม่ได้ปรับราคา<br>'+
+ '📐 <b>ยังไม่แยกราคาตามความกว้าง</b> — De: 40×150 = 50×150 = ฿799 · สหโชคแยก ฿30 · TOY แยก ฿200<br>'+
+ '📈 <b>หมวดนี้คึกกว่าวงกบกลมมาก</b> — สหโชค 62 ชิ้น/เดือน · แต่ TOY และ Door House เกือบไม่ขายเลย → ป้ายและราคาไม่ใช่ตัวแปรหลัก';
 function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
 document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
 document.getElementById('sb-legend').innerHTML=SPBadges.legend();
