@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ราคาบานเฟี้ยม — เปรียบทุกร้าน</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<script>(function(){if(localStorage.getItem('spTheme')!=='dark'){document.documentElement.classList.add('light');}})();</script>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 มืด</button>
+<style>
+:root{--bg:#FAFAF8;--bg3:#FFF;--bg4:#F2F0EC;--text:#1C1A18;--dim:#5C5850;--green:#1A7A5E;--red:#C0392B;--yellow:#8B6914;--blue:#1A5FAA;--orange:#C04A1A;--purple:#6D4AA8;--border:rgba(0,0,0,.12);}
+html:not(.light){--bg:#0A0A0F;--bg3:#18181F;--bg4:#1E1E28;--text:#EEEAF5;--dim:#7A7590;--green:#00E5A0;--red:#FF4060;--yellow:#FFD060;--blue:#60A5FA;--orange:#FF6B35;--purple:#A78BFA;--border:rgba(255,255,255,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;padding:20px 16px 80px;max-width:940px;margin:0 auto;}
+#theme-toggle{position:fixed;top:14px;right:16px;z-index:9999;border-radius:20px;padding:7px 15px;font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.back{display:inline-flex;gap:6px;color:var(--dim);font-size:12px;text-decoration:none;margin-bottom:16px;}
+h1{font-size:19px;font-weight:800;margin-bottom:4px;}
+.sub{font-size:12px;color:var(--dim);margin-bottom:14px;}
+.insight{background:rgba(192,74,26,.07);border:1px solid rgba(192,74,26,.25);border-radius:11px;padding:12px 15px;font-size:12.5px;line-height:1.85;margin-bottom:14px;}
+.insight b{color:var(--orange);}
+.note{background:rgba(139,105,20,.08);border:1px solid rgba(139,105,20,.28);border-radius:11px;padding:12px 15px;font-size:12.5px;line-height:1.85;margin-bottom:14px;}
+.note b{color:var(--yellow);}
+.grp{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin:22px 0 9px;}
+.tbl-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow-x:auto;margin-bottom:10px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px;}
+th{background:var(--bg4);padding:8px 10px;font-size:10px;font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);text-align:right;white-space:nowrap;}
+th:first-child{text-align:left;}
+th.us{color:var(--orange);font-weight:700;}
+th.hd{color:var(--purple);font-weight:700;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap;font-family:'Space Mono',monospace;}
+td:first-child{text-align:left;font-family:'Sarabun',sans-serif;font-weight:700;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg4);}
+.win{color:var(--green);font-weight:700;}
+.lose{color:var(--red);}
+.mid{color:var(--text);}
+.us-col{color:var(--orange);font-weight:700;}
+.na{color:var(--dim);opacity:.32;}
+.up{color:var(--green);font-weight:700;}
+.down{color:var(--red);font-weight:700;}
+.hdcell{background:rgba(109,74,168,.07);}
+.scline{font-size:9px;color:var(--dim);margin-top:2px;font-family:'Sarabun',sans-serif;opacity:.8;}
+.shopmeta{background:var(--bg3);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-bottom:16px;}
+.sm-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;padding:9px 13px;border-bottom:1px solid var(--border);font-size:12.5px;align-items:center;}
+.sm-row:last-child{border-bottom:none;}
+.sm-row.h{background:var(--bg4);font-size:10px;font-family:'Space Mono',monospace;color:var(--dim);}
+.sm-v{font-family:'Space Mono',monospace;font-weight:700;}
+</style>
+
+<a class="back" href="index.html">← กลับหน้าหลัก</a>
+<h1>🪟 ราคาบานเฟี้ยม — เปรียบทุกร้าน</h1>
+<p class="sub">5 ไซซ์ที่ De ขายจริง · Tb ยังไม่ลงขายหมวดนี้ · อัปเดต 2 ก.ย. 2569</p>
+
+<div class="insight" id="insight"></div>
+
+<div class="note">
+🪵 <b>เทียบเฉพาะ "ไม้สัก กรอบโล่ง" เท่านั้น</b> — สหโชคค้าไม้ขาย 3 เกรดในลิสต์เดียวกัน: <b>ไม้สัก</b> · <b>ไม้เนื้อแข็ง</b> (ถูกกว่า) · <b>+กระจก</b> (แพงกว่ามาก) · ตารางหลักใช้เฉพาะไม้สักกรอบโล่งซึ่งเทียบกับของเราได้ตรงที่สุด
+</div>
+
+<div class="grp">ยอดขายต่อเดือน ระดับ listing</div>
+<div class="shopmeta" id="meta"></div>
+
+<div id="sb-legend"></div>
+
+<div id="out"></div>
+
+<div class="grp">📋 SKU ทั้งหมดของสหโชคค้าไม้ (อ้างอิง)</div>
+<div class="tbl-wrap">
+<table style="min-width:560px">
+<thead><tr><th style="text-align:left">SKU</th><th>ราคา</th><th>ส่วนแบ่ง</th><th>สะสม</th><th>ลิสต์</th></tr></thead>
+<tbody id="allsku"></tbody>
+</table>
+</div>
+
+<script src="shop-badges.js"></script>
+<script>
+const SHOPS=[
+ {k:'de',   name:'De', us:true},
+ {k:'saha', name:'สหโชคค้าไม้'},
+];
+
+const LISTINGS=[
+ {shop:'สหโชคค้าไม้', listing:'หน้าต่างไม้สัก/ไม้เนื้อแข็ง ลายกรอบโล่ง บานยาว (16984150600)', rank:'#1408', sold30:35, open:'3 ก.ย. 2022', total:'1k+', rv:'4.9 · 166 รีวิว'},
+ {shop:'สหโชคค้าไม้', listing:'หน้าต่างไม้สัก/ไม้เนื้อแข็ง กรอบโล่ง 50-60×100 และขนาดอื่นๆ (14831391253)', rank:'#1475', sold30:27, open:'5 ม.ค. 2022', total:'1k+', rv:'4.9 · 139 รีวิว'},
+];
+
+/* เฉพาะ 5 ไซซ์ที่ De ขายจริง */
+const D=[
+ {z:'40×150', de:{p:699}, saha:null},
+ {z:'40×200', de:{p:999}, saha:null},
+ {z:'50×100', de:{p:550}, saha:{p:480,sc:9}},
+ {z:'50×150', de:{p:699}, saha:{p:920,sc:15}},
+ {z:'50×200', de:{p:999}, saha:null},
+];
+
+const ALLSKU=[
+ {sku:'ไม้สัก 50×100 ซม.',            p:480,  sh:'1.75%', n:3,  L:'บานยาว'},
+ {sku:'ไม้สัก 50×150 ซม.',            p:920,  sh:'7.60%', n:13, L:'บานยาว'},
+ {sku:'ไม้สัก 60×150 ซม.',            p:950,  sh:'4.09%', n:7,  L:'บานยาว'},
+ {sku:'ไม้สัก 50×100 ซม.',            p:480,  sh:'4.17%', n:6,  L:'50-60×100'},
+ {sku:'ไม้สัก 50×150 ซม.',            p:920,  sh:'1.39%', n:2,  L:'50-60×100'},
+ {sku:'ไม้สัก 60×100 ซม.',            p:520,  sh:'5.56%', n:8,  L:'50-60×100'},
+ {sku:'ไม้สัก+กระจก 60×100 ซม.',      p:1060, sh:'7.64%', n:11, L:'50-60×100'},
+ {sku:'ไม้เนื้อแข็ง+กระจก 60×100 ซม.', p:980,  sh:'4.17%', n:6,  L:'50-60×100'},
+ {sku:'ไม้เนื้อแข็ง+กระจก 60×110 ซม.', p:1060, sh:'4.17%', n:6,  L:'50-60×100'},
+];
+
+function comp(r){return SHOPS.filter(s=>!s.us).map(s=>r[s.k]).filter(x=>x&&x.p).map(x=>x.p);}
+function cell(x,us){
+  if(!x||!x.p) return '<span class="na">—</span>';
+  const nt = x.sc!=null ? '<div class="scline">สะสม '+x.sc+' ชิ้น</div>' : '';
+  return '<span class="'+(us?'us-col':'mid')+'">฿'+x.p.toLocaleString()+'</span>'+nt;
+}
+function gap(r){
+  const ns=comp(r);
+  if(!ns.length) return ['<span class="na">ไม่มีคู่แข่ง</span>','<span class="na">—</span>'];
+  const cap=Math.min(...ns), our=r.de&&r.de.p;
+  const capTxt='<span style="color:var(--purple);font-weight:700">฿'+cap.toLocaleString()+'</span>';
+  if(!our) return [capTxt,'<span class="na">—</span>'];
+  const g=cap-our;
+  return [capTxt, g>0?'<span class="up">ถูกกว่าเขา ฿'+g.toLocaleString()+'</span>'
+                : g<0?'<span class="down">แพงกว่าเขา ฿'+Math.abs(g).toLocaleString()+'</span>'
+                : '<span class="mid">เท่ากัน</span>'];
+}
+function renderMeta(){
+  let h='<div class="sm-row h"><span>Listing</span><span>เปิดเมื่อ</span><span>Ranking</span><span>ขาย/เดือน</span></div>';
+  LISTINGS.forEach(m=>{
+    h+='<div class="sm-row"><span><span style="font-weight:600">'+m.shop+'</span>'
+      +'<div style="font-size:11px;color:var(--dim)">'+m.listing+'</div>'
+      +'<div style="font-size:10px;color:var(--dim);opacity:.8">'+m.rv+' · ขายรวม '+m.total+'</div></span>'
+      +'<span class="sm-v" style="color:var(--dim);font-size:11px">'+m.open+'</span>'
+      +'<span class="sm-v" style="color:var(--dim)">'+m.rank+'</span>'
+      +'<span class="sm-v" style="color:var(--green)">'+m.sold30+'</span></div>';
+  });
+  document.getElementById('meta').innerHTML=h;
+}
+function render(){
+  let h='<div class="grp">บานเฟี้ยม — ไซซ์ที่ De ขายจริง</div><div class="tbl-wrap"><table><thead><tr>';
+  h+='<th style="text-align:left">ขนาด</th>';
+  SHOPS.forEach(s=>{h+='<th'+(s.us?' class="us"':'')+'>'+s.name+SPBadges.dots(s.k)+'</th>';});
+  h+='<th class="hd">ราคาคู่แข่ง</th><th class="hd">ตำแหน่งเรา</th></tr></thead><tbody>';
+  D.forEach(r=>{
+    h+='<tr><td>'+r.z+'</td>';
+    SHOPS.forEach(s=>{h+='<td>'+cell(r[s.k],!!s.us)+'</td>';});
+    const g=gap(r);
+    h+='<td class="hdcell">'+g[0]+'</td><td class="hdcell">'+g[1]+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('out').innerHTML=h;
+}
+function renderAll(){
+  let h='';
+  ALLSKU.forEach(s=>{
+    h+='<tr><td>'+s.sku+'</td><td>฿'+s.p.toLocaleString()+'</td>'
+      +'<td style="color:var(--blue);font-weight:700">'+s.sh+'</td><td>'+s.n+'</td>'
+      +'<td style="font-size:10px;color:var(--dim)">'+s.L+'</td></tr>';
+  });
+  document.getElementById('allsku').innerHTML=h;
+}
+document.getElementById('insight').innerHTML=
+ '🟢 <b>50×150 เราถูกกว่าคู่แข่ง ฿221</b> — De ฿699 vs สหโชค ฿920 · และเป็นไซซ์ที่<b>ขายดีที่สุดของเขา</b> (สะสม 15 ชิ้นจาก 2 ลิสต์) → มีที่ขึ้นราคาได้จริง<br>'+
+ '🔴 <b>50×100 เราแพงกว่า ฿70</b> — De ฿550 vs สหโชค ฿480 · แต่เป็นไซซ์ที่เขาขายได้น้อยกว่า 50×150<br>'+
+ '⚪ <b>40×150 · 40×200 · 50×200 ไม่มีคู่แข่งเลย</b> — สหโชคไม่ทำความกว้าง 40 และไม่ทำความสูง 200 → เราตั้งราคาได้อิสระ<br>'+
+ '💎 <b>รุ่น +กระจก คือของแพงที่สุดและขายดีสุดของเขา</b> — ไม้สัก+กระจก 60×100 ฿1,060 สะสม 11 ชิ้น สูงกว่าไม้สักเปล่า 60×100 (฿520) ถึง 2 เท่า<br>'+
+ '📈 <b>หมวดนี้คึกกว่าวงกบกลมมาก</b> — สหโชค 2 ลิสต์รวม 62 ชิ้น/เดือน · เทียบกับหมวดวงกบกลมที่ทุกร้านรวมกันยังไม่ถึง 20';
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-toggle').textContent=l?'🌙 มืด':'☀️ สว่าง';localStorage.setItem('spTheme',l?'light':'dark');}
+document.addEventListener('DOMContentLoaded',function(){const b=document.getElementById('theme-toggle');if(b)b.textContent=document.documentElement.classList.contains('light')?'🌙 มืด':'☀️ สว่าง';});
+document.getElementById('sb-legend').innerHTML=SPBadges.legend();
+renderMeta();render();renderAll();
+</script>
+</body>
+</html>
